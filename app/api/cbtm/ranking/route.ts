@@ -1,5 +1,3 @@
-import { kv } from "@vercel/kv";
-import crypto from "crypto";
 import { NextRequest } from "next/server";
 import { HTMLElement, parse } from "node-html-parser";
 
@@ -323,10 +321,15 @@ class CBTMCrawler {
 
         // Column 2 (col-md-8): Name and Club
         const nameSpan = columns[2].querySelector("span.FonteTexto");
-        const clubSpan = columns[2].querySelector("span.FonteTextoClaro");
+        const clubAndStateSpan = columns[2].querySelector(
+          "span.FonteTextoClaro"
+        );
 
         const name = nameSpan ? nameSpan.text.trim() : "";
-        const club = clubSpan ? clubSpan.text.trim() : "";
+        const clubAndState = clubAndStateSpan
+          ? clubAndStateSpan.text.trim()
+          : "";
+        const [club, state] = clubAndState.split(" - ");
 
         // Only add if we have meaningful data
         if (name && rank) {
@@ -334,6 +337,7 @@ class CBTMCrawler {
             rank: parseInt(rank, 10) || rank,
             name: name,
             club: club,
+            state,
             points: parseInt(points, 10) || points,
           });
         }
@@ -345,13 +349,6 @@ class CBTMCrawler {
 
     return rankings;
   }
-}
-
-/**
- * Generate ETag from cache key
- */
-function generateETag(key: string) {
-  return crypto.createHash("md5").update(key).digest("hex");
 }
 
 /**
@@ -391,12 +388,7 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // Generate cache key with today's date
-    const today = getTodayDate();
-    const cacheKey = `ranking:${category}:${year}:${region}:${
-      athlete || "all"
-    }:${today}`;
-    const etag = generateETag(cacheKey);
+    const etag = getTodayDate();
 
     // Check If-None-Match header
     const clientETag = req.headers.get("if-none-match");
@@ -404,41 +396,9 @@ export async function GET(req: NextRequest) {
       return new Response(undefined, { status: 304 });
     }
 
-    // // Try to get from cache
-    // let cachedData: string | null = null;
-    // try {
-    //   cachedData = await kv.get(cacheKey);
-    // } catch (error) {
-    //   console.warn("Cache read failed:", error);
-    // }
-
-    // if (cachedData) {
-    //   // Return cached data with ETag
-    //   return new Response(cachedData, {
-    //     status: 200,
-    //     headers: {
-    //       "Access-Control-Allow-Origin": "*",
-    //       "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    //       "Access-Control-Allow-Headers": "Content-Type, If-None-Match",
-    //       ETag: etag,
-    //       "Cache-Control": "public, max-age=3600", // 1 hour CDN cache
-    //     },
-    //   });
-    // }
-
-    // Cache miss - crawl the site
-    console.log("Cache miss, crawling:", cacheKey);
-
     const crawler = new CBTMCrawler();
     const result = await crawler.getRanking(category, year, region, athlete);
     const resultString = JSON.stringify(result);
-
-    // // Store in cache (24 hour expiration)
-    // try {
-    //   await kv.set(cacheKey, resultString, { ex: 86400 });
-    // } catch (error) {
-    //   console.warn("Cache write failed:", error);
-    // }
 
     // Return fresh data with ETag
     return new Response(resultString, {

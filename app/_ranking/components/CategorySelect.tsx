@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import {
   Box,
@@ -19,9 +19,15 @@ interface Props {
 }
 
 export const CategorySelect = ({ value, onChange }: Props) => {
-  const [gender, setGender] = useState<Gender>(Gender.Male);
+  const findCategory = value
+    ? AVAILABLE_CATEGORIES.find((item) => item.value === value)
+    : null;
+
+  const [gender, setGender] = useState<Gender>(
+    findCategory?.gender ?? Gender.Male,
+  );
   const [categoryType, setCategoryType] = useState<CategoryType>(
-    CategoryType.Absolute,
+    findCategory?.type ?? CategoryType.Absolute,
   );
 
   const selectCollection = useMemo(() => {
@@ -35,10 +41,21 @@ export const CategorySelect = ({ value, onChange }: Props) => {
     });
   }, [gender, categoryType]);
 
-  useEffect(() => {
-    onChange(selectCollection.items[0].value);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectCollection]);
+  const handleGenderChange = (newGender: Gender) => {
+    const firstOption = AVAILABLE_CATEGORIES.find(
+      (item) => item.gender === newGender && item.type === categoryType,
+    );
+    setGender(newGender);
+    onChange(firstOption!.value);
+  };
+
+  const handleCategoryTypeChange = (newCategoryType: CategoryType) => {
+    const firstOption = AVAILABLE_CATEGORIES.find(
+      (item) => item.gender === gender && item.type === newCategoryType,
+    );
+    setCategoryType(newCategoryType);
+    onChange(firstOption!.value);
+  };
 
   return (
     <Box>
@@ -47,7 +64,7 @@ export const CategorySelect = ({ value, onChange }: Props) => {
           <SegmentGroup.Root
             size="lg"
             defaultValue={gender}
-            onValueChange={(e) => setGender(e.value as Gender)}
+            onValueChange={(e) => handleGenderChange(e.value as Gender)}
           >
             <SegmentGroup.Indicator bgColor="teal.200" />
             <SegmentGroup.Item value={Gender.Male}>
@@ -65,7 +82,9 @@ export const CategorySelect = ({ value, onChange }: Props) => {
           <SegmentGroup.Root
             size="lg"
             defaultValue={categoryType}
-            onValueChange={(e) => setCategoryType(e.value as CategoryType)}
+            onValueChange={(e) =>
+              handleCategoryTypeChange(e.value as CategoryType)
+            }
           >
             <SegmentGroup.Indicator bgColor="teal.200" />
             <SegmentGroup.Item value={CategoryType.Absolute}>

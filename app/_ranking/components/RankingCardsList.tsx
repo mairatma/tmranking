@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, FormatNumber, Heading, Stat, Text } from '@chakra-ui/react';
+import { Card, Heading, Stat, Text } from '@chakra-ui/react';
 
 import { RankingEntry } from '../types';
 
@@ -26,7 +26,9 @@ export const RankingCardsList = ({ rankings }: Props) => {
             <Stat.Root>
               <Stat.Label>Pontos </Stat.Label>
               <Stat.ValueText>
-                <FormatNumber value={item.points} style="decimal" />
+                {new Intl.NumberFormat('pt-BR', { style: 'decimal' }).format(
+                  item.points,
+                )}
               </Stat.ValueText>
               <Stat.HelpText>
                 {item.club} - {item.state}

@@ -67,8 +67,6 @@ export const RankingFilters = ({ value, onChange }: Props) => {
     });
   };
 
-  console.log('region, category', value);
-
   return (
     <Box>
       <Flex gap={{ smDown: '4', sm: '2' }} direction={{ smDown: 'column' }}>

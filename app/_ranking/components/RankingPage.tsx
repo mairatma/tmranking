@@ -44,7 +44,9 @@ export const RankingPage = () => {
         </Center>
       )}
 
-      {!isLoading && data && <RankingTable rankings={data.rankings} />}
+      {!isLoading && data && (
+        <RankingTable rankings={data.rankings} category={category} />
+      )}
     </Stack>
   );
 };

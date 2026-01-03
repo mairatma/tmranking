@@ -1,14 +1,15 @@
 'use client';
 
-import { Flex, Table, Text } from '@chakra-ui/react';
+import { Box, Flex, LinkBox, LinkOverlay, Table, Text } from '@chakra-ui/react';
 
 import { RankingEntry } from '../types';
 
 interface Props {
+  category: string;
   rankings: RankingEntry[];
 }
 
-export const RankingTable = ({ rankings }: Props) => {
+export const RankingTable = ({ category, rankings }: Props) => {
   return (
     <Table.Root size="sm" interactive mt="4">
       <Table.Header>
@@ -19,22 +20,27 @@ export const RankingTable = ({ rankings }: Props) => {
       </Table.Header>
       <Table.Body>
         {rankings.map((item) => (
-          <Table.Row key={item.rank}>
+          <LinkBox as={Table.Row} key={item.rank}>
             <Table.Cell>
               <Flex gap="2">
                 <Text fontWeight="bold" color="teal.500">
                   #{item.rank}
                 </Text>{' '}
-                <Text fontWeight="bold">
-                  {item.name}
+                <Box>
+                  <LinkOverlay
+                    href={`https://app.cbtm.org.br/iUI/Site/RankingResultadoDetalhe?Categoria=${category}&Ano=2026&Associado=${item.id}&Tipo=O&UF=BR&Colocacao=${item.rank}&Pontos=${item.points}`}
+                    target="_blank"
+                  >
+                    <Text fontWeight="bold">{item.name}</Text>
+                  </LinkOverlay>
                   <Text textStyle="xs" color="fg.muted" fontWeight="normal">
                     {item.club} - {item.state}
                   </Text>
-                </Text>
+                </Box>
               </Flex>
             </Table.Cell>
             <Table.Cell textAlign="end">{item.points}</Table.Cell>
-          </Table.Row>
+          </LinkBox>
         ))}
       </Table.Body>
     </Table.Root>

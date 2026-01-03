@@ -9,6 +9,7 @@ export interface RankingOptions {
 }
 
 export interface RankingEntry {
+  id: string;
   rank: number;
   name: string;
   club: string;

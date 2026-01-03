@@ -1,12 +1,11 @@
-import type { Metadata } from 'next';
+'use client';
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { Provider } from './_chakra/provider';
 import { MainLayout } from './_layout/components/MainLayout';
 
-export const metadata: Metadata = {
-  title: 'CBTM Site - Revamped',
-  description: 'Uma versão customizada dos sistemas públicos da CBTM',
-};
+const queryClient = new QueryClient();
 
 export default function RootLayout({
   children,
@@ -17,7 +16,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Provider>
-          <MainLayout>{children}</MainLayout>
+          <QueryClientProvider client={queryClient}>
+            <MainLayout>{children}</MainLayout>
+          </QueryClientProvider>
         </Provider>
       </body>
     </html>

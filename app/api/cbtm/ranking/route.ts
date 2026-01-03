@@ -321,16 +321,16 @@ class CBTMCrawler {
         const clubAndState = clubAndStateSpan
           ? clubAndStateSpan.text.trim()
           : '';
-        const [club, state] = clubAndState.split(' - ');
+        const [club, state] = clubAndState.split('-');
 
         // Only add if we have meaningful data
         if (name && rank) {
           rankings.push({
-            rank: parseInt(rank, 10) || rank,
+            rank: parseInt(rank, 10),
             name: name,
-            club: club,
-            state,
-            points: parseInt(points, 10) || points,
+            club: club?.trim(),
+            state: state?.trim(),
+            points: parseInt(points, 10),
           });
         }
       } catch (error) {

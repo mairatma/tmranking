@@ -26,15 +26,18 @@ const fetchRanking = async (options: Required<RankingOptions>) => {
   return (await response.json()) as GetRankingResponse;
 };
 
-export const useRanking = (options: RankingOptions) => {
-  const requestOptions = {
-    year: DEFAULT_YEAR,
-    region: DEFAULT_REGION,
-    ...options,
-  };
+export const useRanking = (options: RankingOptions | null) => {
+  const requestOptions = options
+    ? {
+        year: DEFAULT_YEAR,
+        region: DEFAULT_REGION,
+        ...options,
+      }
+    : null;
 
   return useQuery({
     queryKey: ['ranking', requestOptions],
-    queryFn: () => fetchRanking(requestOptions),
+    queryFn: requestOptions ? () => fetchRanking(requestOptions) : () => null,
+    enabled: Boolean(requestOptions),
   });
 };

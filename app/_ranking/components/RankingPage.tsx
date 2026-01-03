@@ -1,16 +1,19 @@
 'use client';
 
-import { Heading, Loader, Stack } from '@chakra-ui/react';
+import { useState } from 'react';
+
+import { Center, Heading, Spinner, Stack } from '@chakra-ui/react';
 
 import { useRanking } from '../hooks/useRanking';
-import { RankingCategory } from '../types';
+import { CategorySelect } from './CategorySelect';
 import { RankingTable } from './RankingTable';
 import { RankingCardsList } from './RankingCardsList';
 
 export const RankingPage = () => {
-  const { data, isLoading } = useRanking({
-    category: RankingCategory.Sub9,
-  });
+  const [category, setCategory] = useState<string | null>(null);
+
+  const options = category ? { category } : null;
+  const { data, isLoading } = useRanking(options);
 
   return (
     <Stack>
@@ -18,7 +21,13 @@ export const RankingPage = () => {
         CBTM Ranking
       </Heading>
 
-      {isLoading && <Loader />}
+      <CategorySelect value={category} onChange={setCategory} />
+
+      {isLoading && (
+        <Center mt="8">
+          <Spinner size="xl" />
+        </Center>
+      )}
 
       {!isLoading && data && (
         <>

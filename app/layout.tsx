@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { Provider } from './_chakra/provider';
+import { MainLayout } from './_layout/components/MainLayout';
 
 export const metadata: Metadata = {
   title: 'CBTM Site - Revamped',
@@ -15,7 +16,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Provider>{children}</Provider>
+        <Provider>
+          <MainLayout>{children}</MainLayout>
+        </Provider>
       </body>
     </html>
   );

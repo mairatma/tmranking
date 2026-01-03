@@ -11,7 +11,7 @@ interface Props {
 
 export const RankingTable = ({ category, rankings }: Props) => {
   return (
-    <Table.Root size="sm" interactive mt="4">
+    <Table.Root size="sm" interactive mt="4" overflow="hidden">
       <Table.Header>
         <Table.Row>
           <Table.ColumnHeader>Nome</Table.ColumnHeader>
@@ -20,7 +20,7 @@ export const RankingTable = ({ category, rankings }: Props) => {
       </Table.Header>
       <Table.Body>
         {rankings.map((item) => (
-          <LinkBox as={Table.Row} key={item.rank}>
+          <LinkBox as={Table.Row} key={item.rank} transform="scale(1)">
             <Table.Cell>
               <Flex gap="2">
                 <Text fontWeight="bold" color="teal.500">

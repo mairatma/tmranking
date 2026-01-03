@@ -6,7 +6,6 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useRanking } from '../hooks/useRanking';
 import { CategorySelect } from './CategorySelect';
 import { RankingTable } from './RankingTable';
-import { RankingCardsList } from './RankingCardsList';
 import { AVAILABLE_CATEGORIES } from '../categories';
 
 const DEFAULT_CATEGORY_VALUE = AVAILABLE_CATEGORIES[0].value;
@@ -45,12 +44,7 @@ export const RankingPage = () => {
         </Center>
       )}
 
-      {!isLoading && data && (
-        <>
-          <RankingTable rankings={data.rankings} />
-          <RankingCardsList rankings={data.rankings} />
-        </>
-      )}
+      {!isLoading && data && <RankingTable rankings={data.rankings} />}
     </Stack>
   );
 };

@@ -1,6 +1,6 @@
 'use client';
 
-import { Table, Text } from '@chakra-ui/react';
+import { Flex, Table, Text } from '@chakra-ui/react';
 
 import { RankingEntry } from '../types';
 
@@ -10,13 +10,10 @@ interface Props {
 
 export const RankingTable = ({ rankings }: Props) => {
   return (
-    <Table.Root size="sm" interactive hideBelow="sm" mt="4">
+    <Table.Root size="sm" interactive mt="4">
       <Table.Header>
         <Table.Row>
-          <Table.ColumnHeader>Rank</Table.ColumnHeader>
           <Table.ColumnHeader>Nome</Table.ColumnHeader>
-          <Table.ColumnHeader>Estado</Table.ColumnHeader>
-          <Table.ColumnHeader>Clube</Table.ColumnHeader>
           <Table.ColumnHeader textAlign="end">Pontos</Table.ColumnHeader>
         </Table.Row>
       </Table.Header>
@@ -24,15 +21,18 @@ export const RankingTable = ({ rankings }: Props) => {
         {rankings.map((item) => (
           <Table.Row key={item.rank}>
             <Table.Cell>
-              <Text fontWeight="bold" color="teal.500">
-                {item.rank}
-              </Text>
+              <Flex gap="2">
+                <Text fontWeight="bold" color="teal.500">
+                  #{item.rank}
+                </Text>{' '}
+                <Text fontWeight="bold">
+                  {item.name}
+                  <Text textStyle="xs" color="fg.muted" fontWeight="normal">
+                    {item.club} - {item.state}
+                  </Text>
+                </Text>
+              </Flex>
             </Table.Cell>
-            <Table.Cell>
-              <Text fontWeight="bold">{item.name}</Text>
-            </Table.Cell>
-            <Table.Cell>{item.state}</Table.Cell>
-            <Table.Cell>{item.club}</Table.Cell>
             <Table.Cell textAlign="end">{item.points}</Table.Cell>
           </Table.Row>
         ))}

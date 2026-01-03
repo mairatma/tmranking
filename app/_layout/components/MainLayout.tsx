@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Container, Table } from '@chakra-ui/react';
+import { Box, Container } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
 interface Props {

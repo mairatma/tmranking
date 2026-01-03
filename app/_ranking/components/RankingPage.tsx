@@ -1,6 +1,6 @@
 'use client';
 
-import { Heading, Loader, Stack, Table } from '@chakra-ui/react';
+import { Heading, Loader, Stack, Table, Text } from '@chakra-ui/react';
 
 import { useRanking } from '../hooks/useRanking';
 import { RankingCategory } from '../types';
@@ -32,8 +32,14 @@ export const RankingPage = () => {
           <Table.Body>
             {data?.rankings.map((item) => (
               <Table.Row key={item.rank}>
-                <Table.Cell>{item.rank}</Table.Cell>
-                <Table.Cell>{item.name}</Table.Cell>
+                <Table.Cell>
+                  <Text fontWeight="bold" color="teal.500">
+                    {item.rank}
+                  </Text>
+                </Table.Cell>
+                <Table.Cell>
+                  <Text fontWeight="bold">{item.name}</Text>
+                </Table.Cell>
                 <Table.Cell>{item.state}</Table.Cell>
                 <Table.Cell>{item.club}</Table.Cell>
                 <Table.Cell textAlign="end">{item.points}</Table.Cell>

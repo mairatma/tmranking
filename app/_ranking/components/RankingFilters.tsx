@@ -12,15 +12,19 @@ import {
 } from '@chakra-ui/react';
 
 import { AVAILABLE_CATEGORIES, CategoryType, Gender } from '../categories';
+import { RankingOptions } from '../types';
+import { AVAILABLE_REGIONS } from '../regions';
+
+const REGION_COLLECTION = createListCollection({ items: AVAILABLE_REGIONS });
 
 interface Props {
-  value: string | null;
-  onChange: (value: string | null) => unknown;
+  value: RankingOptions;
+  onChange: (value: RankingOptions) => unknown;
 }
 
-export const CategorySelect = ({ value, onChange }: Props) => {
+export const RankingFilters = ({ value, onChange }: Props) => {
   const findCategory = value
-    ? AVAILABLE_CATEGORIES.find((item) => item.value === value)
+    ? AVAILABLE_CATEGORIES.find((item) => item.value === value.category)
     : null;
 
   const [gender, setGender] = useState<Gender>(
@@ -46,7 +50,10 @@ export const CategorySelect = ({ value, onChange }: Props) => {
       (item) => item.gender === newGender && item.type === categoryType,
     );
     setGender(newGender);
-    onChange(firstOption!.value);
+    onChange({
+      ...value,
+      category: firstOption!.value,
+    });
   };
 
   const handleCategoryTypeChange = (newCategoryType: CategoryType) => {
@@ -54,8 +61,13 @@ export const CategorySelect = ({ value, onChange }: Props) => {
       (item) => item.gender === gender && item.type === newCategoryType,
     );
     setCategoryType(newCategoryType);
-    onChange(firstOption!.value);
+    onChange({
+      ...value,
+      category: firstOption!.value,
+    });
   };
+
+  console.log('region, category', value);
 
   return (
     <Box>
@@ -103,36 +115,78 @@ export const CategorySelect = ({ value, onChange }: Props) => {
         </Box>
       </Flex>
 
-      <Select.Root
-        mt={{ smDown: '4', sm: '2' }}
-        size={{ smDown: 'lg', sm: 'md' }}
-        collection={selectCollection}
-        value={value ? [value] : []}
-        onValueChange={(e) => onChange(e.value[0] ?? null)}
-      >
-        <Select.HiddenSelect />
-        <Select.Label>Categoria</Select.Label>
-        <Select.Control>
-          <Select.Trigger>
-            <Select.ValueText placeholder="Selecione a categoria" />
-          </Select.Trigger>
-          <Select.IndicatorGroup>
-            <Select.Indicator />
-          </Select.IndicatorGroup>
-        </Select.Control>
-        <Portal>
-          <Select.Positioner>
-            <Select.Content>
-              {selectCollection.items.map((item) => (
-                <Select.Item item={item} key={item.value}>
-                  {item.label}
-                  <Select.ItemIndicator />
-                </Select.Item>
-              ))}
-            </Select.Content>
-          </Select.Positioner>
-        </Portal>
-      </Select.Root>
+      <Flex gap={{ smDown: '2', sm: '4' }} direction={{ smDown: 'column' }}>
+        <Select.Root
+          mt={{ smDown: '4', sm: '2' }}
+          size="md"
+          collection={selectCollection}
+          value={[value.category]}
+          onValueChange={(e) =>
+            onChange({
+              ...value,
+              category: e.value[0] ?? null,
+            })
+          }
+        >
+          <Select.HiddenSelect />
+          <Select.Label>Categoria</Select.Label>
+          <Select.Control>
+            <Select.Trigger>
+              <Select.ValueText placeholder="Selecione a categoria" />
+            </Select.Trigger>
+            <Select.IndicatorGroup>
+              <Select.Indicator />
+            </Select.IndicatorGroup>
+          </Select.Control>
+          <Portal>
+            <Select.Positioner>
+              <Select.Content>
+                {selectCollection.items.map((item) => (
+                  <Select.Item item={item} key={item.value}>
+                    {item.label}
+                    <Select.ItemIndicator />
+                  </Select.Item>
+                ))}
+              </Select.Content>
+            </Select.Positioner>
+          </Portal>
+        </Select.Root>
+        <Select.Root
+          mt={{ smDown: '4', sm: '2' }}
+          size="md"
+          collection={REGION_COLLECTION}
+          value={[value.region]}
+          onValueChange={(e) =>
+            onChange({
+              ...value,
+              region: e.value[0] ?? null,
+            })
+          }
+        >
+          <Select.HiddenSelect />
+          <Select.Label>Região</Select.Label>
+          <Select.Control>
+            <Select.Trigger>
+              <Select.ValueText placeholder="Selecione a região" />
+            </Select.Trigger>
+            <Select.IndicatorGroup>
+              <Select.Indicator />
+            </Select.IndicatorGroup>
+          </Select.Control>
+          <Portal>
+            <Select.Positioner>
+              <Select.Content>
+                {REGION_COLLECTION.items.map((item) => (
+                  <Select.Item item={item} key={item.value}>
+                    {item.label}
+                    <Select.ItemIndicator />
+                  </Select.Item>
+                ))}
+              </Select.Content>
+            </Select.Positioner>
+          </Portal>
+        </Select.Root>
+      </Flex>
     </Box>
   );
 };

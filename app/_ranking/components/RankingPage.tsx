@@ -4,11 +4,11 @@ import { Center, Heading, Spinner, Stack } from '@chakra-ui/react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 import { useRanking } from '../hooks/useRanking';
-import { CategorySelect } from './CategorySelect';
 import { RankingTable } from './RankingTable';
 import { AVAILABLE_CATEGORIES } from '../categories';
 import { AVAILABLE_REGIONS } from '../regions';
-import { RegionSelect } from './RegionSelect';
+import { RankingFilters } from './RankingFilters';
+import { RankingOptions } from '../types';
 
 const DEFAULT_CATEGORY_VALUE = AVAILABLE_CATEGORIES[0].value;
 const DEFAULT_REGION_VALUE = AVAILABLE_REGIONS[0].value;
@@ -23,23 +23,10 @@ export const RankingPage = () => {
 
   const { data, isLoading } = useRanking({ category, region });
 
-  const handleCategoryChange = (newCategory: string | null) => {
+  const handleFiltersChange = (newFilters: RankingOptions) => {
     const newParams = new URLSearchParams(searchParams);
-    if (newCategory) {
-      newParams.set('category', newCategory);
-    } else {
-      newParams.delete('category');
-    }
-    router.push(`${pathname}?${newParams.toString()}`);
-  };
-
-  const handleRegionChange = (newRegion: string | null) => {
-    const newParams = new URLSearchParams(searchParams);
-    if (newRegion) {
-      newParams.set('region', newRegion);
-    } else {
-      newParams.delete('region');
-    }
+    newParams.set('category', newFilters.category);
+    newParams.set('region', newFilters.region);
     router.push(`${pathname}?${newParams.toString()}`);
   };
 
@@ -49,8 +36,10 @@ export const RankingPage = () => {
         CBTM Ranking
       </Heading>
 
-      <CategorySelect value={category} onChange={handleCategoryChange} />
-      <RegionSelect value={region} onChange={handleRegionChange} />
+      <RankingFilters
+        value={{ category, region }}
+        onChange={handleFiltersChange}
+      />
 
       {isLoading && (
         <Center mt="8">

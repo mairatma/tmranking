@@ -1,13 +1,17 @@
 'use client';
 
+import { useEffect, useMemo, useState } from 'react';
+
 import {
-  Combobox,
+  Box,
+  createListCollection,
+  Flex,
   Portal,
-  useFilter,
-  useListCollection,
+  SegmentGroup,
+  Select,
 } from '@chakra-ui/react';
 
-import { AVAILABLE_CATEGORIES } from '../categories';
+import { AVAILABLE_CATEGORIES, CategoryType, Gender } from '../categories';
 
 interface Props {
   value: string | null;
@@ -15,43 +19,101 @@ interface Props {
 }
 
 export const CategorySelect = ({ value, onChange }: Props) => {
-  const { contains } = useFilter({ sensitivity: 'base' });
+  const [gender, setGender] = useState<Gender>(Gender.Male);
+  const [categoryType, setCategoryType] = useState<CategoryType>(
+    CategoryType.Absolute,
+  );
 
-  const { collection, filter } = useListCollection({
-    initialItems: AVAILABLE_CATEGORIES,
-    filter: contains,
-  });
+  const selectCollection = useMemo(() => {
+    return createListCollection({
+      items: AVAILABLE_CATEGORIES.filter(
+        (item) => item.gender === gender && item.type === categoryType,
+      ).map((item) => ({
+        value: item.value,
+        label: item.label,
+      })),
+    });
+  }, [gender, categoryType]);
+
+  useEffect(() => {
+    onChange(selectCollection.items[0].value);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectCollection]);
 
   return (
-    <Combobox.Root
-      collection={collection}
-      onInputValueChange={(e) => filter(e.inputValue)}
-      value={value ? [value] : []}
-      onValueChange={(e) => onChange(e.value[0] ?? null)}
-      width="320px"
-      smDown={{ width: '100%' }}
-    >
-      <Combobox.Label>Categoria</Combobox.Label>
-      <Combobox.Control>
-        <Combobox.Input placeholder="Escreva para procurar" />
-        <Combobox.IndicatorGroup>
-          <Combobox.ClearTrigger />
-          <Combobox.Trigger />
-        </Combobox.IndicatorGroup>
-      </Combobox.Control>
-      <Portal>
-        <Combobox.Positioner>
-          <Combobox.Content>
-            <Combobox.Empty>Nenhuma categoria encontrada</Combobox.Empty>
-            {collection.items.map((item) => (
-              <Combobox.Item item={item} key={item.value}>
-                {item.label}
-                <Combobox.ItemIndicator />
-              </Combobox.Item>
-            ))}
-          </Combobox.Content>
-        </Combobox.Positioner>
-      </Portal>
-    </Combobox.Root>
+    <Box>
+      <Flex gap={{ smDown: '4', sm: '2' }} direction={{ smDown: 'column' }}>
+        <Box>
+          <SegmentGroup.Root
+            size="lg"
+            defaultValue={gender}
+            onValueChange={(e) => setGender(e.value as Gender)}
+          >
+            <SegmentGroup.Indicator bgColor="teal.200" />
+            <SegmentGroup.Item value={Gender.Male}>
+              <SegmentGroup.ItemText>MAS</SegmentGroup.ItemText>
+              <SegmentGroup.ItemHiddenInput />
+            </SegmentGroup.Item>
+            <SegmentGroup.Item value={Gender.Female}>
+              <SegmentGroup.ItemText>FEM</SegmentGroup.ItemText>
+              <SegmentGroup.ItemHiddenInput />
+            </SegmentGroup.Item>
+          </SegmentGroup.Root>
+        </Box>
+
+        <Box>
+          <SegmentGroup.Root
+            size="lg"
+            defaultValue={categoryType}
+            onValueChange={(e) => setCategoryType(e.value as CategoryType)}
+          >
+            <SegmentGroup.Indicator bgColor="teal.200" />
+            <SegmentGroup.Item value={CategoryType.Absolute}>
+              <SegmentGroup.ItemText>ABSOLUTO</SegmentGroup.ItemText>
+              <SegmentGroup.ItemHiddenInput />
+            </SegmentGroup.Item>
+            <SegmentGroup.Item value={CategoryType.Youth}>
+              <SegmentGroup.ItemText>JOVEM</SegmentGroup.ItemText>
+              <SegmentGroup.ItemHiddenInput />
+            </SegmentGroup.Item>
+            <SegmentGroup.Item value={CategoryType.Senior}>
+              <SegmentGroup.ItemText>ADULTO</SegmentGroup.ItemText>
+              <SegmentGroup.ItemHiddenInput />
+            </SegmentGroup.Item>
+          </SegmentGroup.Root>
+        </Box>
+      </Flex>
+
+      <Select.Root
+        mt={{ smDown: '4', sm: '2' }}
+        size={{ smDown: 'lg', sm: 'md' }}
+        collection={selectCollection}
+        value={value ? [value] : []}
+        onValueChange={(e) => onChange(e.value[0] ?? null)}
+      >
+        <Select.HiddenSelect />
+        <Select.Label>Categoria</Select.Label>
+        <Select.Control>
+          <Select.Trigger>
+            <Select.ValueText placeholder="Selecione a categoria" />
+          </Select.Trigger>
+          <Select.IndicatorGroup>
+            <Select.Indicator />
+          </Select.IndicatorGroup>
+        </Select.Control>
+        <Portal>
+          <Select.Positioner>
+            <Select.Content>
+              {selectCollection.items.map((item) => (
+                <Select.Item item={item} key={item.value}>
+                  {item.label}
+                  <Select.ItemIndicator />
+                </Select.Item>
+              ))}
+            </Select.Content>
+          </Select.Positioner>
+        </Portal>
+      </Select.Root>
+    </Box>
   );
 };

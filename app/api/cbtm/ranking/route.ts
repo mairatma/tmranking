@@ -323,9 +323,14 @@ class CBTMCrawler {
           : '';
         const [club, state] = clubAndState.split('-');
 
+        const link = row.querySelector('a');
+        const href = link!.getAttribute('href')!;
+        const id = /Associado=(\d+)/.exec(href)![1];
+
         // Only add if we have meaningful data
         if (name && rank) {
           rankings.push({
+            id,
             rank: parseInt(rank, 10),
             name: name,
             club: club?.trim(),

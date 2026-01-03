@@ -1,11 +1,7 @@
-export enum RankingRegion {
-  Brasil = 'Brasil',
-}
-
 export interface RankingOptions {
   category: string;
+  region: string;
   year?: number;
-  region?: RankingRegion;
 }
 
 export interface RankingEntry {

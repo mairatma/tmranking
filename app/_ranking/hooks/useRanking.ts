@@ -1,8 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import { RankingEntry, RankingOptions, RankingRegion } from '../types';
+import { RankingEntry, RankingOptions } from '../types';
 
 const DEFAULT_YEAR = new Date().getFullYear();
-const DEFAULT_REGION = RankingRegion.Brasil;
 
 interface GetRankingResponse {
   rankings: [RankingEntry];
@@ -30,7 +29,6 @@ export const useRanking = (options: RankingOptions | null) => {
   const requestOptions = options
     ? {
         year: DEFAULT_YEAR,
-        region: DEFAULT_REGION,
         ...options,
       }
     : null;

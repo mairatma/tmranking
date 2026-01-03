@@ -7,8 +7,11 @@ import { useRanking } from '../hooks/useRanking';
 import { CategorySelect } from './CategorySelect';
 import { RankingTable } from './RankingTable';
 import { AVAILABLE_CATEGORIES } from '../categories';
+import { AVAILABLE_REGIONS } from '../regions';
+import { RegionSelect } from './RegionSelect';
 
 const DEFAULT_CATEGORY_VALUE = AVAILABLE_CATEGORIES[0].value;
+const DEFAULT_REGION_VALUE = AVAILABLE_REGIONS[0].value;
 
 export const RankingPage = () => {
   const router = useRouter();
@@ -16,16 +19,26 @@ export const RankingPage = () => {
 
   const searchParams = useSearchParams();
   const category = searchParams.get('category') ?? DEFAULT_CATEGORY_VALUE;
+  const region = searchParams.get('region') ?? DEFAULT_REGION_VALUE;
 
-  const options = category ? { category } : null;
-  const { data, isLoading } = useRanking(options);
+  const { data, isLoading } = useRanking({ category, region });
 
-  const handleCategoryChange = (category: string | null) => {
+  const handleCategoryChange = (newCategory: string | null) => {
     const newParams = new URLSearchParams(searchParams);
-    if (category) {
-      newParams.set('category', category);
+    if (newCategory) {
+      newParams.set('category', newCategory);
     } else {
       newParams.delete('category');
+    }
+    router.push(`${pathname}?${newParams.toString()}`);
+  };
+
+  const handleRegionChange = (newRegion: string | null) => {
+    const newParams = new URLSearchParams(searchParams);
+    if (newRegion) {
+      newParams.set('region', newRegion);
+    } else {
+      newParams.delete('region');
     }
     router.push(`${pathname}?${newParams.toString()}`);
   };
@@ -37,6 +50,7 @@ export const RankingPage = () => {
       </Heading>
 
       <CategorySelect value={category} onChange={handleCategoryChange} />
+      <RegionSelect value={region} onChange={handleRegionChange} />
 
       {isLoading && (
         <Center mt="8">

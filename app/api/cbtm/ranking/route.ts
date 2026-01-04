@@ -218,10 +218,7 @@ class CBTMCrawler {
     return params;
   }
 
-  /**
-   * Fetch ranking data
-   */
-  async getRanking(
+  async fetchRankingFirstPage(
     category: string,
     year: string,
     region: string,
@@ -260,13 +257,93 @@ class CBTMCrawler {
     // Update ViewState for potential next request
     this.updateViewState(html);
 
+    return html;
+  }
+
+  /**
+   * Fetch ranking data
+   */
+  async getRanking(
+    category: string,
+    year: string,
+    region: string,
+    athlete: string | null,
+  ) {
+    const html = await this.fetchRankingFirstPage(
+      category,
+      year,
+      region,
+      athlete,
+    );
+
     // Parse and return data
-    const rankings = this.parseRankingTable(html);
+    const data = this.parseRankingTable(html);
 
     return {
-      rankings,
+      ...data,
       crawledAt: new Date().toISOString(),
     };
+  }
+
+  extractHtmlField(responseText: string) {
+    // Regex to match 'html':'...' or "html":"..."
+    // Captures everything between the quotes, handling escaped characters
+    const replaced = responseText.replace(/\\'/g, '___ESCAPED_SINGLE___');
+    const regex = /'html':'([^']+)'/;
+
+    const match = replaced.match(regex);
+
+    if (!match) {
+      throw new Error('HTML field not found');
+    }
+
+    // Get the captured HTML content
+    return match[1].replace(/___ESCAPED_SINGLE___/g, "\\'");
+  }
+
+  async fetchRankingPage(
+    category: string,
+    year: string,
+    region: string,
+    athlete: string | null,
+    page: number,
+  ) {
+    await this.fetchRankingFirstPage(category, year, region, athlete);
+
+    const formData = this.buildFormData(category, year, region, athlete);
+    formData.set('__EVENTTARGET', '');
+    formData.append('__CALLBACKID', 'ctl00$mainContent$grid');
+    formData.append(
+      '__CALLBACKPARAM',
+      `c0:KV|2;[];GB|20;12|PAGERONCLICK3|PN${page - 1};`,
+    );
+
+    const response = await fetch(`${BASE_URL}?Tipo=O`, {
+      method: 'POST',
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Accept:
+          'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'pt-BR,pt;q=0.9,en;q=0.8',
+        ...(this.sessionData?.cookies && { Cookie: this.sessionData.cookies }),
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const responseText = await response.text();
+    const extracted = this.extractHtmlField(responseText);
+
+    const data = this.parseRankingTable(extracted);
+    return JSON.stringify({
+      ...data,
+      crawledAt: new Date().toISOString(),
+    });
   }
 
   /**
@@ -277,12 +354,7 @@ class CBTMCrawler {
     const root = parse(html);
 
     // Find the main table by ID
-    const table = root.querySelector('table#mainContent_grid_DXMainTable');
-
-    if (!table) {
-      console.warn('Table mainContent_grid_DXMainTable not found');
-      return [];
-    }
+    const table = root.querySelector('table#mainContent_grid_DXMainTable')!;
 
     const rankings = [];
 
@@ -344,7 +416,9 @@ class CBTMCrawler {
       }
     }
 
-    return rankings;
+    const totalItems = /(?:'|\\')itemCount(?:'|\\'):\s*(\d+)/.exec(html)![1];
+
+    return { rankings, totalItems };
   }
 }
 
@@ -373,6 +447,7 @@ export async function GET(req: NextRequest) {
     const year = req.nextUrl.searchParams.get('year');
     const region = req.nextUrl.searchParams.get('region');
     const athlete = req.nextUrl.searchParams.get('athlete');
+    const page = req.nextUrl.searchParams.get('page');
 
     // Validate required parameters
     if (!category || !year || !region) {
@@ -394,6 +469,26 @@ export async function GET(req: NextRequest) {
     }
 
     const crawler = new CBTMCrawler();
+
+    if (page && Number(page) > 1) {
+      const result = await crawler.fetchRankingPage(
+        category,
+        year,
+        region,
+        athlete,
+        Number(page),
+      );
+      return new Response(result, {
+        status: 200,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, If-None-Match',
+          ETag: etag,
+          'Cache-Control': 'public, max-age=3600', // 1 hour CDN cache
+        },
+      });
+    }
     const result = await crawler.getRanking(category, year, region, athlete);
     const resultString = JSON.stringify(result);
 

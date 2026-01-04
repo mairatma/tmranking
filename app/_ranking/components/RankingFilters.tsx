@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import {
   Box,
@@ -22,23 +22,22 @@ interface Props {
   onChange: (value: RankingOptions) => unknown;
 }
 
+const filterByGenderAndType = (gender: Gender, categoryType: CategoryType) => {
+  return AVAILABLE_CATEGORIES.filter(
+    (item) => item.gender === gender && item.type === categoryType,
+  );
+};
+
 export const RankingFilters = ({ value, onChange }: Props) => {
-  const findCategory = value
+  const categoryObj = value
     ? AVAILABLE_CATEGORIES.find((item) => item.value === value.category)
     : null;
-
-  const [gender, setGender] = useState<Gender>(
-    findCategory?.gender ?? Gender.Male,
-  );
-  const [categoryType, setCategoryType] = useState<CategoryType>(
-    findCategory?.type ?? CategoryType.Absolute,
-  );
+  const gender = categoryObj?.gender ?? Gender.Male;
+  const categoryType = categoryObj?.type ?? CategoryType.Absolute;
 
   const selectCollection = useMemo(() => {
     return createListCollection({
-      items: AVAILABLE_CATEGORIES.filter(
-        (item) => item.gender === gender && item.type === categoryType,
-      ).map((item) => ({
+      items: filterByGenderAndType(gender, categoryType).map((item) => ({
         value: item.value,
         label: item.label,
       })),
@@ -46,24 +45,16 @@ export const RankingFilters = ({ value, onChange }: Props) => {
   }, [gender, categoryType]);
 
   const handleGenderChange = (newGender: Gender) => {
-    const firstOption = AVAILABLE_CATEGORIES.find(
-      (item) => item.gender === newGender && item.type === categoryType,
-    );
-    setGender(newGender);
     onChange({
       ...value,
-      category: firstOption!.value,
+      category: filterByGenderAndType(newGender, categoryType)![0].value,
     });
   };
 
   const handleCategoryTypeChange = (newCategoryType: CategoryType) => {
-    const firstOption = AVAILABLE_CATEGORIES.find(
-      (item) => item.gender === gender && item.type === newCategoryType,
-    );
-    setCategoryType(newCategoryType);
     onChange({
       ...value,
-      category: firstOption!.value,
+      category: filterByGenderAndType(gender, newCategoryType)![0].value,
     });
   };
 

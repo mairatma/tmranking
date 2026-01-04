@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  ButtonGroup,
   Center,
   Heading,
   IconButton,
@@ -74,13 +75,15 @@ export const RankingPage = () => {
                 handleFiltersChange({ category, region, page: e.page })
               }
             >
-              <Pagination.Items
-                render={(page) => (
-                  <IconButton variant={{ base: 'ghost', _selected: 'outline' }}>
-                    {page.value}
-                  </IconButton>
-                )}
-              />
+              <ButtonGroup variant="ghost" size="sm">
+                <Pagination.Items
+                  render={(page) => (
+                    <IconButton variant={{ base: 'ghost', _selected: 'solid' }}>
+                      {page.value}
+                    </IconButton>
+                  )}
+                />
+              </ButtonGroup>
             </Pagination.Root>
           </Center>
         </>

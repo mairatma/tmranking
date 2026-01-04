@@ -2,6 +2,7 @@ export interface RankingOptions {
   category: string;
   region: string;
   year?: number;
+  page?: number;
 }
 
 export interface RankingEntry {

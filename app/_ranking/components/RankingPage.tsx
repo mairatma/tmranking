@@ -1,6 +1,13 @@
 'use client';
 
-import { Center, Heading, Spinner, Stack } from '@chakra-ui/react';
+import {
+  Center,
+  Heading,
+  IconButton,
+  Pagination,
+  Spinner,
+  Stack,
+} from '@chakra-ui/react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 import { useRanking } from '../hooks/useRanking';
@@ -12,6 +19,7 @@ import { RankingOptions } from '../types';
 
 const DEFAULT_CATEGORY_VALUE = AVAILABLE_CATEGORIES[0].value;
 const DEFAULT_REGION_VALUE = AVAILABLE_REGIONS[0].value;
+const INITIAL_PAGE = 1;
 
 export const RankingPage = () => {
   const router = useRouter();
@@ -20,13 +28,19 @@ export const RankingPage = () => {
   const searchParams = useSearchParams();
   const category = searchParams.get('category') ?? DEFAULT_CATEGORY_VALUE;
   const region = searchParams.get('region') ?? DEFAULT_REGION_VALUE;
+  const page = Number(searchParams.get('page')) ?? INITIAL_PAGE;
 
-  const { data, isLoading } = useRanking({ category, region });
+  const { data, isLoading } = useRanking({
+    category,
+    region,
+    page,
+  });
 
   const handleFiltersChange = (newFilters: RankingOptions) => {
     const newParams = new URLSearchParams(searchParams);
     newParams.set('category', newFilters.category);
     newParams.set('region', newFilters.region);
+    newParams.set('page', (newFilters.page ?? INITIAL_PAGE).toString());
     router.push(`${pathname}?${newParams.toString()}`);
   };
 
@@ -48,7 +62,28 @@ export const RankingPage = () => {
       )}
 
       {!isLoading && data && (
-        <RankingTable rankings={data.rankings} category={category} />
+        <>
+          <RankingTable rankings={data.rankings} category={category} />
+
+          <Center>
+            <Pagination.Root
+              count={data.totalItems}
+              pageSize={50}
+              page={page}
+              onPageChange={(e) =>
+                handleFiltersChange({ category, region, page: e.page })
+              }
+            >
+              <Pagination.Items
+                render={(page) => (
+                  <IconButton variant={{ base: 'ghost', _selected: 'outline' }}>
+                    {page.value}
+                  </IconButton>
+                )}
+              />
+            </Pagination.Root>
+          </Center>
+        </>
       )}
     </Stack>
   );

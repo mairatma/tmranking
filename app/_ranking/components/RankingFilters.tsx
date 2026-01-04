@@ -35,7 +35,7 @@ export const RankingFilters = ({ value, onChange }: Props) => {
   const gender = categoryObj?.gender ?? Gender.Male;
   const categoryType = categoryObj?.type ?? CategoryType.Absolute;
 
-  const selectCollection = useMemo(() => {
+  const categoryCollection = useMemo(() => {
     return createListCollection({
       items: filterByGenderAndType(gender, categoryType).map((item) => ({
         value: item.value,
@@ -106,7 +106,7 @@ export const RankingFilters = ({ value, onChange }: Props) => {
         <Select.Root
           mt={{ smDown: '4', sm: '2' }}
           size="md"
-          collection={selectCollection}
+          collection={categoryCollection}
           value={[value.category]}
           onValueChange={(e) =>
             onChange({
@@ -128,7 +128,7 @@ export const RankingFilters = ({ value, onChange }: Props) => {
           <Portal>
             <Select.Positioner>
               <Select.Content>
-                {selectCollection.items.map((item) => (
+                {categoryCollection.items.map((item) => (
                   <Select.Item item={item} key={item.value}>
                     {item.label}
                     <Select.ItemIndicator />

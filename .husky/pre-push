@@ -1,1 +1,1 @@
-yarn lint && yarn prettier --check . 
+yarn lint --max-warnings 0 && yarn prettier --check . 

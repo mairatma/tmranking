@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Flex, LinkBox, LinkOverlay, Table, Text } from '@chakra-ui/react';
+import { Box, Flex, Table, Text } from '@chakra-ui/react';
 
 import { RankingEntry } from '../types';
 import Link from 'next/link';

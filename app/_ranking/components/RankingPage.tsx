@@ -75,7 +75,7 @@ export const RankingPage = () => {
                 handleFiltersChange({ category, region, page: e.page })
               }
             >
-              <ButtonGroup variant="ghost" size="sm">
+              <ButtonGroup variant="ghost" size="sm" colorPalette="teal">
                 <Pagination.Items
                   render={(page) => (
                     <IconButton variant={{ base: 'ghost', _selected: 'solid' }}>

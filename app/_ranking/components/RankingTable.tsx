@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Flex, Table, Text } from '@chakra-ui/react';
+import { Box, EmptyState, Flex, Table, Text, VStack } from '@chakra-ui/react';
 
 import { RankingEntry } from '../types';
 import Link from 'next/link';
@@ -11,6 +11,21 @@ interface Props {
 }
 
 export const RankingTable = ({ category, rankings }: Props) => {
+  if (rankings.length == 0) {
+    return (
+      <EmptyState.Root>
+        <EmptyState.Content>
+          <VStack textAlign="center">
+            <EmptyState.Title>Nenhum atleta encontrado</EmptyState.Title>
+            <EmptyState.Description>
+              Não há atletas para os filtros selectionados.
+            </EmptyState.Description>
+          </VStack>
+        </EmptyState.Content>
+      </EmptyState.Root>
+    );
+  }
+
   return (
     <Table.Root size="sm" interactive mt="4">
       <Table.Header>

@@ -63,7 +63,6 @@ export const RankingFilters = ({ value, onChange }: Props) => {
       <Flex gap={{ smDown: '4', sm: '2' }} direction={{ smDown: 'column' }}>
         <Box>
           <SegmentGroup.Root
-            size="lg"
             defaultValue={gender}
             onValueChange={(e) => handleGenderChange(e.value as Gender)}
           >
@@ -81,7 +80,6 @@ export const RankingFilters = ({ value, onChange }: Props) => {
 
         <Box>
           <SegmentGroup.Root
-            size="lg"
             defaultValue={categoryType}
             onValueChange={(e) =>
               handleCategoryTypeChange(e.value as CategoryType)

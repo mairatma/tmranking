@@ -3,7 +3,6 @@
 import {
   ButtonGroup,
   Center,
-  Heading,
   IconButton,
   Pagination,
   Spinner,
@@ -47,10 +46,6 @@ export const RankingPage = () => {
 
   return (
     <Stack>
-      <Heading size="3xl" letterSpacing="tight">
-        CBTM Ranking
-      </Heading>
-
       <RankingFilters
         value={{ category, region }}
         onChange={handleFiltersChange}

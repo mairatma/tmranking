@@ -28,3 +28,19 @@ export const extractGridCallbackState = (root: HTMLElement) => {
 
   throw new Error('Could not find grid callback state');
 };
+
+export const extractHtmlFromCallbackResponse = (responseText: string) => {
+  // Regex to match 'html':'...' or "html":"..."
+  // Captures everything between the quotes, handling escaped characters
+  const replaced = responseText.replace(/\\'/g, '___ESCAPED_SINGLE___');
+  const regex = /'html':'([^']+)'/;
+
+  const match = replaced.match(regex);
+
+  if (!match) {
+    throw new Error('HTML field not found');
+  }
+
+  // Get the captured HTML content
+  return match[1].replace(/___ESCAPED_SINGLE___/g, "\\'");
+};

@@ -1,5 +1,11 @@
 import { NextRequest } from 'next/server';
-import { HTMLElement, parse } from 'node-html-parser';
+import { parse } from 'node-html-parser';
+
+import { RANKING_INITIAL_SESSION_DATA } from '../crawler/session';
+import {
+  extractGridCallbackState,
+  extractInputValue,
+} from '../crawler/helpers';
 
 const BASE_URL = 'https://app.cbtm.org.br/iUI/Site/RankingResultado';
 
@@ -11,10 +17,6 @@ interface CbtmSessionData {
   cookies: string | null;
 }
 
-const CATEGORY_TO_NAME: Record<string, string> = {
-  52: 'SUB-09 MAS',
-};
-
 /**
  * CBTM Ranking Crawler
  * Fetches table tennis rankings with stateful ViewState management
@@ -23,94 +25,7 @@ class CBTMCrawler {
   private sessionData: CbtmSessionData | null;
 
   constructor() {
-    this.sessionData = null;
-  }
-
-  /**
-   * Initialize session and extract ViewState tokens
-   */
-  async initializeSession() {
-    try {
-      const response = await fetch(`${BASE_URL}?Tipo=O`, {
-        headers: {
-          'User-Agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-          Accept:
-            'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-          'Accept-Language': 'pt-BR,pt;q=0.9,en;q=0.8',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-
-      const html = await response.text();
-      const root = parse(html);
-
-      // Extract ViewState tokens
-      const viewState = this.extractInputValue(root, '__VIEWSTATE');
-      const viewStateGenerator = this.extractInputValue(
-        root,
-        '__VIEWSTATEGENERATOR',
-      );
-      const eventValidation = this.extractInputValue(root, '__EVENTVALIDATION');
-
-      // Extract DevExpress grid callback state
-      const gridCallbackState = this.extractGridCallbackState(root);
-
-      // Store cookies
-      const cookies = response.headers.get('set-cookie');
-
-      if (!viewState || !viewStateGenerator || !eventValidation) {
-        throw new Error('Could not extract session data values');
-      }
-
-      this.sessionData = {
-        viewState,
-        viewStateGenerator,
-        eventValidation,
-        gridCallbackState,
-        cookies,
-      };
-
-      return true;
-    } catch (error) {
-      console.error('Failed to initialize session:', error);
-      return false;
-    }
-  }
-
-  /**
-   * Extract value from hidden input field
-   */
-  extractInputValue(root: HTMLElement, name: string) {
-    const input = root.querySelector(`input[name="${name}"]`);
-    return input ? input.getAttribute('value') : null;
-  }
-
-  extractGridCallbackState(root: HTMLElement) {
-    // Alternative: look for it in inline JavaScript
-    const scripts = root.querySelectorAll('script');
-    for (const script of scripts) {
-      const scriptText = script.text;
-
-      // Look for callbackState in various patterns
-      const patterns = [
-        /callbackState["\s:]+["']([^"']+)["']/i,
-        /["']callbackState["']:\s*["']([^"']+)["']/i,
-        /callbackState=["']([^"']+)["']/i,
-      ];
-
-      for (const pattern of patterns) {
-        const match = scriptText.match(pattern);
-        if (match && match[1]) {
-          return match[1];
-        }
-      }
-    }
-
-    throw new Error('Could not find grid callback state');
+    this.sessionData = RANKING_INITIAL_SESSION_DATA;
   }
 
   /**
@@ -121,11 +36,8 @@ class CBTMCrawler {
 
     const root = parse(html);
 
-    const newViewState = this.extractInputValue(root, '__VIEWSTATE');
-    const newEventValidation = this.extractInputValue(
-      root,
-      '__EVENTVALIDATION',
-    );
+    const newViewState = extractInputValue(root, '__VIEWSTATE');
+    const newEventValidation = extractInputValue(root, '__EVENTVALIDATION');
 
     if (newViewState) {
       this.sessionData = { ...this.sessionData, viewState: newViewState };
@@ -136,7 +48,7 @@ class CBTMCrawler {
         eventValidation: newEventValidation,
       };
 
-    const newGridCallbackState = this.extractGridCallbackState(root);
+    const newGridCallbackState = extractGridCallbackState(root);
     {
       this.sessionData = {
         ...this.sessionData,
@@ -170,9 +82,9 @@ class CBTMCrawler {
     // Ranking dropdown
     params.append(
       'ctl00$mainContent$cmbRANKING$State',
-      `{ "rawValue": "${CATEGORY_TO_NAME[category]}" }`,
+      `{ "rawValue": "${category}" }`,
     );
-    params.append('ctl00$mainContent$cmbRANKING', CATEGORY_TO_NAME[category]);
+    params.append('ctl00$mainContent$cmbRANKING', category);
     params.append('ctl00$mainContent$cmbRANKING$L', category);
     params.append('mainContent_cmbRANKING_VI', category);
 
@@ -224,14 +136,6 @@ class CBTMCrawler {
     region: string,
     athlete: string | null,
   ) {
-    // Initialize if needed
-    if (!this.sessionData) {
-      const initialized = await this.initializeSession();
-      if (!initialized) {
-        throw new Error('Failed to initialize session');
-      }
-    }
-
     const formData = this.buildFormData(category, year, region, athlete);
 
     const response = await fetch(`${BASE_URL}?Tipo=O`, {

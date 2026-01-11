@@ -16,10 +16,5 @@ export default async function Tournament({
   const { id } = await params;
   await connection();
 
-  return (
-    <Stack>
-      <TournamentPage id={id} />
-      WIP
-    </Stack>
-  );
+  return <TournamentPage id={id} />;
 }

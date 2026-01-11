@@ -1,4 +1,5 @@
 import { parse } from 'node-html-parser';
+import { extractGridCallbackState, extractInputValue } from '../helpers';
 
 /**
  * Parse ranking table from HTML
@@ -69,4 +70,17 @@ export const parseRankingTable = (html: string) => {
   const totalItems = /(?:'|\\')itemCount(?:'|\\'):\s*(\d+)/.exec(html)![1];
 
   return { rankings, totalItems };
+};
+
+export const extractSessionData = (html: string) => {
+  const root = parse(html);
+
+  const viewState = extractInputValue(root, '__VIEWSTATE');
+  const eventValidation = extractInputValue(root, '__EVENTVALIDATION');
+  const gridCallbackState = extractGridCallbackState(root);
+  if (!viewState || !eventValidation || !gridCallbackState) {
+    throw new Error('Could not extract new session data from html');
+  }
+
+  return { viewState, eventValidation, gridCallbackState };
 };

@@ -1,10 +1,6 @@
 import { extractHtmlFromCallbackResponse } from '../helpers';
-import { parseRankingTable } from './parser';
-import {
-  CbtmSessionData,
-  extractSessionData,
-  RANKING_INITIAL_SESSION_DATA,
-} from '../session';
+import { extractSessionData, parseRankingTable } from './parser';
+import { CbtmSessionData, RANKING_INITIAL_SESSION_DATA } from '../session';
 import { buildRankingFormData } from './formData';
 import { RankingOptions } from './types';
 import { buildCrawlerResponse } from '../response';

@@ -39,3 +39,34 @@ export const parseTournamentNameAndCategories = (html: string) => {
 
   return { title, categories: normalizedCategories };
 };
+
+const INTEGER_REGEX = /(\d+)/;
+
+export const parseTournamentRegistrations = (html: string) => {
+  const root = parse(html);
+
+  const tableElement = root.querySelector(
+    '#MainContent_MainContent_EventoTabPage_Inscricoes_CardViewInscricoes_DXMainTable td',
+  );
+  const registrationElements =
+    tableElement?.childNodes as unknown as HTMLElement[];
+
+  const registrations = registrationElements?.map((element) => {
+    const dataElements = element.querySelectorAll(
+      '.dxflNestedControlCell_MaterialCompact',
+    );
+    const name = dataElements[0].textContent.trim() ?? '';
+    const team = dataElements[1].textContent.trim() ?? '';
+    const registrationType = dataElements[3].textContent.trim() ?? '';
+    const rankingPoints = Number(
+      dataElements[4].textContent.match(INTEGER_REGEX)?.[1] ?? 0,
+    );
+    const ratingPoints = Number(
+      dataElements[5].textContent.match(INTEGER_REGEX)?.[1] ?? 0,
+    );
+
+    return { name, team, registrationType, rankingPoints, ratingPoints };
+  });
+
+  return registrations;
+};

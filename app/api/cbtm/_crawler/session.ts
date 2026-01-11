@@ -1,7 +1,3 @@
-import { parse } from 'node-html-parser';
-
-import { extractGridCallbackState, extractInputValue } from './helpers';
-
 export interface CbtmSessionData {
   viewState: string;
   viewStateGenerator: string;
@@ -20,17 +16,4 @@ export const RANKING_INITIAL_SESSION_DATA: CbtmSessionData = {
     'OcsTVSRs9e1/HH/pytLAgtBHHS4R2RVCBy0u3lqalQX9TzwJS2ULbR8Pk9c128mxcIkMgxZDLvaj2wWp06c1LbfzsRFImJFmb3dU7bXmnzIRCCRNocStbkJ6r5RtXRR97Ep8FrTIfTmxkkdQbladlJjLHp7YN2Rt5rgupoGL2DN5kvEXhkuW2wPZ1Q20NwxqRVQ4uTqHHJ9U+Z42Sc1lThpVZ5ipB4KnV9blVV9+XauDmfvsTkXq875UReY1+2772Foene+sYNBFOnEKh1rce+lmVl7mpi76UVaPVHz9yapuB/ZG06mmzzfJGEmC6ouzLAc/w3YUdcrY6fHCGzMHoaT6hJkkdyponGfxwE4BruCKgL5QkRkjecHoegOpcrzi/Wgmbo1R+dBtVC+cH3LHTiQ44qeHNvE/noZkZpr/EkWItaHHNwTa0kZFE1OfNdUiVCj2eh8NVJdW53pMtUUoOlL/B6t+zGFRWwkJphUESblqVghL',
   cookies:
     '__AntiXsrfToken=3fefcd13cc9a445495e0ce1b3889f0f4; ASP.NET_SessionId=4rudboiwvjhsohv3mncwmzxs; _ga_3PW6D5SGGB=GS2.1.s1765320451$o15$g1$t1765320802$j60$l0$h0; ARRAffinity=bac3b7dde15ed1a3c834d1b97875e14a00a64509323f0349eb62abb1bcc4cf72; ARRAffinitySameSite=bac3b7dde15ed1a3c834d1b97875e14a00a64509323f0349eb62abb1bcc4cf72; _gid=GA1.3.1378089505.1767450789; _ga=GA1.3.1990422071.1757109160; _gat_gtag_UA_115126919_1=1; _ga_DHEQ5RK36Z=GS2.1.s1767534129$o24$g1$t1767534146$j60$l0$h0',
-};
-
-export const extractSessionData = (html: string) => {
-  const root = parse(html);
-
-  const viewState = extractInputValue(root, '__VIEWSTATE');
-  const eventValidation = extractInputValue(root, '__EVENTVALIDATION');
-  const gridCallbackState = extractGridCallbackState(root);
-  if (!viewState || !eventValidation || !gridCallbackState) {
-    throw new Error('Could not extract new session data from html');
-  }
-
-  return { viewState, eventValidation, gridCallbackState };
 };

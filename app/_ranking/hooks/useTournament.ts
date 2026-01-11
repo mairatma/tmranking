@@ -12,11 +12,7 @@ interface GetTournamentResponse {
 }
 
 const fetchTournament = async (id: string) => {
-  const baseUrl = '/api/cbtm/tournaments';
-
-  const queryString = new URLSearchParams({ id }).toString();
-
-  const response = await fetch(`${baseUrl}?${queryString}`, {});
+  const response = await fetch(`/api/cbtm/tournaments/${id}`, {});
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }

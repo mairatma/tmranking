@@ -1,12 +1,15 @@
 import { NextRequest } from 'next/server';
 
-import { buildEtag, buildResponseHeaders } from '../_helpers/response';
-import { fetchTournamentById } from '../_crawler/tournaments/fetchById';
+import { buildEtag, buildResponseHeaders } from '../../_helpers/response';
+import { fetchTournamentById } from '../../_crawler/tournaments/fetchById';
 
 /**
  * Main API handler
  */
-export async function GET(req: NextRequest) {
+export async function GET(
+  req: NextRequest,
+  ctx: RouteContext<'/api/cbtm/tournaments/[id]'>,
+) {
   if (req.method === 'OPTIONS') {
     return new Response('', { status: 200 });
   }
@@ -17,24 +20,11 @@ export async function GET(req: NextRequest) {
 
   try {
     // Extract parameters
-    const id = req.nextUrl.searchParams.get('id');
-
-    // Validate required parameters
-    if (!id) {
-      return new Response(
-        JSON.stringify({
-          error: 'Missing required parameters',
-          required: ['id'],
-        }),
-        { status: 400 },
-      );
-    }
-
-    const etag = buildEtag();
+    const { id } = await ctx.params;
 
     // Check If-None-Match header
     const clientETag = req.headers.get('if-none-match');
-    if (clientETag === etag) {
+    if (clientETag === buildEtag()) {
       return new Response(undefined, { status: 304 });
     }
 

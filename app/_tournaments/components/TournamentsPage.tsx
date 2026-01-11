@@ -1,13 +1,17 @@
 'use client';
 
 import { Button, Group, Input, Stack } from '@chakra-ui/react';
+import { useRouter } from 'next/navigation';
 import { FormEventHandler, useState } from 'react';
 
 export const TournamentsPage = () => {
+  const router = useRouter();
+
   const [tournamentId, setTournamentId] = useState<string | null>(null);
   const handleSearch: FormEventHandler = (e) => {
-    console.log('Will search', tournamentId);
     e.preventDefault();
+
+    router.push(`/tournaments/${tournamentId}`);
   };
 
   return (

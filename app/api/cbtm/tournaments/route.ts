@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 
-import { fetchRankingList } from '../_crawler/ranking/fetchList';
 import { buildEtag, buildResponseHeaders } from '../_helpers/response';
+import { fetchTournamentById } from '../_crawler/tournaments/fetchById';
 
 /**
  * Main API handler
@@ -17,18 +17,14 @@ export async function GET(req: NextRequest) {
 
   try {
     // Extract parameters
-    const category = req.nextUrl.searchParams.get('category');
-    const year = req.nextUrl.searchParams.get('year');
-    const region = req.nextUrl.searchParams.get('region');
-    const athlete = req.nextUrl.searchParams.get('athlete');
-    const page = req.nextUrl.searchParams.get('page');
+    const id = req.nextUrl.searchParams.get('id');
 
     // Validate required parameters
-    if (!category || !year || !region) {
+    if (!id) {
       return new Response(
         JSON.stringify({
           error: 'Missing required parameters',
-          required: ['category', 'year', 'region'],
+          required: ['id'],
         }),
         { status: 400 },
       );
@@ -42,11 +38,7 @@ export async function GET(req: NextRequest) {
       return new Response(undefined, { status: 304 });
     }
 
-    const pageNumber = page ? Number(page) : 1;
-    const result = await fetchRankingList(
-      { category, year, region, athlete },
-      pageNumber,
-    );
+    const result = await fetchTournamentById(id);
     return new Response(JSON.stringify(result), {
       status: 200,
       headers: buildResponseHeaders(),

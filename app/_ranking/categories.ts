@@ -9,7 +9,7 @@ export enum CategoryType {
   Senior = 'Senior',
 }
 
-interface Category {
+export interface Category {
   value: string;
   label: string;
   gender: Gender;

@@ -1,6 +1,6 @@
 import { Box, Spinner, Table, Text } from '@chakra-ui/react';
 
-import { useTournamentRegistrations } from '@/app/_ranking/hooks/useTournamentRegistrations';
+import { useTournamentRegistrations } from '@/app/_tournaments/hooks/useTournamentRegistrations';
 
 interface Props {
   id: string;

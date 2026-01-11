@@ -3,7 +3,7 @@
 import { Flex, Heading, Spinner, Stack, Tabs } from '@chakra-ui/react';
 import { LuBrackets, LuGrid2X2, LuSquareCheck, LuUser } from 'react-icons/lu';
 
-import { useTournament } from '@/app/_ranking/hooks/useTournament';
+import { useTournament } from '@/app/_tournaments/hooks/useTournament';
 import { Registrations } from './Registrations';
 import { CategoryChooserDrawer } from '@/app/_components/CategoryChooserDrawer';
 import { CATEGORY_ID_MAP } from '@/app/_ranking/categories';

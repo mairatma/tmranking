@@ -1,9 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-interface GetTournamentBracketsResponse {
-  teams: string[][];
-  results: string[][][];
-}
+import { TournamentBrackets } from '../types';
 
 const fetchTournamentBrackets = async (
   tournamentId: string,
@@ -22,7 +19,7 @@ const fetchTournamentBrackets = async (
     .replaceAll('\\"', '\"')
     .replaceAll('\\r\\n', '');
 
-  return JSON.parse(normalized) as GetTournamentBracketsResponse;
+  return JSON.parse(normalized) as TournamentBrackets;
 };
 
 export const useTournamentBrackets = (

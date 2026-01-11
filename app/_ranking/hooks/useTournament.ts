@@ -2,6 +2,12 @@ import { useQuery } from '@tanstack/react-query';
 
 interface GetTournamentResponse {
   title: string;
+  categories: {
+    value: string;
+    label: string;
+    registeredCount: number;
+    preRegisteredCount: number;
+  }[];
   crawledAt: string;
 }
 

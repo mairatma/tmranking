@@ -306,3 +306,9 @@ export const AVAILABLE_CATEGORIES: Category[] = [
     type: CategoryType.Senior,
   },
 ];
+
+export const CATEGORY_ID_MAP = AVAILABLE_CATEGORIES.reduce<
+  Record<string, Category>
+>((acc, category) => {
+  return { ...acc, [category.value]: category };
+}, {});

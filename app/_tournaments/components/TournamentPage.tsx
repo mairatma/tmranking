@@ -1,13 +1,13 @@
 'use client';
 
-import { Flex, Heading, Stack, Tabs } from '@chakra-ui/react';
+import { Flex, Heading, Spinner, Stack, Tabs } from '@chakra-ui/react';
 import { LuBrackets, LuGrid2X2, LuSquareCheck, LuUser } from 'react-icons/lu';
 
 import { useTournament } from '@/app/_ranking/hooks/useTournament';
 import { Registrations } from './Registrations';
 import { CategoryChooserDrawer } from '@/app/_components/CategoryChooserDrawer';
-import { useState } from 'react';
-import { AVAILABLE_CATEGORIES } from '@/app/_ranking/categories';
+import { CATEGORY_ID_MAP } from '@/app/_ranking/categories';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 enum TabTypes {
   Registrations = 'registrations',
@@ -21,12 +21,22 @@ interface Props {
 }
 
 export const TournamentPage = ({ id }: Props) => {
-  const { data } = useTournament(id);
-  const [category, setCategory] = useState(AVAILABLE_CATEGORIES[0].value);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  const categoryName = AVAILABLE_CATEGORIES.find(
-    ({ value }) => value === category,
-  )!.label;
+  const { data, isLoading } = useTournament(id);
+
+  if (isLoading || !data) {
+    return <Spinner />;
+  }
+
+  const availableCategories = data.categories
+    .map((item) => CATEGORY_ID_MAP[item.value])
+    .filter((item) => item);
+
+  const category = searchParams.get('category') ?? availableCategories[0].value;
+  const categoryName = CATEGORY_ID_MAP[category].label;
 
   return (
     <Stack>
@@ -36,9 +46,11 @@ export const TournamentPage = ({ id }: Props) => {
           {categoryName}
         </Heading>
         <CategoryChooserDrawer
-          categories={AVAILABLE_CATEGORIES}
+          categories={availableCategories}
           value={category}
-          onSelect={setCategory}
+          onSelect={(newCategory) =>
+            router.push(`${pathname}?category=${newCategory}`)
+          }
         />
       </Flex>
       <Tabs.Root defaultValue={TabTypes.Registrations} fitted lazyMount>

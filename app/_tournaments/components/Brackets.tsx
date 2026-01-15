@@ -1,4 +1,4 @@
-import { Spinner } from '@chakra-ui/react';
+import { Box, Spinner } from '@chakra-ui/react';
 import { Bracket } from 'react-brackets';
 
 import { useTournamentBrackets } from '@/app/_tournaments/hooks/useTournamentBrackets';
@@ -19,10 +19,12 @@ export const Brackets = ({ id, categoryId }: Props) => {
 
   const rounds = buildBracketRounds(data);
   return (
-    <Bracket
-      mobileBreakpoint={0}
-      rounds={rounds}
-      renderSeedComponent={BracketSeed}
-    />
+    <Box style={{ overflowX: 'auto' }}>
+      <Bracket
+        mobileBreakpoint={0}
+        rounds={rounds}
+        renderSeedComponent={BracketSeed}
+      />
+    </Box>
   );
 };

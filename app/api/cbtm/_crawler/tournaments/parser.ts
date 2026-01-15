@@ -70,3 +70,49 @@ export const parseTournamentRegistrations = (html: string) => {
 
   return registrations;
 };
+
+export const parseTournamentGroups = (html: string) => {
+  const root = parse(html);
+
+  const tableElement = root.querySelector(
+    '#MainContent_MainContent_EventoTabPage_Grupos_CardViewGrupo_DXMainTable td',
+  );
+  const groupElements = tableElement?.childNodes as unknown as HTMLElement[];
+
+  const groups = groupElements?.map((element) => {
+    const dataElements = element.querySelectorAll(
+      '.dxflNestedControlCell_MaterialCompact',
+    );
+    const name = dataElements[0].textContent.trim() ?? '';
+
+    const participants = [];
+    let startIndex = 6;
+    while (dataElements[startIndex].textContent.trim() !== '') {
+      participants.push({
+        name: dataElements[startIndex + 1].textContent.trim(),
+        rankingPoints:
+          dataElements[startIndex + 2].textContent.match(INTEGER_REGEX)?.[1] ??
+          0,
+        ratingPoints:
+          dataElements[startIndex + 3].textContent.match(INTEGER_REGEX)?.[1] ??
+          0,
+        qualified: dataElements[startIndex + 4].textContent.trim() !== '',
+      });
+
+      startIndex += 5;
+    }
+
+    // const team = dataElements[1].textContent.trim() ?? '';
+    // const registrationType = dataElements[3].textContent.trim() ?? '';
+    // const rankingPoints = Number(
+    //   dataElements[4].textContent.match(INTEGER_REGEX)?.[1] ?? 0,
+    // );
+    // const ratingPoints = Number(
+    //   dataElements[5].textContent.match(INTEGER_REGEX)?.[1] ?? 0,
+    // );
+
+    return { name, participants };
+  });
+
+  return groups;
+};

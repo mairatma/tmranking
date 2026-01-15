@@ -1,3 +1,4 @@
+import { getCookiesFromResponse } from '../../_helpers/cookies';
 import { buildCrawlerResponse } from '../response';
 import { parseTournamentNameAndCategories } from './parser';
 import { getTournamentUrl } from './url';
@@ -10,7 +11,7 @@ export const fetchTournamentPageById = async (id: string) => {
   }
 
   const responseText = await response.text();
-  const cookies = response.headers.getSetCookie().join(';');
+  const cookies = getCookiesFromResponse(response);
 
   return { responseText, cookies };
 };

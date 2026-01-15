@@ -4,6 +4,7 @@ import { Bracket } from 'react-brackets';
 import { useTournamentBrackets } from '@/app/_tournaments/hooks/useTournamentBrackets';
 import { buildBracketRounds } from '../helpers/brackets';
 import { BracketSeed } from './BracketSeed';
+import { BracketRoundTitle } from './BracketsRoundTitle';
 
 interface Props {
   id: string;
@@ -23,6 +24,7 @@ export const Brackets = ({ id, categoryId }: Props) => {
       <Bracket
         mobileBreakpoint={0}
         rounds={rounds}
+        roundTitleComponent={(title) => <BracketRoundTitle title={title} />}
         renderSeedComponent={BracketSeed}
       />
     </Box>

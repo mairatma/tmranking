@@ -3,7 +3,7 @@ import { IRenderSeedProps, Seed, SeedItem, SeedTeam } from 'react-brackets';
 
 const WINNER_STYLES = {
   color: 'var(--chakra-colors-teal-fg)',
-  fontWeight: 700,
+  fontWeight: 'bold',
 };
 const LOSER_STYLES = {
   color: 'var(--chakra-colors-teal-solid)',

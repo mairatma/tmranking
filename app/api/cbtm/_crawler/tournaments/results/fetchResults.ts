@@ -44,7 +44,7 @@ export const fetchTournamentResults = async (
     .replaceAll('\\t', '')
     .replaceAll('\\/', '/');
 
-  const groups = parseTournamentResults(normalizedHtml);
+  const results = parseTournamentResults(normalizedHtml);
 
-  return buildCrawlerResponse({ groups });
+  return buildCrawlerResponse({ results });
 };

@@ -9,6 +9,7 @@ import { CategoryChooserDrawer } from '@/app/_components/CategoryChooserDrawer';
 import { CATEGORY_ID_MAP } from '@/app/_ranking/categories';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Brackets } from './Brackets';
+import { Groups } from './Groups';
 
 enum TabTypes {
   Registrations = 'registrations',
@@ -76,7 +77,9 @@ export const TournamentPage = ({ id }: Props) => {
         <Tabs.Content value={TabTypes.Registrations}>
           <Registrations id={id} categoryId={category} />
         </Tabs.Content>
-        <Tabs.Content value={TabTypes.Groups}>WIP</Tabs.Content>
+        <Tabs.Content value={TabTypes.Groups}>
+          <Groups id={id} categoryId={category} />
+        </Tabs.Content>
         <Tabs.Content value={TabTypes.Results}>WIP</Tabs.Content>
         <Tabs.Content value={TabTypes.Brackets}>
           <Brackets id={id} categoryId={category} />

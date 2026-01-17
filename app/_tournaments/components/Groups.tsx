@@ -3,8 +3,8 @@ import {
   Box,
   Card,
   Flex,
+  Grid,
   Spinner,
-  Stack,
   Table,
   Text,
 } from '@chakra-ui/react';
@@ -24,10 +24,10 @@ export const Groups = ({ id, categoryId }: Props) => {
   }
 
   return (
-    <Stack gap="2">
+    <Grid templateColumns="repeat(auto-fit, minmax(350px, 1fr))" gap="2">
       {data.groups.map(({ name, participants }, groupIndex) => {
         return (
-          <Card.Root key={name} flex="1" minWidth="350px">
+          <Card.Root key={name} flex="1">
             <Card.Body>
               <Card.Title>Grupo {groupIndex + 1}</Card.Title>
               <Table.Root size="sm" interactive mt="4">
@@ -75,6 +75,6 @@ export const Groups = ({ id, categoryId }: Props) => {
           </Card.Root>
         );
       })}
-    </Stack>
+    </Grid>
   );
 };

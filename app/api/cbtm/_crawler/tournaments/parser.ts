@@ -102,15 +102,6 @@ export const parseTournamentGroups = (html: string) => {
       startIndex += 5;
     }
 
-    // const team = dataElements[1].textContent.trim() ?? '';
-    // const registrationType = dataElements[3].textContent.trim() ?? '';
-    // const rankingPoints = Number(
-    //   dataElements[4].textContent.match(INTEGER_REGEX)?.[1] ?? 0,
-    // );
-    // const ratingPoints = Number(
-    //   dataElements[5].textContent.match(INTEGER_REGEX)?.[1] ?? 0,
-    // );
-
     return { name, participants };
   });
 

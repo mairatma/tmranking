@@ -4,14 +4,14 @@ import {
   buildEtag,
   buildResponseHeaders,
 } from '../../../../../_helpers/response';
-import { fetchTournamentGroups } from '@/app/api/cbtm/_crawler/tournaments/groups/fetchGroups';
+import { fetchTournamentResults } from '@/app/api/cbtm/_crawler/tournaments/results/fetchResults';
 
 /**
  * Main API handler
  */
 export async function GET(
   req: NextRequest,
-  ctx: RouteContext<'/api/cbtm/tournaments/[id]/categories/[categoryId]/groups'>,
+  ctx: RouteContext<'/api/cbtm/tournaments/[id]/categories/[categoryId]/results'>,
 ) {
   if (req.method === 'OPTIONS') {
     return new Response('', { status: 200 });
@@ -31,7 +31,7 @@ export async function GET(
       return new Response(undefined, { status: 304 });
     }
 
-    const result = await fetchTournamentGroups(id, categoryId);
+    const result = await fetchTournamentResults(id, categoryId);
     return new Response(JSON.stringify(result), {
       status: 200,
       headers: buildResponseHeaders(),

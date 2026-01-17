@@ -107,3 +107,80 @@ export const parseTournamentGroups = (html: string) => {
 
   return groups;
 };
+
+const parseSetScores = (
+  elements: NodeListOf<Element>,
+  from: number,
+  to: number,
+) => {
+  const setScores = [];
+  let index = from;
+  while (index <= to) {
+    const matches = elements[index].textContent.match(INTEGER_REGEX);
+    if (!matches) {
+      break;
+    }
+    setScores.push(matches[1] ?? 0);
+    index++;
+  }
+
+  return setScores;
+};
+
+const SCORE_REGEX = /(\d+)-(\d+)/;
+const DESCRIPTION_REGEX = /Jogo\s*(\d+)\s*-\s*Mesa\s*(\d+)\s*-(.+)$/;
+
+export const parseTournamentResults = (html: string) => {
+  const root = parse(html);
+
+  const tableElement = root.querySelector(
+    '#MainContent_MainContent_EventoTabPage_Resultados_CardViewResultado_DXMainTable td',
+  );
+  const gameElements = tableElement?.childNodes as unknown as HTMLElement[];
+
+  const games = gameElements?.map((element) => {
+    const dataElements = element.querySelectorAll(
+      '.dxflNestedControlCell_MaterialCompact',
+    );
+    const splitName = dataElements[0].textContent.split('-');
+    const name = splitName[splitName.length - 1].trim();
+
+    const scoreStr = dataElements[1].textContent;
+    const score1 = scoreStr.match(SCORE_REGEX)?.[1];
+    const score2 = scoreStr.match(SCORE_REGEX)?.[2];
+
+    const description = dataElements[2].textContent.trim();
+    const matches = description.match(DESCRIPTION_REGEX);
+    const gameNumber = matches?.[1];
+    const tableNumber = matches?.[2];
+    const time = matches?.[3];
+
+    const date = dataElements[3].textContent.trim();
+
+    const scores = [
+      {
+        name: dataElements[4].textContent.trim(),
+        sets: parseSetScores(dataElements, 6, 10),
+      },
+      {
+        name: dataElements[11].textContent.trim(),
+        sets: parseSetScores(dataElements, 13, 17),
+      },
+    ];
+
+    return {
+      name,
+      gameNumber,
+      tableNumber,
+      date,
+      time,
+      finalScore: [
+        score1 ? Number(score1) : '?',
+        score2 ? Number(score2) : '?',
+      ],
+      scores,
+    };
+  });
+
+  return games;
+};

@@ -1,6 +1,9 @@
-import { Box, Spinner, Table, Text } from '@chakra-ui/react';
+import { Badge, Box, Flex, Spinner, Table, Text } from '@chakra-ui/react';
 
-import { useTournamentRegistrations } from '@/app/_tournaments/hooks/useTournamentRegistrations';
+import {
+  RegistrationType,
+  useTournamentRegistrations,
+} from '@/app/_tournaments/hooks/useTournamentRegistrations';
 
 interface Props {
   id: string;
@@ -28,7 +31,19 @@ export const Registrations = ({ id, categoryId }: Props) => {
           <Table.Row key={index}>
             <Table.Cell>
               <Box>
-                <Text fontWeight="bold">{item.name}</Text>
+                <Flex alignItems="center" gap="2">
+                  <Text fontWeight="bold">{item.name}</Text>
+                  <Badge
+                    size="xs"
+                    colorPalette={
+                      item.registrationType === RegistrationType.REGISTERED
+                        ? 'green'
+                        : undefined
+                    }
+                  >
+                    {item.registrationType}
+                  </Badge>
+                </Flex>
                 <Text textStyle="xs" color="fg.muted" fontWeight="normal">
                   {item.team}
                 </Text>

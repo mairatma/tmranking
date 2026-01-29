@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-enum RegistrationType {
+export enum RegistrationType {
   REGISTERED = 'Inscrito',
   PRE_REGISTERED = 'Pré-inscrito',
 }

@@ -52,7 +52,7 @@ export const Groups = ({ id, categoryId }: Props) => {
                         </Text>
                       </Table.Cell>
                       <Table.Cell>
-                        <Flex gap="2">
+                        <Flex justifyContent="space-between" gap="2">
                           <Text fontWeight="bold">{item.name}</Text>
                           {item.qualified && (
                             <Badge colorPalette="green" height="fit-content">

@@ -1,4 +1,12 @@
-import { Card, Grid, Spinner, Table, Text } from '@chakra-ui/react';
+import {
+  Badge,
+  Card,
+  Flex,
+  Grid,
+  Spinner,
+  Table,
+  Text,
+} from '@chakra-ui/react';
 
 import { useTournamentResults } from '../hooks/useTournamentResults';
 
@@ -17,13 +25,19 @@ export const Results = ({ id, categoryId }: Props) => {
   return (
     <Grid templateColumns="repeat(auto-fit, minmax(350px, 1fr))" gap="2">
       {data.results.map(
-        ({ name, gameNumber, tableNumber, scores, finalScore }) => {
+        ({ name, gameNumber, tableNumber, scores, finalScore, date, time }) => {
           return (
             <Card.Root key={gameNumber} flex="1">
               <Card.Body>
                 <Card.Title>{name}</Card.Title>
                 <Card.Description>
-                  Jogo {gameNumber} - Mesa {tableNumber}
+                  <Flex justifyContent="space-between" gap="1">
+                    Jogo {gameNumber} - Mesa {tableNumber}
+                    <Flex gap="1">
+                      <Badge>{date}</Badge>
+                      <Badge>{time}</Badge>
+                    </Flex>
+                  </Flex>
                 </Card.Description>
                 <Table.Root size="sm" interactive mt="4">
                   <Table.Body>

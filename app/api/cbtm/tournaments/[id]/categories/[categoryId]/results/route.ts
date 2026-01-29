@@ -34,7 +34,7 @@ export async function GET(
     const result = await fetchTournamentResults(id, categoryId);
     return new Response(JSON.stringify(result), {
       status: 200,
-      headers: buildResponseHeaders(),
+      headers: buildResponseHeaders({ noCache: true }),
     });
   } catch (error) {
     console.error('API Error:', error);

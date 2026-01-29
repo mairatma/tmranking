@@ -19,6 +19,11 @@ enum TabTypes {
   Brackets = 'brackets',
 }
 
+enum TournamentSearchParams {
+  Category = 'category',
+  Tab = 'tab',
+}
+
 interface Props {
   id: string;
 }
@@ -38,8 +43,24 @@ export const TournamentPage = ({ id }: Props) => {
     .map((item) => CATEGORY_ID_MAP[item.value])
     .filter((item) => item);
 
-  const category = searchParams.get('category') ?? availableCategories[0].value;
+  const category =
+    searchParams.get(TournamentSearchParams.Category) ??
+    availableCategories[0].value;
+  const handleCategoryChange = (newCategory: string) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set(TournamentSearchParams.Category, newCategory);
+    router.push(`${pathname}?${newParams.toString()}`);
+  };
+
   const categoryName = CATEGORY_ID_MAP[category].label;
+
+  const currentTab =
+    searchParams.get(TournamentSearchParams.Tab) ?? TabTypes.Registrations;
+  const handleTabChange = (newTab: string) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set(TournamentSearchParams.Tab, newTab);
+    router.push(`${pathname}?${newParams.toString()}`);
+  };
 
   return (
     <Stack>
@@ -51,12 +72,15 @@ export const TournamentPage = ({ id }: Props) => {
         <CategoryChooserDrawer
           categories={availableCategories}
           value={category}
-          onSelect={(newCategory) =>
-            router.push(`${pathname}?category=${newCategory}`)
-          }
+          onSelect={handleCategoryChange}
         />
       </Flex>
-      <Tabs.Root defaultValue={TabTypes.Registrations} fitted lazyMount>
+      <Tabs.Root
+        fitted
+        lazyMount
+        value={currentTab}
+        onValueChange={(e) => handleTabChange(e.value)}
+      >
         <Tabs.List>
           <Tabs.Trigger value={TabTypes.Registrations}>
             <LuUser />

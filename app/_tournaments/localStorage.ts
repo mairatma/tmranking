@@ -6,6 +6,10 @@ export interface SavedTournament {
 }
 
 export const getTournamentsFromLocalStorage = (): SavedTournament[] => {
-  const tournamentsStr = localStorage.getItem(LOCAL_STORAGE_TOURNAMENTS_KEY);
+  if (typeof window === 'undefined') return [];
+
+  const tournamentsStr = window.localStorage.getItem(
+    LOCAL_STORAGE_TOURNAMENTS_KEY,
+  );
   return tournamentsStr ? JSON.parse(tournamentsStr) : [];
 };

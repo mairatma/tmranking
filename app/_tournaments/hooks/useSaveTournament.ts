@@ -8,6 +8,8 @@ const MAX_TOURNAMENTS = 50;
 export const useSaveTournament = () => {
   return {
     saveTournament: (id: string, name: string) => {
+      if (typeof window === 'undefined') return;
+
       const tournaments = getTournamentsFromLocalStorage();
 
       const newTournaments = [

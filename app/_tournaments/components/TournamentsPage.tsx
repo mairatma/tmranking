@@ -43,6 +43,7 @@ export const TournamentsPage = () => {
             key={id}
             flex="1"
             cursor="pointer"
+            size="sm"
             onClick={() => goToTournament(id)}
           >
             <Card.Body>

@@ -42,6 +42,9 @@ export const TournamentPage = ({ id }: Props) => {
     if (data) {
       saveTournament(id, data.title);
     }
+
+    // We should not save just because saveTournament has changed.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, data]);
 
   if (isLoading || !data) {

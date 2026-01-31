@@ -1,17 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-
-export enum RegistrationType {
-  REGISTERED = 'Inscrito',
-  PRE_REGISTERED = 'Pré-inscrito',
-}
-
-interface TournamentRegistration {
-  name: string;
-  team: string;
-  registrationType: RegistrationType;
-  rankingPoints: number;
-  ratingPoints: number;
-}
+import { TournamentRegistration } from '../registrations/types';
 
 interface GetTournamentRegistrationsResponse {
   registrations: TournamentRegistration[];

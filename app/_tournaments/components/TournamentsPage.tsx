@@ -58,7 +58,7 @@ export const TournamentsPage = () => {
             {tournaments.map(({ id, name }) => (
               <Table.Row key={id}>
                 <Table.Cell p="0">
-                  <Link href={`/tournaments/${id}`} target="_blank">
+                  <Link href={`/tournaments/${id}`}>
                     <Box gap="2" p="2">
                       {name}
                     </Box>

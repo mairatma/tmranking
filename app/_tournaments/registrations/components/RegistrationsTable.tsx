@@ -8,7 +8,7 @@ interface Props {
 
 export const RegistrationsTable = ({ registrations }: Props) => {
   return (
-    <Table.Root size="sm" interactive mt="4">
+    <Table.Root size="sm" interactive>
       <Table.Header>
         <Table.Row>
           <Table.ColumnHeader>Nome</Table.ColumnHeader>

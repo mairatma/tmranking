@@ -30,11 +30,14 @@ export const Registrations = ({ id, categoryId }: Props) => {
         <Switch.Label>Agrupar por clubes</Switch.Label>
         <Switch.Control />
       </Switch.Root>
-      {shouldGroupByClubs ? (
-        <GroupedRegistrations registrations={data.registrations} />
-      ) : (
-        <RegistrationsTable registrations={data.registrations} />
-      )}
+
+      <Box mt="4">
+        {shouldGroupByClubs ? (
+          <GroupedRegistrations registrations={data.registrations} />
+        ) : (
+          <RegistrationsTable registrations={data.registrations} />
+        )}
+      </Box>
     </Box>
   );
 };

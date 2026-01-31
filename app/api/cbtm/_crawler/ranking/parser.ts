@@ -67,7 +67,8 @@ export const parseRankingTable = (html: string) => {
     }
   }
 
-  const totalItems = /(?:'|\\')itemCount(?:'|\\'):\s*(\d+)/.exec(html)![1];
+  const totalItems =
+    /(?:'|\\')itemCount(?:'|\\'):\s*(\d+)/.exec(html)?.[1] ?? '0';
 
   return { rankings, totalItems };
 };

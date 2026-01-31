@@ -3,6 +3,8 @@
 import {
   ButtonGroup,
   Center,
+  Flex,
+  Heading,
   IconButton,
   Pagination,
   Spinner,
@@ -44,12 +46,21 @@ export const RankingPage = () => {
     router.push(`${pathname}?${newParams.toString()}`);
   };
 
+  const categoryName = AVAILABLE_CATEGORIES.find(
+    (item) => item.value === category,
+  )?.label;
+
   return (
     <Stack>
-      <RankingFilters
-        value={{ category, region }}
-        onChange={handleFiltersChange}
-      />
+      <Flex alignItems="center" gap="4">
+        <Heading size="xl">
+          {categoryName} - {region}
+        </Heading>
+        <RankingFilters
+          value={{ category, region }}
+          onChange={handleFiltersChange}
+        />
+      </Flex>
 
       {isLoading && (
         <Center mt="8">

@@ -1,5 +1,8 @@
+import { useState } from 'react';
+
 import {
   Badge,
+  Box,
   Card,
   Flex,
   Grid,
@@ -9,6 +12,11 @@ import {
 } from '@chakra-ui/react';
 
 import { useTournamentResults } from '../hooks/useTournamentResults';
+import { SearchSelect } from '@/app/_components/SearchSelect';
+import {
+  filterResultsByAthelete,
+  getAllAtheletesFromResults,
+} from '../helpers/results';
 
 interface Props {
   id: string;
@@ -18,55 +26,81 @@ interface Props {
 export const Results = ({ id, categoryId }: Props) => {
   const { data } = useTournamentResults(id, categoryId);
 
+  const [selectedAthelete, setSelectedAthlete] = useState('');
+
   if (!data) {
     return <Spinner />;
   }
 
+  const atheleteOptions = getAllAtheletesFromResults(data.results).map(
+    (name) => ({ label: name, value: name }),
+  );
+  const resultsToDisplay = selectedAthelete
+    ? filterResultsByAthelete(data.results, selectedAthelete)
+    : data.results;
+
   return (
-    <Grid templateColumns="repeat(auto-fit, minmax(350px, 1fr))" gap="2">
-      {data.results.map(
-        ({ name, gameNumber, tableNumber, scores, finalScore, date, time }) => {
-          return (
-            <Card.Root key={gameNumber} flex="1">
-              <Card.Body>
-                <Card.Title>{name}</Card.Title>
-                <Card.Description>
-                  <Flex justifyContent="space-between" gap="1">
-                    Jogo {gameNumber} - Mesa {tableNumber}
-                    <Flex gap="1">
-                      <Badge>{date}</Badge>
-                      <Badge>{time}</Badge>
+    <Box>
+      <SearchSelect
+        label="Filtrar por atleta"
+        options={atheleteOptions}
+        value={selectedAthelete}
+        onChange={setSelectedAthlete}
+        mb="4"
+      />
+      <Grid templateColumns="repeat(auto-fit, minmax(350px, 1fr))" gap="2">
+        {resultsToDisplay.map(
+          ({
+            name,
+            gameNumber,
+            tableNumber,
+            scores,
+            finalScore,
+            date,
+            time,
+          }) => {
+            return (
+              <Card.Root key={gameNumber} flex="1">
+                <Card.Body>
+                  <Card.Title>{name}</Card.Title>
+                  <Card.Description>
+                    <Flex justifyContent="space-between" gap="1">
+                      Jogo {gameNumber} - Mesa {tableNumber}
+                      <Flex gap="1">
+                        <Badge>{date}</Badge>
+                        <Badge>{time}</Badge>
+                      </Flex>
                     </Flex>
-                  </Flex>
-                </Card.Description>
-                <Table.Root size="sm" interactive mt="4">
-                  <Table.Body>
-                    {scores.map((score, index) => {
-                      return (
-                        <Table.Row key={index}>
-                          <Table.Cell>
-                            <Text fontWeight="bold">{score.name}</Text>
-                          </Table.Cell>
-                          <Table.Cell textAlign="end">
-                            <Text fontWeight="bold" color="teal.500">
-                              {finalScore[index]}
-                            </Text>
-                          </Table.Cell>
-                          {score.sets.map((setScore, setScoreIndex) => (
-                            <Table.Cell key={setScoreIndex} textAlign="end">
-                              {setScore}
+                  </Card.Description>
+                  <Table.Root size="sm" interactive mt="4">
+                    <Table.Body>
+                      {scores.map((score, index) => {
+                        return (
+                          <Table.Row key={index}>
+                            <Table.Cell>
+                              <Text fontWeight="bold">{score.name}</Text>
                             </Table.Cell>
-                          ))}
-                        </Table.Row>
-                      );
-                    })}
-                  </Table.Body>
-                </Table.Root>
-              </Card.Body>
-            </Card.Root>
-          );
-        },
-      )}
-    </Grid>
+                            <Table.Cell textAlign="end">
+                              <Text fontWeight="bold" color="teal.500">
+                                {finalScore[index]}
+                              </Text>
+                            </Table.Cell>
+                            {score.sets.map((setScore, setScoreIndex) => (
+                              <Table.Cell key={setScoreIndex} textAlign="end">
+                                {setScore}
+                              </Table.Cell>
+                            ))}
+                          </Table.Row>
+                        );
+                      })}
+                    </Table.Body>
+                  </Table.Root>
+                </Card.Body>
+              </Card.Root>
+            );
+          },
+        )}
+      </Grid>
+    </Box>
   );
 };

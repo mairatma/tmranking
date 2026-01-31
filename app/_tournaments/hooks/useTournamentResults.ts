@@ -1,17 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-interface TournamentResults {
-  name: string;
-  gameNumber: string;
-  tableNumber: string;
-  date: string;
-  time: string;
-  finalScore: [number, number];
-  scores: {
-    name: string;
-    sets: string[];
-  }[];
-}
+import { TournamentResults } from '../types';
 
 interface GetTournamentResultsResponse {
   results: TournamentResults[];

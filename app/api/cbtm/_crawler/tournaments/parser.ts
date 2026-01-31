@@ -87,7 +87,10 @@ export const parseTournamentGroups = (html: string) => {
 
     const participants = [];
     let startIndex = 6;
-    while (dataElements[startIndex].textContent.trim() !== '') {
+    while (
+      dataElements.length > startIndex &&
+      dataElements[startIndex + 1].textContent.trim() !== ''
+    ) {
       participants.push({
         name: dataElements[startIndex + 1].textContent.trim(),
         rankingPoints:

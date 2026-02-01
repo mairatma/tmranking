@@ -1,6 +1,6 @@
 import { Badge, Box, Flex, Table, Text } from '@chakra-ui/react';
 
-import { RegistrationType, TournamentRegistration } from '../types';
+import { TournamentRegistration } from '../types';
 
 interface Props {
   registrations: TournamentRegistration[];
@@ -35,16 +35,7 @@ export const RegistrationsTable = ({ registrations }: Props) => {
                   <Text fontWeight="600" color="text.primary">
                     {item.name}
                   </Text>
-                  <Badge
-                    size="xs"
-                    colorPalette={
-                      item.registrationType === RegistrationType.REGISTERED
-                        ? 'secondary'
-                        : undefined
-                    }
-                  >
-                    {item.registrationType}
-                  </Badge>
+                  <Badge size="xs">{item.registrationType}</Badge>
                 </Flex>
                 <Text textStyle="xs" color="text.muted" fontWeight="400">
                   {item.team}

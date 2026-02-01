@@ -17,16 +17,15 @@ export const MainLayout = ({ children }: Props) => {
     <>
       <Flex
         as="nav"
-        bgColor="#0052CC"
-        color="white"
+        bgColor="white"
         alignItems="center"
         px="6"
-        py="4"
-        gap="6"
+        py="3"
+        gap="4"
         boxShadow="0 2px 8px rgba(0, 0, 0, 0.1)"
       >
-        <Image src="/images/logo.png" alt="CBTM" height={32} width={32} />
-        <Flex gap="8" ml="2">
+        <Image src="/images/cbtm.png" alt="CBTM" height={32} width={32} />
+        <Flex gap="6" ml="2">
           <NavLink href="/" isActive={!pathname.includes('/tournaments')}>
             Ranking
           </NavLink>

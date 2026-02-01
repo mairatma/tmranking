@@ -1,62 +1,89 @@
-import { createSystem, defaultConfig } from '@chakra-ui/react';
+import {
+  createSystem,
+  defaultConfig,
+  defineConfig,
+  defineRecipe,
+  defineSlotRecipe,
+} from '@chakra-ui/react';
+import { tableAnatomy, tabsAnatomy } from '@chakra-ui/react/anatomy';
 
 const colors = {
   // CBTM Brand Colors
   primary: {
-    50: '#E3F2FD',
-    100: '#BBDEFB',
-    200: '#90CAF9',
-    300: '#64B5F6',
-    400: '#42A5F5',
-    500: '#2196F3',
-    600: '#1E88E5',
-    700: '#1976D2',
-    800: '#1565C0',
-    900: '#0052CC', // CBTM Primary Blue
+    50: {
+      value: '#E3F2FD',
+    },
+    100: {
+      value: '#BBDEFB',
+    },
+    200: {
+      value: '#90CAF9',
+    },
+    300: {
+      value: '#64B5F6',
+    },
+    400: {
+      value: '#42A5F5',
+    },
+    500: {
+      value: '#2196F3',
+    },
+    600: {
+      value: '#1E88E5',
+    },
+    700: {
+      value: '#1976D2',
+    },
+    800: {
+      value: '#1565C0',
+    },
+    900: {
+      value: '#0052CC',
+    }, // CBTM Primary Blue
   },
   secondary: {
-    50: '#E8F5E9',
-    100: '#C8E6C9',
-    200: '#A5D6A7',
-    300: '#81C784',
-    400: '#66BB6A',
-    500: '#4CAF50',
-    600: '#43A047',
-    700: '#388E3C',
-    800: '#2E7D32',
-    900: '#28A745', // CBTM Secondary Green
+    50: { value: '#E8F5E9' },
+    100: { value: '#C8E6C9' },
+    200: { value: '#A5D6A7' },
+    300: { value: '#81C784' },
+    400: { value: '#66BB6A' },
+    500: { value: '#4CAF50' },
+    600: { value: '#43A047' },
+    700: { value: '#388E3C' },
+    800: { value: '#2E7D32' },
+    900: { value: '#28A745' }, // CBTM Secondary Green
   },
   accent: {
-    50: '#FFF8E1',
-    100: '#FFECB3',
-    200: '#FFE082',
-    300: '#FFD54F',
-    400: '#FFCA28',
-    500: '#FFC107',
-    600: '#FFB300',
-    700: '#FFA000',
-    800: '#FF8F00',
-    900: '#FF6F00',
+    50: { value: '#FFF8E1' },
+    100: { value: '#FFECB3' },
+    200: { value: '#FFE082' },
+    300: { value: '#FFD54F' },
+    400: { value: '#FFCA28' },
+    500: { value: '#FFC107' },
+    600: { value: '#FFB300' },
+    700: { value: '#FFA000' },
+    800: { value: '#FF8F00' },
+    900: { value: '#FF6F00' },
   },
   neutral: {
-    50: '#FAFAFA',
-    100: '#F5F5F5',
-    200: '#EEEEEE',
-    300: '#E0E0E0',
-    400: '#BDBDBD',
-    500: '#999999',
-    600: '#757575',
-    700: '#616161',
-    800: '#424242',
-    900: '#212121',
+    50: { value: '#FAFAFA' },
+    100: { value: '#F5F5F5' },
+    200: { value: '#EEEEEE' },
+    300: { value: '#E0E0E0' },
+    400: { value: '#BDBDBD' },
+    500: { value: '#999999' },
+    600: { value: '#757575' },
+    700: { value: '#616161' },
+    800: { value: '#424242' },
+    900: { value: '#212121' },
   },
 };
 
 const semanticTokens = {
   colors: {
-    'brand.primary': { value: colors.primary[900] }, // #0052CC
-    'brand.secondary': { value: colors.secondary[900] }, // #28A745
-    'brand.accent': { value: colors.accent[500] }, // #FFC107
+    'brand.primary': colors.primary[900], // #0052CC
+    'brand.secondary': colors.secondary[900], // #28A745
+    'brand.accent': colors.accent[500], // #FFC107
     'text.primary': { value: '#333333' },
     'text.secondary': { value: '#666666' },
     'text.muted': { value: '#999999' },
@@ -68,14 +95,167 @@ const semanticTokens = {
   },
 };
 
-const config = {
-  globalConfig: {
-    cssVarsRoot: ':root',
+export const tableSlotRecipe = defineSlotRecipe({
+  slots: tableAnatomy.keys(),
+  base: {
+    root: {
+      borderCollapse: 'collapse',
+      w: '100%',
+    },
+    columnHeader: {
+      bg: 'primary.900',
+      color: 'white',
+      textAlign: 'left',
+      fontWeight: '600',
+      padding: '0.75rem',
+    },
+    cell: {
+      padding: '0.75rem',
+      borderBottom: '1px solid',
+      borderColor: 'border.light',
+    },
   },
+
+  variants: {
+    interactive: {
+      true: {
+        body: {
+          '& tr': {
+            _hover: {
+              '& td': {
+                bg: 'primary.50',
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+});
+
+const tabsSlotRecipe = defineSlotRecipe({
+  slots: tabsAnatomy.keys(),
+  base: {
+    trigger: {
+      fontWeight: '500',
+    },
+  },
+  variants: {
+    variant: {
+      line: {
+        list: {
+          display: 'flex',
+          borderColor: 'border.light',
+          _horizontal: {
+            borderBottomWidth: '2px',
+          },
+          _vertical: {
+            borderEndWidth: '2px',
+          },
+        },
+        trigger: {
+          color: 'text.secondary',
+          _hover: {
+            color: 'brand.primary',
+          },
+          _selected: {
+            color: 'brand.primary',
+            _horizontal: {
+              '--indicator-color': 'colors.brand.primary',
+            },
+          },
+        },
+      },
+    },
+  },
+});
+
+const linkRecipe = defineRecipe({
+  base: {
+    color: 'primary.900',
+    transition: 'color 0.2s',
+  },
+  variants: {
+    variant: {
+      underline: {
+        color: 'primary.900',
+        textDecoration: 'underline',
+        textUnderlineOffset: '3px',
+        textDecorationColor: 'currentColor/20',
+      },
+      plain: {
+        color: 'primary.900',
+        _hover: {
+          textDecoration: 'none',
+        },
+      },
+    },
+  },
+
+  defaultVariants: {
+    variant: 'plain',
+  },
+});
+
+const badgeRecipe = defineRecipe({
+  base: {
+    fontWeight: '600',
+    borderRadius: 'full',
+  },
+  variants: {
+    variant: {
+      solid: {
+        bg: 'brand.primary',
+        color: 'text.light',
+      },
+      subtle: {
+        bg: 'primary.50',
+        color: 'brand.primary',
+      },
+    },
+  },
+});
+
+const buttonRecipe = defineRecipe({
+  base: {
+    fontWeight: '500',
+    borderRadius: 'md',
+    transition: 'all 0.2s',
+  },
+  variants: {
+    variant: {
+      solid: {
+        colorScheme: 'primary',
+        bg: 'brand.primary',
+        color: 'text.light',
+        _hover: {
+          bg: 'primary.800',
+        },
+        _active: {
+          bg: 'primary.900',
+        },
+      },
+      outline: {
+        borderColor: 'brand.primary',
+        color: 'brand.primary',
+        _hover: {
+          bg: 'primary.50',
+        },
+      },
+      ghost: {
+        color: 'brand.primary',
+        _hover: {
+          bg: 'primary.50',
+        },
+      },
+    },
+  },
+});
+
+const config = defineConfig({
   theme: {
-    colors,
     tokens: {
-      colors: semanticTokens.colors,
+      colors,
     },
     semanticTokens: {
       colors: semanticTokens.colors,
@@ -106,148 +286,16 @@ const config = {
         lineHeight: '1.5',
       },
     },
-    componentStyles: {
-      Button: {
-        baseStyle: {
-          fontWeight: '500',
-          borderRadius: 'md',
-          transition: 'all 0.2s',
-        },
-        variants: {
-          solid: {
-            colorScheme: 'primary',
-            bg: 'brand.primary',
-            color: 'text.light',
-            _hover: {
-              bg: colors.primary[800],
-            },
-            _active: {
-              bg: colors.primary[900],
-            },
-          },
-          outline: {
-            borderColor: 'brand.primary',
-            color: 'brand.primary',
-            _hover: {
-              bg: 'primary.50',
-            },
-          },
-          ghost: {
-            color: 'brand.primary',
-            _hover: {
-              bg: 'primary.50',
-            },
-          },
-        },
-        defaultProps: {
-          variant: 'solid',
-        },
-      },
-      Link: {
-        baseStyle: {
-          color: 'brand.primary',
-          textDecoration: 'none',
-          _hover: {
-            textDecoration: 'underline',
-          },
-        },
-      },
-      Table: {
-        baseStyle: {
-          table: {
-            borderCollapse: 'collapse',
-            w: '100%',
-          },
-          thead: {
-            bg: '#0052CC',
-            color: 'white',
-          },
-          th: {
-            textAlign: 'left',
-            fontWeight: '600',
-            padding: '0.75rem',
-            borderBottom: '2px solid',
-            borderColor: '#0052CC',
-            color: 'white',
-          },
-          td: {
-            padding: '0.75rem',
-            borderBottom: '1px solid',
-            borderColor: 'border.light',
-          },
-          tbody: {
-            tr: {
-              _hover: {
-                bg: 'bg.secondary',
-              },
-              _even: {
-                bg: 'bg.secondary',
-              },
-            },
-          },
-        },
-      },
-      Tabs: {
-        baseStyle: {
-          tablist: {
-            borderBottom: '2px solid',
-            borderColor: 'border.light',
-          },
-          tab: {
-            color: 'text.secondary',
-            fontWeight: '500',
-            borderBottom: '2px solid transparent',
-            _hover: {
-              color: 'brand.primary',
-            },
-            _selected: {
-              color: 'brand.primary',
-              borderColor: 'brand.primary',
-            },
-          },
-        },
-      },
-      Badge: {
-        baseStyle: {
-          fontWeight: '600',
-          borderRadius: 'full',
-        },
-        variants: {
-          solid: {
-            bg: 'brand.primary',
-            color: 'text.light',
-          },
-          subtle: {
-            bg: 'primary.50',
-            color: 'brand.primary',
-          },
-        },
-      },
-      Card: {
-        baseStyle: {
-          container: {
-            bg: 'bg.primary',
-            borderRadius: 'md',
-            border: '1px solid',
-            borderColor: 'border.light',
-            p: '1.5rem',
-            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-          },
-        },
-      },
-      Heading: {
-        baseStyle: {
-          color: 'text.primary',
-          fontWeight: '700',
-        },
-      },
-      Text: {
-        baseStyle: {
-          color: 'text.primary',
-        },
-      },
+    recipes: {
+      button: buttonRecipe,
+      link: linkRecipe,
+      badge: badgeRecipe,
+    },
+    slotRecipes: {
+      table: tableSlotRecipe,
+      tabs: tabsSlotRecipe,
     },
   },
-};
+});
 
 export const system = createSystem(defaultConfig, config);

@@ -73,7 +73,7 @@ export const TournamentsPage = () => {
               >
                 <Table.Cell p="0">
                   <Link href={`/tournaments/${id}`}>
-                    <Box p="3" fontWeight="500" color="brand.primary">
+                    <Box p="3" fontWeight="500">
                       {name}
                     </Box>
                   </Link>

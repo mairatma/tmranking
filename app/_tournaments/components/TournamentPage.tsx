@@ -75,20 +75,21 @@ export const TournamentPage = ({ id }: Props) => {
   };
 
   return (
-    <Stack gap="6">
+    <Stack gap="2">
       <div>
         <Heading size="lg" color="text.primary" mb="4">
           {data?.title}
         </Heading>
         <Flex
-          alignItems={{ base: 'flex-start', sm: 'center' }}
-          direction={{ base: 'column', sm: 'row' }}
+          alignItems="center"
+          direction="row"
+          justifyContent={{ smDown: 'space-between' }}
           gap="4"
           pb="4"
           borderBottom="2px solid"
           borderColor="border.light"
         >
-          <Heading size="sm" color="text.secondary" fontWeight="500">
+          <Heading size="lg" color="secondary.900" fontWeight="700">
             {categoryName}
           </Heading>
           <CategoryChooserDrawer

@@ -6,7 +6,7 @@ interface Props {
 
 export const BracketRoundTitle = ({ title }: Props) => {
   return (
-    <Box color="brand.primary" fontWeight="bold" textAlign="center">
+    <Box color="text.primary" fontWeight="medium" textAlign="center">
       {title}
     </Box>
   );

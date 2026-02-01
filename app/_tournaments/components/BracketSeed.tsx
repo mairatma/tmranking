@@ -3,11 +3,11 @@ import { IRenderSeedProps, Seed, SeedItem, SeedTeam } from 'react-brackets';
 import { TBD_WINNER } from '../helpers/brackets';
 
 const WINNER_STYLES = {
-  color: 'var(--chakra-colors-teal-fg)',
+  color: 'var(--chakra-colors-primary-900)',
   fontWeight: 'bold',
 };
 const LOSER_STYLES = {
-  color: 'var(--chakra-colors-teal-solid)',
+  color: 'var(--chakra-colors-primary-700)',
 };
 
 export const BracketSeed = ({ seed, breakpoint }: IRenderSeedProps) => {
@@ -20,7 +20,7 @@ export const BracketSeed = ({ seed, breakpoint }: IRenderSeedProps) => {
 
   return (
     <Seed mobileBreakpoint={breakpoint} style={{ fontSize: 12 }}>
-      <SeedItem style={{ backgroundColor: 'var(--chakra-colors-teal-subtle)' }}>
+      <SeedItem style={{ backgroundColor: 'var(--chakra-colors-primary-100)' }}>
         <div>
           <SeedTeam style={isFirstTeamTheWinner ? WINNER_STYLES : LOSER_STYLES}>
             {teams[0]?.name || 'BYE'}

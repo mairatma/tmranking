@@ -81,7 +81,7 @@ export const Results = ({ id, categoryId }: Props) => {
                               <Text fontWeight="bold">{score.name}</Text>
                             </Table.Cell>
                             <Table.Cell textAlign="end">
-                              <Text fontWeight="bold" color="teal.500">
+                              <Text fontWeight="bold" color="primary.500">
                                 {finalScore[index]}
                               </Text>
                             </Table.Cell>

@@ -54,7 +54,7 @@ export const CategoryChooser = ({ categories, value, onChange }: Props) => {
             defaultValue={gender}
             onValueChange={(e) => handleGenderChange(e.value as Gender)}
           >
-            <SegmentGroup.Indicator bgColor="teal.200" />
+            <SegmentGroup.Indicator bgColor="primary.200" />
             <SegmentGroup.Item value={Gender.Male}>
               <SegmentGroup.ItemText>MAS</SegmentGroup.ItemText>
               <SegmentGroup.ItemHiddenInput />
@@ -73,7 +73,7 @@ export const CategoryChooser = ({ categories, value, onChange }: Props) => {
               handleCategoryTypeChange(e.value as CategoryType)
             }
           >
-            <SegmentGroup.Indicator bgColor="teal.200" />
+            <SegmentGroup.Indicator bgColor="primary.200" />
             <SegmentGroup.Item value={CategoryType.Absolute}>
               <SegmentGroup.ItemText>ABSOLUTO</SegmentGroup.ItemText>
               <SegmentGroup.ItemHiddenInput />

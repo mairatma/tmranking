@@ -15,9 +15,18 @@ export const MainLayout = ({ children }: Props) => {
 
   return (
     <>
-      <Flex as="nav" bgColor="gray.100" alignItems="center" p="2" gap="4">
-        <Image src="/images/logo.png" alt="CBTM" height={25} width={25} />
-        <Flex fontWeight="bold" gap="4">
+      <Flex
+        as="nav"
+        bgColor="#0052CC"
+        color="white"
+        alignItems="center"
+        px="6"
+        py="4"
+        gap="6"
+        boxShadow="0 2px 8px rgba(0, 0, 0, 0.1)"
+      >
+        <Image src="/images/logo.png" alt="CBTM" height={32} width={32} />
+        <Flex gap="8" ml="2">
           <NavLink href="/" isActive={!pathname.includes('/tournaments')}>
             Ranking
           </NavLink>
@@ -30,7 +39,7 @@ export const MainLayout = ({ children }: Props) => {
         </Flex>
       </Flex>
       <Container>
-        <Box py="4">{children}</Box>
+        <Box py="6">{children}</Box>
       </Container>
     </>
   );

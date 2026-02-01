@@ -47,7 +47,7 @@ export const Groups = ({ id, categoryId }: Props) => {
                   {participants.map((item, index) => (
                     <Table.Row key={index}>
                       <Table.Cell>
-                        <Text fontWeight="bold" color="teal.500">
+                        <Text fontWeight="bold" color="primary.500">
                           {index + 1}
                         </Text>
                       </Table.Cell>

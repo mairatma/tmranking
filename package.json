@@ -8,7 +8,8 @@
     "start": "next start",
     "format": "prettier --write .",
     "lint": "eslint",
-    "prepare": "husky"
+    "prepare": "husky",
+    "builderio": "builder.io launch"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.30.0",
@@ -27,6 +28,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "builder.io": "^1.21.16",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
     "husky": "^9.1.7",

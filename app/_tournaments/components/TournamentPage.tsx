@@ -75,25 +75,36 @@ export const TournamentPage = ({ id }: Props) => {
   };
 
   return (
-    <Stack>
-      <Heading size="xl">{data?.title}</Heading>
-      <Flex alignItems="center" gap="4">
-        <Heading size="lg" color="teal.600">
-          {categoryName}
+    <Stack gap="6">
+      <div>
+        <Heading size="lg" color="text.primary" mb="4">
+          {data?.title}
         </Heading>
-        <CategoryChooserDrawer
-          categories={availableCategories}
-          value={category}
-          onSelect={handleCategoryChange}
-        />
-      </Flex>
+        <Flex
+          alignItems={{ base: 'flex-start', sm: 'center' }}
+          direction={{ base: 'column', sm: 'row' }}
+          gap="4"
+          pb="4"
+          borderBottom="2px solid"
+          borderColor="border.light"
+        >
+          <Heading size="sm" color="text.secondary" fontWeight="500">
+            {categoryName}
+          </Heading>
+          <CategoryChooserDrawer
+            categories={availableCategories}
+            value={category}
+            onSelect={handleCategoryChange}
+          />
+        </Flex>
+      </div>
       <Tabs.Root
         fitted
         lazyMount
         value={currentTab}
         onValueChange={(e) => handleTabChange(e.value)}
       >
-        <Tabs.List>
+        <Tabs.List borderColor="border.light">
           <Tabs.Trigger value={TabTypes.Registrations}>
             <LuUser />
             Inscrições

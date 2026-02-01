@@ -51,11 +51,23 @@ export const RankingPage = () => {
   )?.label;
 
   return (
-    <Stack>
-      <Flex alignItems="center" gap="4">
-        <Heading size="xl">
-          {categoryName} - {region}
-        </Heading>
+    <Stack gap="6">
+      <Flex
+        alignItems={{ base: 'flex-start', sm: 'center' }}
+        direction={{ base: 'column', sm: 'row' }}
+        gap="4"
+        pb="4"
+        borderBottom="2px solid"
+        borderColor="border.light"
+      >
+        <div>
+          <Heading size="lg" color="text.primary" mb="1">
+            {categoryName}
+          </Heading>
+          <Heading size="sm" color="text.secondary" fontWeight="400">
+            Região: {region}
+          </Heading>
+        </div>
         <RankingFilters
           value={{ category, region }}
           onChange={handleFiltersChange}
@@ -81,7 +93,7 @@ export const RankingPage = () => {
                 handleFiltersChange({ category, region, page: e.page })
               }
             >
-              <ButtonGroup variant="ghost" size="sm" colorPalette="teal">
+              <ButtonGroup variant="ghost" size="sm" colorPalette="primary">
                 <Pagination.Items
                   render={(page) => (
                     <IconButton variant={{ base: 'ghost', _selected: 'solid' }}>

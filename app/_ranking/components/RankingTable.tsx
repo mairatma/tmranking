@@ -27,28 +27,38 @@ export const RankingTable = ({ category, rankings }: Props) => {
   }
 
   return (
-    <Table.Root size="sm" interactive mt="4">
-      <Table.Header>
+    <Table.Root size="sm" interactive>
+      <Table.Header bg="#0052CC">
         <Table.Row>
-          <Table.ColumnHeader>Nome</Table.ColumnHeader>
-          <Table.ColumnHeader textAlign="end">Pontos</Table.ColumnHeader>
+          <Table.ColumnHeader color="white" fontWeight="600">
+            Nome
+          </Table.ColumnHeader>
+          <Table.ColumnHeader textAlign="end" color="white" fontWeight="600">
+            Pontos
+          </Table.ColumnHeader>
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {rankings.map((item) => (
-          <Table.Row key={item.rank}>
+        {rankings.map((item, index) => (
+          <Table.Row
+            key={item.rank}
+            bg={index % 2 === 0 ? 'bg.secondary' : 'bg.primary'}
+            _hover={{ bg: 'primary.50' }}
+          >
             <Table.Cell p="0">
               <Link
                 href={`https://app.cbtm.org.br/iUI/Site/RankingResultadoDetalhe?Categoria=${category}&Ano=2026&Associado=${item.id}&Tipo=O&UF=BR&Colocacao=${item.rank}&Pontos=${item.points}`}
                 target="_blank"
               >
-                <Flex gap="2" p="2">
-                  <Text fontWeight="bold" color="teal.500">
+                <Flex gap="2" p="3" alignItems="flex-start">
+                  <Text fontWeight="bold" color="brand.primary" minW="3rem">
                     #{item.rank}
                   </Text>{' '}
-                  <Box>
-                    <Text fontWeight="bold">{item.name}</Text>
-                    <Text textStyle="xs" color="fg.muted" fontWeight="normal">
+                  <Box flex="1">
+                    <Text fontWeight="600" color="text.primary">
+                      {item.name}
+                    </Text>
+                    <Text textStyle="xs" color="text.muted" fontWeight="400">
                       {item.club} - {item.state}
                     </Text>
                   </Box>
@@ -60,7 +70,9 @@ export const RankingTable = ({ category, rankings }: Props) => {
                 href={`https://app.cbtm.org.br/iUI/Site/RankingResultadoDetalhe?Categoria=${category}&Ano=2026&Associado=${item.id}&Tipo=O&UF=BR&Colocacao=${item.rank}&Pontos=${item.points}`}
                 target="_blank"
               >
-                <Box p="2">{item.points}</Box>
+                <Box p="3" fontWeight="600" color="text.primary">
+                  {item.points}
+                </Box>
               </Link>
             </Table.Cell>
           </Table.Row>

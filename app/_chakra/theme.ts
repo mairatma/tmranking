@@ -174,6 +174,10 @@ const linkRecipe = defineRecipe({
   base: {
     color: 'primary.900',
     transition: 'color 0.2s',
+    focusRing: 'none',
+    _focusVisible: {
+      focusRing: 'outside',
+    },
   },
   variants: {
     variant: {

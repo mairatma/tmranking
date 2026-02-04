@@ -1,4 +1,4 @@
-import { Badge, Box, Flex, Table, Text } from '@chakra-ui/react';
+import { Badge, Box, Table, Text } from '@chakra-ui/react';
 
 import { TournamentRegistration } from '../types';
 
@@ -31,15 +31,13 @@ export const RegistrationsTable = ({ registrations }: Props) => {
           >
             <Table.Cell p="3">
               <Box>
-                <Flex alignItems="center" gap="2">
-                  <Text fontWeight="600" color="text.primary">
-                    {item.name}
-                  </Text>
-                  <Badge size="xs">{item.registrationType}</Badge>
-                </Flex>
+                <Text fontWeight="600" color="text.primary">
+                  {item.name}
+                </Text>
                 <Text textStyle="xs" color="text.muted" fontWeight="400">
                   {item.team}
                 </Text>
+                <Badge size="xs">{item.registrationType}</Badge>
               </Box>
             </Table.Cell>
             <Table.Cell textAlign="end" p="3">

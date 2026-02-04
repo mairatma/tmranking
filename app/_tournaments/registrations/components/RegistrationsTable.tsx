@@ -9,7 +9,7 @@ interface Props {
 export const RegistrationsTable = ({ registrations }: Props) => {
   return (
     <Table.Root size="sm" interactive>
-      <Table.Header bg="#0052CC">
+      <Table.Header>
         <Table.Row>
           <Table.ColumnHeader color="white" fontWeight="600">
             Nome

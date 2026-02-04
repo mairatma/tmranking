@@ -57,7 +57,7 @@ export const TournamentsPage = () => {
 
       {tournaments.length > 0 ? (
         <Table.Root size="md" interactive>
-          <Table.Header bg="#0052CC">
+          <Table.Header>
             <Table.Row>
               <Table.ColumnHeader color="white" fontWeight="600">
                 Torneios

@@ -2,7 +2,8 @@ import { IRoundProps } from 'react-brackets';
 
 import { TournamentBrackets } from '../types';
 
-const BYE_TEXT = 'BYE';
+const UNKNOWN_SCORE = '?';
+export const TBD_WINNER = 'TBD';
 
 const ROUND_NAMES = [
   'Final',
@@ -14,6 +15,25 @@ const ROUND_NAMES = [
   'Rodada de 64',
 ];
 
+const calculateWinner = (
+  player1: string,
+  player2: string,
+  score1: number | null,
+  score2: number | null,
+  gameInfo: string | null,
+) => {
+  if (!gameInfo) {
+    return player1 || player2;
+  }
+
+  const hasScores = typeof score1 === 'number' && typeof score2 === 'number';
+  if (hasScores) {
+    return score1 > score2 ? player1 : player2;
+  }
+
+  return TBD_WINNER;
+};
+
 export const buildBracketRounds = (data: TournamentBrackets) => {
   const rounds: IRoundProps[] = [];
 
@@ -24,20 +44,21 @@ export const buildBracketRounds = (data: TournamentBrackets) => {
       rounds.push({
         title: ROUND_NAMES[roundIndex],
         seeds: bracket.map((game, gameIndex) => {
-          const player1 = data.teams[gameIndex][0] ?? BYE_TEXT;
-          const player2 = data.teams[gameIndex][1] ?? BYE_TEXT;
+          const player1 = data.teams[gameIndex][0];
+          const player2 = data.teams[gameIndex][1];
 
           return {
             id: `${index}-${gameIndex}`,
             date: game[2],
             teams: [{ name: player1 }, { name: player2 }],
-            score: [game[0], game[1]],
-            winner:
-              typeof game[0] === 'number'
-                ? Number(game[0]) > Number(game[1])
-                  ? player1
-                  : player2
-                : player1,
+            score: [game[0] ?? UNKNOWN_SCORE, game[1] ?? UNKNOWN_SCORE],
+            winner: calculateWinner(
+              player1,
+              player2,
+              game[0],
+              game[1],
+              game[2],
+            ),
           };
         }),
       });
@@ -59,13 +80,8 @@ export const buildBracketRounds = (data: TournamentBrackets) => {
           id: `${index}-${gameIndex}`,
           date: game[2],
           teams: [{ name: player1 }, { name: player2 }],
-          score: [game[0], game[1]],
-          winner:
-            typeof game[0] === 'number'
-              ? Number(game[0]) > Number(game[1])
-                ? player1
-                : player2
-              : player1,
+          score: [game[0] ?? UNKNOWN_SCORE, game[1] ?? UNKNOWN_SCORE],
+          winner: calculateWinner(player1, player2, game[0], game[1], game[2]),
         };
       }),
     });

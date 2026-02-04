@@ -1,6 +1,6 @@
 export interface TournamentBrackets {
   teams: string[][];
-  results: string[][][];
+  results: [number, number, string][][];
 }
 
 export interface TournamentResults {

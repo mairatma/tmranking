@@ -1,5 +1,6 @@
 import { Box } from '@chakra-ui/react';
 import { IRenderSeedProps, Seed, SeedItem, SeedTeam } from 'react-brackets';
+import { TBD_WINNER } from '../helpers/brackets';
 
 const WINNER_STYLES = {
   color: 'var(--chakra-colors-teal-fg)',
@@ -12,7 +13,10 @@ const LOSER_STYLES = {
 export const BracketSeed = ({ seed, breakpoint }: IRenderSeedProps) => {
   const { score, teams, date, winner } = seed;
 
-  const isFirstTeamTheWinner = winner === teams[0].name;
+  const isFirstTeamTheWinner =
+    winner === teams[0].name && winner !== TBD_WINNER;
+  const isSecondTeamTheWinner =
+    winner === teams[1].name && winner !== TBD_WINNER;
 
   return (
     <Seed mobileBreakpoint={breakpoint} style={{ fontSize: 12 }}>
@@ -22,7 +26,9 @@ export const BracketSeed = ({ seed, breakpoint }: IRenderSeedProps) => {
             {teams[0]?.name || 'BYE'}
             <div>{score[0]}</div>
           </SeedTeam>
-          <SeedTeam style={isFirstTeamTheWinner ? LOSER_STYLES : WINNER_STYLES}>
+          <SeedTeam
+            style={isSecondTeamTheWinner ? WINNER_STYLES : LOSER_STYLES}
+          >
             {teams[1]?.name || 'BYE'}
             <div>{score[1]}</div>
           </SeedTeam>

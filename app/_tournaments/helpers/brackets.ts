@@ -3,6 +3,7 @@ import { IRoundProps } from 'react-brackets';
 import { TournamentBrackets } from '../types';
 
 const UNKNOWN_SCORE = '?';
+const NO_SCORE = '';
 export const TBD_WINNER = 'TBD';
 
 const ROUND_NAMES = [
@@ -34,6 +35,12 @@ const calculateWinner = (
   return TBD_WINNER;
 };
 
+const normalizeScore = (score: number | null, gameInfo: string | null) => {
+  if (!gameInfo) return NO_SCORE;
+
+  return score ?? UNKNOWN_SCORE;
+};
+
 export const buildBracketRounds = (data: TournamentBrackets) => {
   const rounds: IRoundProps[] = [];
 
@@ -44,21 +51,18 @@ export const buildBracketRounds = (data: TournamentBrackets) => {
       rounds.push({
         title: ROUND_NAMES[roundIndex],
         seeds: bracket.map((game, gameIndex) => {
-          const player1 = data.teams[gameIndex][0];
-          const player2 = data.teams[gameIndex][1];
+          const [player1, player2] = data.teams[gameIndex];
+          const [score1, score2, gameInfo] = game;
 
           return {
             id: `${index}-${gameIndex}`,
-            date: game[2],
+            date: gameInfo,
             teams: [{ name: player1 }, { name: player2 }],
-            score: [game[0] ?? UNKNOWN_SCORE, game[1] ?? UNKNOWN_SCORE],
-            winner: calculateWinner(
-              player1,
-              player2,
-              game[0],
-              game[1],
-              game[2],
-            ),
+            score: [
+              normalizeScore(score1, gameInfo),
+              normalizeScore(score2, gameInfo),
+            ],
+            winner: calculateWinner(player1, player2, score1, score2, gameInfo),
           };
         }),
       });
@@ -76,12 +80,17 @@ export const buildBracketRounds = (data: TournamentBrackets) => {
         const player1 = game1.winner;
         const player2 = game2.winner;
 
+        const [score1, score2, gameInfo] = game;
+
         return {
           id: `${index}-${gameIndex}`,
-          date: game[2],
+          date: gameInfo,
           teams: [{ name: player1 }, { name: player2 }],
-          score: [game[0] ?? UNKNOWN_SCORE, game[1] ?? UNKNOWN_SCORE],
-          winner: calculateWinner(player1, player2, game[0], game[1], game[2]),
+          score: [
+            normalizeScore(score1, gameInfo),
+            normalizeScore(score2, gameInfo),
+          ],
+          winner: calculateWinner(player1, player2, score1, score2, gameInfo),
         };
       }),
     });

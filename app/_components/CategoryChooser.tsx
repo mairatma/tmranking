@@ -46,6 +46,14 @@ export const CategoryChooser = ({ categories, value, onChange }: Props) => {
     onChange(filterByGenderAndType(gender, newCategoryType)![0].value);
   };
 
+  const checkHasGender = (genderToCheck: Gender) => {
+    return filterByGenderAndType(genderToCheck, categoryType).length > 0;
+  };
+
+  const checkHasCategoryType = (type: CategoryType) => {
+    return filterByGenderAndType(gender, type).length > 0;
+  };
+
   return (
     <Box>
       <Flex gap={{ smDown: '4', sm: '2' }} direction={{ smDown: 'column' }}>
@@ -55,11 +63,17 @@ export const CategoryChooser = ({ categories, value, onChange }: Props) => {
             onValueChange={(e) => handleGenderChange(e.value as Gender)}
           >
             <SegmentGroup.Indicator bgColor="primary.200" />
-            <SegmentGroup.Item value={Gender.Male}>
+            <SegmentGroup.Item
+              value={Gender.Male}
+              disabled={!checkHasGender(Gender.Male)}
+            >
               <SegmentGroup.ItemText>MAS</SegmentGroup.ItemText>
               <SegmentGroup.ItemHiddenInput />
             </SegmentGroup.Item>
-            <SegmentGroup.Item value={Gender.Female}>
+            <SegmentGroup.Item
+              value={Gender.Female}
+              disabled={!checkHasGender(Gender.Female)}
+            >
               <SegmentGroup.ItemText>FEM</SegmentGroup.ItemText>
               <SegmentGroup.ItemHiddenInput />
             </SegmentGroup.Item>
@@ -74,15 +88,24 @@ export const CategoryChooser = ({ categories, value, onChange }: Props) => {
             }
           >
             <SegmentGroup.Indicator bgColor="primary.200" />
-            <SegmentGroup.Item value={CategoryType.Absolute}>
+            <SegmentGroup.Item
+              value={CategoryType.Absolute}
+              disabled={!checkHasCategoryType(CategoryType.Absolute)}
+            >
               <SegmentGroup.ItemText>ABSOLUTO</SegmentGroup.ItemText>
               <SegmentGroup.ItemHiddenInput />
             </SegmentGroup.Item>
-            <SegmentGroup.Item value={CategoryType.Youth}>
+            <SegmentGroup.Item
+              value={CategoryType.Youth}
+              disabled={!checkHasCategoryType(CategoryType.Youth)}
+            >
               <SegmentGroup.ItemText>JOVEM</SegmentGroup.ItemText>
               <SegmentGroup.ItemHiddenInput />
             </SegmentGroup.Item>
-            <SegmentGroup.Item value={CategoryType.Senior}>
+            <SegmentGroup.Item
+              value={CategoryType.Senior}
+              disabled={!checkHasCategoryType(CategoryType.Senior)}
+            >
               <SegmentGroup.ItemText>ADULTO</SegmentGroup.ItemText>
               <SegmentGroup.ItemHiddenInput />
             </SegmentGroup.Item>

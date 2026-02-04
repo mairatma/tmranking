@@ -60,7 +60,7 @@ export const TournamentsPage = () => {
           <Table.Header>
             <Table.Row>
               <Table.ColumnHeader color="white" fontWeight="600">
-                Torneios
+                Acessados recentemente
               </Table.ColumnHeader>
             </Table.Row>
           </Table.Header>

@@ -11,9 +11,9 @@ const ROUND_NAMES = [
   'Semi final',
   'Quartas de final',
   'Oitavas de final',
-  'Rodada de 16',
-  'Rodada de 32',
-  'Rodada de 64',
+  'Fase 16',
+  'Fase 32',
+  'Fase 64',
 ];
 
 const calculateWinner = (

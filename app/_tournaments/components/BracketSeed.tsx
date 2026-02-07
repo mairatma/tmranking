@@ -55,7 +55,7 @@ export const BracketSeed = ({
         }}
       >
         <Popover.Trigger asChild>
-          <Box cursor="pointer" _hover={{ opacity: 0.8 }}>
+          <Box cursor="pointer" _hover={{ opacity: 0.8 }} width="100%">
             <SeedItem
               style={{ backgroundColor: 'var(--chakra-colors-primary-100)' }}
             >

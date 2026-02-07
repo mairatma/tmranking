@@ -84,11 +84,12 @@ export const BracketSeed = ({
             <Popover.Content width={gameResults ? 'auto' : undefined}>
               <Popover.Arrow />
               <Popover.Body>
-                {!gameResults && (
+                {!results && (
                   <Center>
                     <Spinner size="md" color="primary.900" />
                   </Center>
                 )}
+                {!gameResults && <Box>Sem detalhes.</Box>}
                 {gameResults && (
                   <Table.Root size="sm">
                     <Table.Header>

@@ -9,6 +9,17 @@ import {
 
 import { Category, CategoryType, Gender } from '../_ranking/categories';
 
+const CATEGORY_TYPE_TO_NAME: Record<CategoryType, string> = {
+  [CategoryType.Absolute]: 'Absoluto',
+  [CategoryType.Ranking]: 'Ranking',
+  [CategoryType.Rating]: 'Rating',
+};
+const CATEGORY_TYPES_ORDER = [
+  CategoryType.Absolute,
+  CategoryType.Ranking,
+  CategoryType.Rating,
+];
+
 interface Props {
   categories: Category[];
   value: string;
@@ -88,27 +99,17 @@ export const CategoryChooser = ({ categories, value, onChange }: Props) => {
             }
           >
             <SegmentGroup.Indicator bgColor="primary.200" />
-            <SegmentGroup.Item
-              value={CategoryType.Absolute}
-              disabled={!checkHasCategoryType(CategoryType.Absolute)}
-            >
-              <SegmentGroup.ItemText>ABSOLUTO</SegmentGroup.ItemText>
-              <SegmentGroup.ItemHiddenInput />
-            </SegmentGroup.Item>
-            <SegmentGroup.Item
-              value={CategoryType.Youth}
-              disabled={!checkHasCategoryType(CategoryType.Youth)}
-            >
-              <SegmentGroup.ItemText>JOVEM</SegmentGroup.ItemText>
-              <SegmentGroup.ItemHiddenInput />
-            </SegmentGroup.Item>
-            <SegmentGroup.Item
-              value={CategoryType.Senior}
-              disabled={!checkHasCategoryType(CategoryType.Senior)}
-            >
-              <SegmentGroup.ItemText>ADULTO</SegmentGroup.ItemText>
-              <SegmentGroup.ItemHiddenInput />
-            </SegmentGroup.Item>
+
+            {CATEGORY_TYPES_ORDER.map((type) =>
+              checkHasCategoryType(type) ? (
+                <SegmentGroup.Item key={type} value={type}>
+                  <SegmentGroup.ItemText textTransform="uppercase">
+                    {CATEGORY_TYPE_TO_NAME[type]}
+                  </SegmentGroup.ItemText>
+                  <SegmentGroup.ItemHiddenInput />
+                </SegmentGroup.Item>
+              ) : null,
+            )}
           </SegmentGroup.Root>
         </Box>
       </Flex>

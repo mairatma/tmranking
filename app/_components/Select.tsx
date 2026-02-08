@@ -7,24 +7,32 @@ import {
 } from '@chakra-ui/react';
 
 interface Props extends Omit<SelectRootProps, 'value' | 'onChange'> {
+  label: string;
+  placeholder: string;
   value?: string;
   onChange: (newValue: string | null) => void;
 }
 
-export const Select = ({ collection, value, onChange }: Props) => {
+export const Select = ({
+  collection,
+  label,
+  placeholder,
+  value,
+  onChange,
+  ...otherProps
+}: Props) => {
   return (
     <ChakraSelect.Root
-      mt={{ smDown: '4', sm: '2' }}
-      size="md"
+      {...otherProps}
       collection={collection}
       value={value ? [value] : undefined}
       onValueChange={(e) => onChange(e.value[0] ?? null)}
     >
       <ChakraSelect.HiddenSelect />
-      <ChakraSelect.Label>Região</ChakraSelect.Label>
+      <ChakraSelect.Label>{label}</ChakraSelect.Label>
       <ChakraSelect.Control>
         <ChakraSelect.Trigger>
-          <ChakraSelect.ValueText placeholder="Selecione a região" />
+          <ChakraSelect.ValueText placeholder={placeholder} />
         </ChakraSelect.Trigger>
         <ChakraSelect.IndicatorGroup>
           <ChakraSelect.Indicator />

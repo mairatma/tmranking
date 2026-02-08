@@ -18,9 +18,11 @@ import { AVAILABLE_CATEGORIES } from '../categories';
 import { AVAILABLE_REGIONS } from '../regions';
 import { RankingFilters } from './RankingFilters';
 import { RankingOptions } from '../types';
+import { getCurrentYear } from '../helpers/years';
 
 const DEFAULT_CATEGORY_VALUE = AVAILABLE_CATEGORIES[0].value;
 const DEFAULT_REGION_VALUE = AVAILABLE_REGIONS[0].value;
+const DEFAULT_YEAR_VALUE = getCurrentYear();
 const INITIAL_PAGE = 1;
 
 export const RankingPage = () => {
@@ -30,11 +32,13 @@ export const RankingPage = () => {
   const searchParams = useSearchParams();
   const category = searchParams.get('category') ?? DEFAULT_CATEGORY_VALUE;
   const region = searchParams.get('region') ?? DEFAULT_REGION_VALUE;
+  const year = Number(searchParams.get('year')) || DEFAULT_YEAR_VALUE;
   const page = Number(searchParams.get('page')) ?? INITIAL_PAGE;
 
   const { data, isLoading } = useRanking({
     category,
     region,
+    year,
     page,
   });
 
@@ -42,7 +46,12 @@ export const RankingPage = () => {
     const newParams = new URLSearchParams(searchParams);
     newParams.set('category', newFilters.category);
     newParams.set('region', newFilters.region);
-    newParams.set('page', (newFilters.page ?? INITIAL_PAGE).toString());
+    if (newFilters.year) {
+      newParams.set('year', newFilters.year.toString());
+    }
+    if (newFilters.page) {
+      newParams.set('page', newFilters.page.toString());
+    }
     router.push(`${pathname}?${newParams.toString()}`);
   };
 
@@ -53,9 +62,9 @@ export const RankingPage = () => {
   return (
     <Stack gap="6">
       <Flex
-        alignItems={{ base: 'flex-start', sm: 'center' }}
-        direction={{ base: 'column', sm: 'row' }}
-        gap="4"
+        alignItems="center"
+        justifyContent={{ base: 'space-between', sm: 'flex-start' }}
+        gap="8"
         pb="4"
         borderBottom="2px solid"
         borderColor="border.light"
@@ -64,12 +73,17 @@ export const RankingPage = () => {
           <Heading size="lg" color="text.primary" mb="1">
             {categoryName}
           </Heading>
-          <Heading size="sm" color="text.secondary" fontWeight="400">
-            Região: {region}
-          </Heading>
+          <Flex>
+            <Heading size="sm" color="text.secondary" fontWeight="400">
+              Região: {region}
+            </Heading>
+            <Heading size="sm" color="text.secondary" fontWeight="400" ml="2">
+              Ano: {year}
+            </Heading>
+          </Flex>
         </div>
         <RankingFilters
-          value={{ category, region }}
+          value={{ category, region, year }}
           onChange={handleFiltersChange}
         />
       </Flex>

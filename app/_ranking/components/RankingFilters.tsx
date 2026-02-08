@@ -1,21 +1,26 @@
 'use client';
 
+import { useState } from 'react';
+
 import {
   Button,
   CloseButton,
   createListCollection,
   Drawer,
+  Flex,
   Portal,
 } from '@chakra-ui/react';
 
-import { AVAILABLE_CATEGORIES, CategoryType } from '../categories';
-import { RankingOptions } from '../types';
-import { AVAILABLE_REGIONS } from '../regions';
 import { CategoryChooser } from '@/app/_components/CategoryChooser';
-import { useState } from 'react';
 import { Select } from '@/app/_components/Select';
 
+import { AVAILABLE_CATEGORIES, CategoryType } from '../categories';
+import { createYearsCollection, getCurrentYear } from '../helpers/years';
+import { AVAILABLE_REGIONS } from '../regions';
+import { RankingOptions } from '../types';
+
 const REGION_COLLECTION = createListCollection({ items: AVAILABLE_REGIONS });
+const YEARS_COLLECTION = createYearsCollection();
 
 const NON_RATING_CATEGORIES = AVAILABLE_CATEGORIES.filter(
   ({ type }) => type !== CategoryType.Rating,
@@ -43,7 +48,7 @@ export const RankingFilters = ({ value, onChange }: Props) => {
     >
       <Drawer.Trigger asChild>
         <Button variant="outline" size="sm">
-          Trocar categoria e região
+          Trocar filtros
         </Button>
       </Drawer.Trigger>
       <Portal>
@@ -54,7 +59,7 @@ export const RankingFilters = ({ value, onChange }: Props) => {
             roundedBottom={{ sm: 'l3', smDown: undefined }}
           >
             <Drawer.Header>
-              <Drawer.Title>Escolha a categoria</Drawer.Title>
+              <Drawer.Title>Escolha a categoria, região e ano</Drawer.Title>
             </Drawer.Header>
             <Drawer.Body>
               <CategoryChooser
@@ -65,16 +70,39 @@ export const RankingFilters = ({ value, onChange }: Props) => {
                 }}
               />
 
-              <Select
-                collection={REGION_COLLECTION}
-                value={filters.region}
-                onChange={(value) =>
-                  setFilters({
-                    ...filters,
-                    region: value ?? '',
-                  })
-                }
-              />
+              <Flex gap="3">
+                <Select
+                  mt={{ smDown: '4', sm: '2' }}
+                  flex="2"
+                  size="md"
+                  label="Região"
+                  placeholder="Selecione a região"
+                  collection={REGION_COLLECTION}
+                  value={filters.region}
+                  onChange={(value) =>
+                    setFilters({
+                      ...filters,
+                      region: value ?? '',
+                    })
+                  }
+                />
+
+                <Select
+                  mt={{ smDown: '4', sm: '2' }}
+                  flex="1"
+                  size="md"
+                  label="Ano"
+                  placeholder="Selecione o ano"
+                  collection={YEARS_COLLECTION}
+                  value={(filters.year ?? getCurrentYear()).toString()}
+                  onChange={(value) =>
+                    setFilters({
+                      ...filters,
+                      year: value ? Number(value) : undefined,
+                    })
+                  }
+                />
+              </Flex>
             </Drawer.Body>
             <Drawer.Footer>
               <Drawer.ActionTrigger asChild>

@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { RankingEntry, RankingOptions } from '../types';
+import { getCurrentYear } from '../helpers/years';
 
-const DEFAULT_YEAR = new Date().getFullYear();
+const DEFAULT_YEAR = getCurrentYear();
 const DEFAULT_PAGE = 1;
 
 interface GetRankingResponse {

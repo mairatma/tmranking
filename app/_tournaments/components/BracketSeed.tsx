@@ -91,15 +91,7 @@ export const BracketSeed = ({
                 )}
                 {!gameResults && <Box>Sem detalhes.</Box>}
                 {gameResults && (
-                  <Table.Root size="sm">
-                    <Table.Header>
-                      <Table.Row>
-                        <Table.ColumnHeader>Detalhes</Table.ColumnHeader>
-                        <Table.ColumnHeader
-                          colSpan={gameResults!.scores[0].sets.length + 2}
-                        ></Table.ColumnHeader>
-                      </Table.Row>
-                    </Table.Header>
+                  <Table.Root size="sm" striped>
                     <Table.Body>
                       {gameResults.scores.map((score, index) => {
                         return (

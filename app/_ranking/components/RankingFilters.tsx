@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  Box,
   Button,
   CloseButton,
   createListCollection,
@@ -10,13 +9,17 @@ import {
   Select,
 } from '@chakra-ui/react';
 
-import { AVAILABLE_CATEGORIES } from '../categories';
+import { AVAILABLE_CATEGORIES, CategoryType } from '../categories';
 import { RankingOptions } from '../types';
 import { AVAILABLE_REGIONS } from '../regions';
 import { CategoryChooser } from '@/app/_components/CategoryChooser';
 import { useState } from 'react';
 
 const REGION_COLLECTION = createListCollection({ items: AVAILABLE_REGIONS });
+
+const NON_RATING_CATEGORIES = AVAILABLE_CATEGORIES.filter(
+  ({ type }) => type !== CategoryType.Rating,
+);
 
 interface Props {
   value: RankingOptions;
@@ -55,7 +58,7 @@ export const RankingFilters = ({ value, onChange }: Props) => {
             </Drawer.Header>
             <Drawer.Body>
               <CategoryChooser
-                categories={AVAILABLE_CATEGORIES}
+                categories={NON_RATING_CATEGORIES}
                 value={filters.category}
                 onChange={(category) => {
                   setFilters({ ...filters, category });
@@ -111,52 +114,5 @@ export const RankingFilters = ({ value, onChange }: Props) => {
         </Drawer.Positioner>
       </Portal>
     </Drawer.Root>
-  );
-
-  return (
-    <Box>
-      <CategoryChooser
-        categories={AVAILABLE_CATEGORIES}
-        value={value.category}
-        onChange={(category) => {
-          onChange({ ...value, category });
-        }}
-      />
-      <Select.Root
-        mt={{ smDown: '4', sm: '2' }}
-        size="md"
-        collection={REGION_COLLECTION}
-        value={[value.region]}
-        onValueChange={(e) =>
-          onChange({
-            ...value,
-            region: e.value[0] ?? null,
-          })
-        }
-      >
-        <Select.HiddenSelect />
-        <Select.Label>Região</Select.Label>
-        <Select.Control>
-          <Select.Trigger>
-            <Select.ValueText placeholder="Selecione a região" />
-          </Select.Trigger>
-          <Select.IndicatorGroup>
-            <Select.Indicator />
-          </Select.IndicatorGroup>
-        </Select.Control>
-        <Portal>
-          <Select.Positioner>
-            <Select.Content>
-              {REGION_COLLECTION.items.map((item) => (
-                <Select.Item item={item} key={item.value}>
-                  {item.label}
-                  <Select.ItemIndicator />
-                </Select.Item>
-              ))}
-            </Select.Content>
-          </Select.Positioner>
-        </Portal>
-      </Select.Root>
-    </Box>
   );
 };

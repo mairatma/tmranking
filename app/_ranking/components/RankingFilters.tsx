@@ -6,7 +6,6 @@ import {
   createListCollection,
   Drawer,
   Portal,
-  Select,
 } from '@chakra-ui/react';
 
 import { AVAILABLE_CATEGORIES, CategoryType } from '../categories';
@@ -14,6 +13,7 @@ import { RankingOptions } from '../types';
 import { AVAILABLE_REGIONS } from '../regions';
 import { CategoryChooser } from '@/app/_components/CategoryChooser';
 import { useState } from 'react';
+import { Select } from '@/app/_components/Select';
 
 const REGION_COLLECTION = createListCollection({ items: AVAILABLE_REGIONS });
 
@@ -65,41 +65,16 @@ export const RankingFilters = ({ value, onChange }: Props) => {
                 }}
               />
 
-              <Select.Root
-                mt={{ smDown: '4', sm: '2' }}
-                size="md"
+              <Select
                 collection={REGION_COLLECTION}
-                value={[filters.region]}
-                onValueChange={(e) =>
+                value={filters.region}
+                onChange={(value) =>
                   setFilters({
                     ...filters,
-                    region: e.value[0] ?? null,
+                    region: value ?? '',
                   })
                 }
-              >
-                <Select.HiddenSelect />
-                <Select.Label>Região</Select.Label>
-                <Select.Control>
-                  <Select.Trigger>
-                    <Select.ValueText placeholder="Selecione a região" />
-                  </Select.Trigger>
-                  <Select.IndicatorGroup>
-                    <Select.Indicator />
-                  </Select.IndicatorGroup>
-                </Select.Control>
-                <Portal>
-                  <Select.Positioner>
-                    <Select.Content>
-                      {REGION_COLLECTION.items.map((item) => (
-                        <Select.Item item={item} key={item.value}>
-                          {item.label}
-                          <Select.ItemIndicator />
-                        </Select.Item>
-                      ))}
-                    </Select.Content>
-                  </Select.Positioner>
-                </Portal>
-              </Select.Root>
+              />
             </Drawer.Body>
             <Drawer.Footer>
               <Drawer.ActionTrigger asChild>

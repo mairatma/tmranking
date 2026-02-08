@@ -46,6 +46,9 @@ export const parseRankingTable = (html: string) => {
       const clubAndState = clubAndStateSpan ? clubAndStateSpan.text.trim() : '';
       const parts = clubAndState.split('-');
       const clubParts = parts.slice(0, parts.length - 1);
+      const club = clubParts
+        ? clubParts.filter((part) => part.trim()).join('-')
+        : '';
       const state = parts[parts.length - 1];
 
       const link = row.querySelector('a');
@@ -58,7 +61,7 @@ export const parseRankingTable = (html: string) => {
           id,
           rank: parseInt(rank, 10),
           name: name,
-          club: clubParts?.join('-').trim(),
+          club,
           state: state?.trim(),
           points: parseInt(points, 10),
         });

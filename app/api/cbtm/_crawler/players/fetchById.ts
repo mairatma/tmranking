@@ -45,5 +45,5 @@ export const fetchPlayerById = async (
 
   const playerData = parsePlayerInfo(responseText);
 
-  return buildCrawlerResponse(playerData);
+  return buildCrawlerResponse({ player: playerData });
 };

@@ -8,9 +8,10 @@ import Link from 'next/link';
 interface Props {
   category: string;
   rankings: RankingEntry[];
+  year: number;
 }
 
-export const RankingTable = ({ category, rankings }: Props) => {
+export const RankingTable = ({ category, rankings, year }: Props) => {
   if (rankings.length == 0) {
     return (
       <EmptyState.Root>
@@ -41,8 +42,7 @@ export const RankingTable = ({ category, rankings }: Props) => {
             <Table.Row key={item.rank}>
               <Table.Cell p="0">
                 <Link
-                  href={`https://app.cbtm.org.br/iUI/Site/RankingResultadoDetalhe?Categoria=${category}&Ano=2026&Associado=${item.id}&Tipo=O&UF=BR&Colocacao=${item.rank}&Pontos=${item.points}`}
-                  target="_blank"
+                  href={`/players/${item.id}/category/${category}?year=${year}`}
                 >
                   <Flex gap="2" p="3" alignItems="flex-start">
                     <Text fontWeight="bold" color="brand.primary" minW="3rem">
@@ -61,8 +61,7 @@ export const RankingTable = ({ category, rankings }: Props) => {
               </Table.Cell>
               <Table.Cell textAlign="end" p="0">
                 <Link
-                  href={`https://app.cbtm.org.br/iUI/Site/RankingResultadoDetalhe?Categoria=${category}&Ano=2026&Associado=${item.id}&Tipo=O&UF=BR&Colocacao=${item.rank}&Pontos=${item.points}`}
-                  target="_blank"
+                  href={`/players/${item.id}/category/${category}?year=${year}`}
                 >
                   <Box p="3" fontWeight="600" color="text.primary">
                     {item.points}

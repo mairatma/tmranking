@@ -16,8 +16,12 @@ export const parsePlayerInfo = (html: string) => {
     ? stateRaw.match(FLAG_IMAGE_STATE_REGEX)?.[1] || null
     : null;
 
-  const team =
+  const teamWithState =
     root.querySelector('#mainContent_lblClube')?.text.trim() ?? UNKNOWN;
+  const team = teamWithState
+    .replace(new RegExp(`(- ${state})|(-${state})$`), '')
+    .trim();
+
   const gender = root.querySelector('#mainContent_divhomem')
     ? 'Male'
     : 'Female';

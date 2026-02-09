@@ -96,7 +96,11 @@ export const RankingPage = () => {
 
       {!isLoading && data && (
         <>
-          <RankingTable rankings={data.rankings} category={category} />
+          <RankingTable
+            rankings={data.rankings}
+            category={category}
+            year={year}
+          />
 
           <Center>
             <Pagination.Root

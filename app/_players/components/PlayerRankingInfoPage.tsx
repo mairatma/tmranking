@@ -62,7 +62,14 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
               Idade (até o fim do ano)
             </Stat.Label>
             <Stat.ValueText alignItems="baseline">
-              {player.age || '-'} <Stat.ValueUnit>anos</Stat.ValueUnit>
+              {player.age ? (
+                <>
+                  {player.age}
+                  <Stat.ValueUnit>anos</Stat.ValueUnit>
+                </>
+              ) : (
+                '-'
+              )}
             </Stat.ValueText>
           </Stat.Root>
 

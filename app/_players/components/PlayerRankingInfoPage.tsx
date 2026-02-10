@@ -44,7 +44,7 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
   return (
     <Stack gap="2">
       <Flex flexDirection="column" gap="2">
-        <Heading size="lg" color="text.primary">
+        <Heading size="xl" color="text.primary">
           {player.name}
         </Heading>
         <Grid templateColumns="repeat(auto-fit, minmax(200px, 1fr))" gap="2">

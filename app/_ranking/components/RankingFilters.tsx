@@ -57,6 +57,11 @@ export const RankingFilters = ({ value, onChange }: Props) => {
           <Drawer.Content
             roundedTop={{ sm: undefined, smDown: 'l3' }}
             roundedBottom={{ sm: 'l3', smDown: undefined }}
+            onClick={(event) => {
+              // Prevent clicks inside the drawer closing it (for dropdowns that have
+              // items on top of the backdrop, for example).
+              event.stopPropagation();
+            }}
           >
             <Drawer.Header>
               <Drawer.Title>Escolha a categoria, região e ano</Drawer.Title>

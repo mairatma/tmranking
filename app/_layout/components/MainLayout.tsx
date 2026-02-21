@@ -37,7 +37,7 @@ export const MainLayout = ({ children }: Props) => {
           </NavLink>
         </Flex>
       </Flex>
-      <Container>
+      <Container maxW="7xl">
         <Box py="6">{children}</Box>
       </Container>
     </>

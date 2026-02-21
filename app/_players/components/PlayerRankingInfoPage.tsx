@@ -3,17 +3,13 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { usePlayerRankingInfo } from '../hooks/usePlayerRankingInfo';
 import {
-  Center,
   DataList,
   Flex,
   Grid,
   Heading,
   Separator,
-  Spinner,
   Stack,
   Stat,
-  Text,
-  VStack,
 } from '@chakra-ui/react';
 import {
   AVAILABLE_CATEGORIES,
@@ -22,6 +18,7 @@ import {
 } from '@/app/_ranking/categories';
 import { ScoredEventsTable } from './ScoredEventsTable';
 import { CategoryChooserDrawer } from '@/app/_components/CategoryChooserDrawer';
+import { LoadingPage } from '@/app/_components/base/LoadingPage';
 
 const NON_RATING_CATEGORIES = AVAILABLE_CATEGORIES.filter(
   ({ type }) => type !== CategoryType.Rating,
@@ -42,14 +39,7 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
   const { data, isLoading } = usePlayerRankingInfo(id, categoryId, year);
 
   if (isLoading || !data) {
-    return (
-      <Center>
-        <VStack>
-          <Spinner size="lg" />
-          <Text>Carregando dados do jogador...</Text>
-        </VStack>
-      </Center>
-    );
+    return <LoadingPage>Carregando dados do jogador..</LoadingPage>;
   }
 
   const { player } = data;

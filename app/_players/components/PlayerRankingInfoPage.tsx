@@ -12,6 +12,8 @@ import {
   Spinner,
   Stack,
   Stat,
+  Text,
+  VStack,
 } from '@chakra-ui/react';
 import {
   AVAILABLE_CATEGORIES,
@@ -42,7 +44,10 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
   if (isLoading || !data) {
     return (
       <Center>
-        <Spinner />
+        <VStack>
+          <Spinner size="lg" />
+          <Text>Carregando dados do jogador...</Text>
+        </VStack>
       </Center>
     );
   }

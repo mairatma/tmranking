@@ -12,6 +12,7 @@ import { ScoredEventsTable } from './ScoredEventsTable';
 import { CategoryChooserDrawer } from '@/app/_components/CategoryChooserDrawer';
 import { LoadingPage } from '@/app/_components/base/LoadingPage';
 import { PlayerInfo } from './PlayerInfo';
+import { HistoricPointsLineChart } from './HistoricPointsLineChart';
 
 const NON_RATING_CATEGORIES = AVAILABLE_CATEGORIES.filter(
   ({ type }) => type !== CategoryType.Rating,
@@ -97,6 +98,12 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
           title: 'Nenhum evento sem pontuação',
           description: 'Todos os eventos pontuaram para o ranking.',
         }}
+      />
+
+      <HistoricPointsLineChart
+        playerId={id}
+        categoryId={categoryId}
+        year={year}
       />
     </Stack>
   );

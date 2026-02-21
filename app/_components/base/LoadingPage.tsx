@@ -2,7 +2,7 @@ import { Center, Spinner, Text, VStack } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
 interface Props {
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 export const LoadingPage = ({ children }: Props) => {
@@ -10,7 +10,7 @@ export const LoadingPage = ({ children }: Props) => {
     <Center>
       <VStack>
         <Spinner size="lg" />
-        <Text>{children}</Text>
+        {children && <Text>{children}</Text>}
       </VStack>
     </Center>
   );

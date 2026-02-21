@@ -2,8 +2,9 @@
 
 import { Box, EmptyState, Flex, Table, Text, VStack } from '@chakra-ui/react';
 
+import { Link } from '@/app/_components/base/Link';
+
 import { RankingEntry } from '../types';
-import Link from 'next/link';
 
 interface Props {
   category: string;

@@ -42,5 +42,7 @@ export const useRanking = (options: RankingOptions | null) => {
     queryKey: ['ranking', requestOptions],
     queryFn: requestOptions ? () => fetchRanking(requestOptions) : () => null,
     enabled: Boolean(requestOptions),
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 };

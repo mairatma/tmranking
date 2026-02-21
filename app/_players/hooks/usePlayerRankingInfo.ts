@@ -33,5 +33,7 @@ export const usePlayerRankingInfo = (
   return useQuery({
     queryKey: ['players', playerId, 'categories', categoryId, 'year', year],
     queryFn: () => fetchPlayerRankingInfo(playerId, categoryId, year),
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 };

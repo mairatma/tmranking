@@ -112,7 +112,7 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
           </Tabs.Trigger>
           <Tabs.Trigger value={TabTypes.Chart}>Gráfico</Tabs.Trigger>
           <Tabs.Trigger value={TabTypes.UnscoredEvents}>
-            Eventos expirados
+            Eventos não pontuados
           </Tabs.Trigger>
         </Tabs.List>
         <Tabs.Content value={TabTypes.ScoredEvents}>

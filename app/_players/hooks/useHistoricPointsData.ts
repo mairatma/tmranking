@@ -1,7 +1,7 @@
 import { getCurrentYear } from '@/app/_ranking/helpers/years';
 import { usePlayerRankingInfo } from './usePlayerRankingInfo';
 import { EventResult } from '../types';
-import { addYears, compareAsc, parse, subYears } from 'date-fns';
+import { addYears, compareAsc, compareDesc, parse, subYears } from 'date-fns';
 import { DateChartEntry } from '@/app/_components/chart/DateLineChart';
 
 const CURRENT_YEAR = getCurrentYear();
@@ -10,34 +10,66 @@ const isDateInChartRange = (date: Date, minChartDate: Date) => {
   return date >= minChartDate;
 };
 
-const buildChartDataFromScoredEvents = (
-  events: EventResult[],
-  year: number,
-) => {
+const buildPointsDelta = (events: EventResult[], year: number) => {
   const currentDate =
     year === CURRENT_YEAR ? new Date() : new Date(year, 12, 31, 11, 59, 59);
 
   const minChartDate = subYears(currentDate, 1);
 
-  const rawData = events.map((event) => {
+  const dateToEntryMap = new Map<number, DateChartEntry>();
+
+  events.forEach((event) => {
     const date = parse(event.date, 'dd/MM/yyyy', currentDate);
     const expirationDate = addYears(date, 1);
 
     const isExpired = expirationDate <= currentDate;
     if (isExpired && isDateInChartRange(expirationDate, minChartDate)) {
-      return { date: expirationDate, value: -1 * event.score };
+      dateToEntryMap.set(expirationDate.getTime(), {
+        date: expirationDate,
+        value: -1 * event.score,
+      });
     }
 
     if (!isExpired && isDateInChartRange(date, minChartDate)) {
-      return { date: date, value: event.score };
+      dateToEntryMap.set(date.getTime(), {
+        date: date,
+        value: event.score,
+      });
     }
-
-    return null;
   });
 
-  const filteredData = rawData.filter((entry) => entry !== null);
-  const data = [...filteredData].sort((a, b) => compareAsc(a.date, b.date));
+  const unorderedData = dateToEntryMap.values().toArray();
+  const data = [...unorderedData].sort((a, b) => compareDesc(a.date, b.date));
+  return data;
+};
 
+const buildChartDataFromScoredEvents = (
+  yearEvents: EventResult[],
+  oneYearOlderEvents: EventResult[],
+  twoYearOlderEvents: EventResult[],
+  year: number,
+) => {
+  const pointsDelta = buildPointsDelta(
+    [...yearEvents, ...oneYearOlderEvents, ...twoYearOlderEvents],
+
+    year,
+  );
+
+  const finalScore = yearEvents.reduce((acc, { score }) => acc + score, 0);
+
+  let currentScore = finalScore;
+  const unorderedData = pointsDelta.map(({ date, value }, index) => {
+    if (index === 0) {
+      currentScore -= value;
+      return { date, value: finalScore };
+    }
+
+    const entry = { date, value: currentScore };
+    currentScore -= value;
+    return entry;
+  });
+
+  const data = [...unorderedData].sort((a, b) => compareAsc(a.date, b.date));
   return data;
 };
 
@@ -80,11 +112,9 @@ export const useHistoricPointsData = (
   }
 
   const data = buildChartDataFromScoredEvents(
-    [
-      ...(currentData?.player.scoredEvents ?? []),
-      ...(lastYearData?.player.scoredEvents ?? []),
-      ...(yearBeforeLastData?.player.scoredEvents ?? []),
-    ],
+    currentData?.player.scoredEvents ?? [],
+    lastYearData?.player.scoredEvents ?? [],
+    yearBeforeLastData?.player.scoredEvents ?? [],
     year,
   );
   return { data, isLoading: false, isError: false };

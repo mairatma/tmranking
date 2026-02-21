@@ -10,8 +10,6 @@ export const ChartTooltip = (
   const { active, payload, label } = props;
   if (!active || !payload || payload.length === 0 || !label) return null;
 
-  console.log('ChartTooltip', payload, label);
-
   const value = payload[0].value;
 
   return (

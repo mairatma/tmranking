@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { usePlayerRankingInfo } from '../hooks/usePlayerRankingInfo';
 import {
   Center,
+  DataList,
   Flex,
   Grid,
   Heading,
@@ -62,7 +63,11 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
         <Heading size="xl" color="text.primary">
           {player.name}
         </Heading>
-        <Grid templateColumns="repeat(auto-fit, minmax(200px, 1fr))" gap="2">
+        <Grid
+          templateColumns="repeat(auto-fit, minmax(200px, 1fr))"
+          gap="2"
+          hideBelow="md"
+        >
           <Stat.Root size="sm" borderWidth="1px" p="4" rounded="md">
             <Stat.Label color="secondary.900" fontWeight="700">
               Idade (até o fim do ano)
@@ -97,6 +102,33 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
             </Stat.ValueText>
           </Stat.Root>
         </Grid>
+
+        <DataList.Root
+          orientation="horizontal"
+          hideFrom="md"
+          borderWidth="1px"
+          p="4"
+          rounded="md"
+        >
+          <DataList.Item>
+            <DataList.ItemLabel color="secondary.900" fontWeight="700">
+              Idade
+            </DataList.ItemLabel>
+            <DataList.ItemValue>{player.age ?? '-'}</DataList.ItemValue>
+          </DataList.Item>
+          <DataList.Item>
+            <DataList.ItemLabel color="secondary.900" fontWeight="700">
+              Clube
+            </DataList.ItemLabel>
+            <DataList.ItemValue>{player.team ?? '-'}</DataList.ItemValue>
+          </DataList.Item>
+          <DataList.Item>
+            <DataList.ItemLabel color="secondary.900" fontWeight="700">
+              Estado
+            </DataList.ItemLabel>
+            <DataList.ItemValue>{player.state ?? '-'}</DataList.ItemValue>
+          </DataList.Item>
+        </DataList.Root>
       </Flex>
 
       <Flex

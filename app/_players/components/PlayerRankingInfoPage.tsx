@@ -1,8 +1,8 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { usePlayerRankingInfo } from '../hooks/usePlayerRankingInfo';
-import { Flex, Heading, Separator, Stack, Stat } from '@chakra-ui/react';
+import { Flex, Heading, Separator, Stack, Stat, Tabs } from '@chakra-ui/react';
 import {
   AVAILABLE_CATEGORIES,
   CATEGORY_ID_MAP,
@@ -18,6 +18,16 @@ const NON_RATING_CATEGORIES = AVAILABLE_CATEGORIES.filter(
   ({ type }) => type !== CategoryType.Rating,
 );
 
+enum TabTypes {
+  ScoredEvents = 'ScoredEvents',
+  Chart = 'Chart',
+  UnscoredEvents = 'UnscoredEvents',
+}
+
+enum PageSearchParams {
+  Tab = 'tab',
+}
+
 interface Props {
   id: string;
   categoryId: string;
@@ -25,6 +35,7 @@ interface Props {
 
 export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const year = searchParams.get('year')
     ? Number(searchParams.get('year'))
@@ -36,6 +47,9 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
     return <LoadingPage>Carregando dados do jogador..</LoadingPage>;
   }
 
+  const currentTab =
+    searchParams.get(PageSearchParams.Tab) ?? TabTypes.ScoredEvents;
+
   const { player } = data;
   const totalScore = player.scoredEvents.reduce(
     (acc, { score }) => acc + score,
@@ -44,6 +58,12 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
 
   const handleCategoryChange = (newCategory: string) => {
     router.push(`/players/${id}/category/${newCategory}`);
+  };
+
+  const handleTabChange = (newTab: string) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set(PageSearchParams.Tab, newTab);
+    router.push(`${pathname}?${newParams.toString()}`);
   };
 
   return (
@@ -80,31 +100,53 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
       </Flex>
       <Separator size="sm" my="2" />
 
-      <ScoredEventsTable
-        title="Eventos que pontuaram para o ranking"
-        events={player.scoredEvents}
-        emptyState={{
-          title: 'Nenhum evento com pontuação',
-          description:
-            'O jogador não participou de eventos que pontuaram para o ranking',
-        }}
-      />
-
-      <ScoredEventsTable
-        mt="4"
-        title="Eventos que não pontuaram para o ranking"
-        events={player.unscoredEvents}
-        emptyState={{
-          title: 'Nenhum evento sem pontuação',
-          description: 'Todos os eventos pontuaram para o ranking.',
-        }}
-      />
-
-      <HistoricPointsLineChart
-        playerId={id}
-        categoryId={categoryId}
-        year={year}
-      />
+      <Tabs.Root
+        fitted
+        lazyMount
+        value={currentTab}
+        onValueChange={(e) => handleTabChange(e.value)}
+      >
+        <Tabs.List borderColor="border.light">
+          <Tabs.Trigger value={TabTypes.ScoredEvents}>
+            Eventos pontuados
+          </Tabs.Trigger>
+          <Tabs.Trigger value={TabTypes.Chart}>Gráfico</Tabs.Trigger>
+          <Tabs.Trigger value={TabTypes.UnscoredEvents}>
+            Eventos expirados
+          </Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.Content value={TabTypes.ScoredEvents}>
+          <ScoredEventsTable
+            title="Eventos que pontuaram para o ranking"
+            events={player.scoredEvents}
+            emptyState={{
+              title: 'Nenhum evento com pontuação',
+              description:
+                'O jogador não participou de eventos que pontuaram para o ranking',
+            }}
+          />
+        </Tabs.Content>
+        <Tabs.Content value={TabTypes.Chart}>
+          <Heading size="md" mb="6">
+            Pontuação no tempo
+          </Heading>
+          <HistoricPointsLineChart
+            playerId={id}
+            categoryId={categoryId}
+            year={year}
+          />
+        </Tabs.Content>
+        <Tabs.Content value={TabTypes.UnscoredEvents}>
+          <ScoredEventsTable
+            title="Eventos que não pontuaram para o ranking"
+            events={player.unscoredEvents}
+            emptyState={{
+              title: 'Nenhum evento sem pontuação',
+              description: 'Todos os eventos pontuaram para o ranking.',
+            }}
+          />
+        </Tabs.Content>
+      </Tabs.Root>
     </Stack>
   );
 };

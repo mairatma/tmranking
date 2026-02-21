@@ -11,6 +11,8 @@ import {
   YAxis,
 } from 'recharts';
 
+import { ChartTooltip } from './ChartTooltip';
+
 export interface DateChartEntry {
   value: number;
   date: Date;
@@ -48,7 +50,7 @@ export const DateLineChart = ({ data, ...otherProps }: Props) => {
         <Tooltip
           animationDuration={100}
           cursor={false}
-          content={<Chart.Tooltip />}
+          content={<ChartTooltip />}
         />
         {chart.series.map((item) => (
           <Line

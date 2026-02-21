@@ -126,7 +126,7 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
           />
         </Tabs.Content>
         <Tabs.Content value={TabTypes.Chart}>
-          <Heading size="md" mb="3">
+          <Heading size="md" mb="4">
             Pontuação no tempo
           </Heading>
           <HistoricPointsLineChart

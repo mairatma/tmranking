@@ -13,7 +13,7 @@ export const ChartTooltip = (
   const value = payload[0].value;
 
   return (
-    <Box w="40" rounded="sm" bg="primary.50" p="3">
+    <Box rounded="sm" bg="primary.50" p="3">
       <Stat.Root size="sm">
         <Stat.Label>{format(label, 'dd/MM/yyyy')}</Stat.Label>
         <Stat.ValueText alignItems="baseline">

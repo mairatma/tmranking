@@ -21,19 +21,9 @@ const getScoreAtDate = (date: Date, events: EventResult[]) => {
     return true;
   });
 
-  if (new Date().getMonth() === date.getMonth()) {
-    console.log('validEventsAtDate', [...validEventsAtDate]);
-  }
-
   validEventsAtDate.sort((a, b) => b.score - a.score);
-  if (new Date().getMonth() === date.getMonth()) {
-    console.log('sorted validEventsAtDate', [...validEventsAtDate]);
-  }
 
   const scoredEventsAtDate = validEventsAtDate.slice(0, MAX_SCORED_EVENTS);
-  if (new Date().getMonth() === date.getMonth()) {
-    console.log('scoredEventsAtDate', [...scoredEventsAtDate]);
-  }
 
   return scoredEventsAtDate.reduce((acc, event) => acc + event.score, 0);
 };

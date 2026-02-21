@@ -1,76 +1,70 @@
 import { getCurrentYear } from '@/app/_ranking/helpers/years';
 import { usePlayerRankingInfo } from './usePlayerRankingInfo';
 import { EventResult } from '../types';
-import { addYears, compareAsc, compareDesc, parse, subYears } from 'date-fns';
+import { addMonths, addYears, endOfMonth, parse, subYears } from 'date-fns';
 import { DateChartEntry } from '@/app/_components/chart/DateLineChart';
 
 const CURRENT_YEAR = getCurrentYear();
 
-const isDateInChartRange = (date: Date, minChartDate: Date) => {
-  return date >= minChartDate;
+const MAX_SCORED_EVENTS = 8;
+
+const getScoreAtDate = (date: Date, events: EventResult[]) => {
+  const validEventsAtDate = events.filter((event) => {
+    const eventDate = parse(event.date, 'dd/MM/yyyy', new Date());
+    const hasEventHappened = eventDate <= date;
+    if (!hasEventHappened) return false;
+
+    const expirationDate = addYears(eventDate, 1);
+    const hasEventExpired = expirationDate <= date;
+    if (hasEventExpired) return false;
+
+    return true;
+  });
+
+  if (new Date().getMonth() === date.getMonth()) {
+    console.log('validEventsAtDate', [...validEventsAtDate]);
+  }
+
+  validEventsAtDate.sort((a, b) => b.score - a.score);
+  if (new Date().getMonth() === date.getMonth()) {
+    console.log('sorted validEventsAtDate', [...validEventsAtDate]);
+  }
+
+  const scoredEventsAtDate = validEventsAtDate.slice(0, MAX_SCORED_EVENTS);
+  if (new Date().getMonth() === date.getMonth()) {
+    console.log('scoredEventsAtDate', [...scoredEventsAtDate]);
+  }
+
+  return scoredEventsAtDate.reduce((acc, event) => acc + event.score, 0);
 };
 
-const buildPointsDelta = (events: EventResult[], year: number) => {
-  const currentDate =
-    year === CURRENT_YEAR ? new Date() : new Date(year, 12, 31, 11, 59, 59);
+const buildChartDataFromEvents = (events: EventResult[], year: number) => {
+  const maxChartDate =
+    year === CURRENT_YEAR
+      ? endOfMonth(new Date())
+      : new Date(year, 12, 31, 11, 59, 59);
+  const minChartDate = endOfMonth(subYears(maxChartDate, 1));
 
-  const minChartDate = subYears(currentDate, 1);
+  const chartData: DateChartEntry[] = [];
+  let currentDate = minChartDate;
+  while (currentDate <= maxChartDate) {
+    chartData.push({
+      date: currentDate,
+      value: getScoreAtDate(currentDate, events),
+    });
 
-  const dateToEntryMap = new Map<number, DateChartEntry>();
+    currentDate = endOfMonth(addMonths(currentDate, 1));
+  }
 
+  return chartData;
+};
+
+const buildUniqueEventsArray = (events: EventResult[]) => {
+  const dateToEventMap = new Map<string, EventResult>();
   events.forEach((event) => {
-    const date = parse(event.date, 'dd/MM/yyyy', currentDate);
-    const expirationDate = addYears(date, 1);
-
-    const isExpired = expirationDate <= currentDate;
-    if (isExpired && isDateInChartRange(expirationDate, minChartDate)) {
-      dateToEntryMap.set(expirationDate.getTime(), {
-        date: expirationDate,
-        value: -1 * event.score,
-      });
-    }
-
-    if (!isExpired && isDateInChartRange(date, minChartDate)) {
-      dateToEntryMap.set(date.getTime(), {
-        date: date,
-        value: event.score,
-      });
-    }
+    dateToEventMap.set(event.date, event);
   });
-
-  const unorderedData = dateToEntryMap.values().toArray();
-  const data = [...unorderedData].sort((a, b) => compareDesc(a.date, b.date));
-  return data;
-};
-
-const buildChartDataFromScoredEvents = (
-  yearEvents: EventResult[],
-  oneYearOlderEvents: EventResult[],
-  twoYearOlderEvents: EventResult[],
-  year: number,
-) => {
-  const pointsDelta = buildPointsDelta(
-    [...yearEvents, ...oneYearOlderEvents, ...twoYearOlderEvents],
-
-    year,
-  );
-
-  const finalScore = yearEvents.reduce((acc, { score }) => acc + score, 0);
-
-  let currentScore = finalScore;
-  const unorderedData = pointsDelta.map(({ date, value }, index) => {
-    if (index === 0) {
-      currentScore -= value;
-      return { date, value: finalScore };
-    }
-
-    const entry = { date, value: currentScore };
-    currentScore -= value;
-    return entry;
-  });
-
-  const data = [...unorderedData].sort((a, b) => compareAsc(a.date, b.date));
-  return data;
+  return dateToEventMap.values().toArray();
 };
 
 type ReturnValue =
@@ -111,11 +105,15 @@ export const useHistoricPointsData = (
     return { data: null, isLoading: false, isError: true };
   }
 
-  const data = buildChartDataFromScoredEvents(
-    currentData?.player.scoredEvents ?? [],
-    lastYearData?.player.scoredEvents ?? [],
-    yearBeforeLastData?.player.scoredEvents ?? [],
-    year,
-  );
+  const allEvents = buildUniqueEventsArray([
+    ...(currentData?.player.scoredEvents ?? []),
+    ...(currentData?.player.unscoredEvents ?? []),
+    ...(lastYearData?.player.scoredEvents ?? []),
+    ...(lastYearData?.player.unscoredEvents ?? []),
+    ...(yearBeforeLastData?.player.scoredEvents ?? []),
+    ...(yearBeforeLastData?.player.unscoredEvents ?? []),
+  ]);
+
+  const data = buildChartDataFromEvents(allEvents, year);
   return { data, isLoading: false, isError: false };
 };

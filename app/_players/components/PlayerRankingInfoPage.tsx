@@ -129,11 +129,13 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
           <Heading size="md" mb="4">
             Pontuação no tempo
           </Heading>
-          <HistoricPointsLineChart
-            playerId={id}
-            categoryId={categoryId}
-            year={year}
-          />
+          {currentTab === TabTypes.Chart && (
+            <HistoricPointsLineChart
+              playerId={id}
+              categoryId={categoryId}
+              year={year}
+            />
+          )}
         </Tabs.Content>
         <Tabs.Content value={TabTypes.UnscoredEvents}>
           <ScoredEventsTable

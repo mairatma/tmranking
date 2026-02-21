@@ -18,6 +18,7 @@ import { PlayerInfo } from './PlayerInfo';
 import { HistoricPointsLineChart } from './HistoricPointsLineChart';
 import { getCurrentYear } from '@/app/_ranking/helpers/years';
 import { PlayerRankingFilters } from './PlayerRankingFilters';
+import { ErrorAlert } from '@/app/_components/base/ErrorAlert';
 
 enum TabTypes {
   ScoredEvents = 'ScoredEvents',
@@ -45,8 +46,12 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
 
   const { data, isLoading } = usePlayerRankingInfo(id, categoryId, year);
 
-  if (isLoading || !data) {
+  if (isLoading) {
     return <LoadingPage>Carregando dados do jogador..</LoadingPage>;
+  }
+
+  if (!data) {
+    return <ErrorAlert />;
   }
 
   const currentTab =

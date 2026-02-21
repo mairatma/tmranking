@@ -1,7 +1,10 @@
+import { EmptyState, VStack } from '@chakra-ui/react';
+
 import { LoadingPage } from '@/app/_components/base/LoadingPage';
 import { useHistoricPointsData } from '../hooks/useHistoricPointsData';
+import { ErrorAlert } from '@/app/_components/base/ErrorAlert';
+
 import { DateLineChart } from '@/app/_components/chart/DateLineChart';
-import { EmptyState, VStack } from '@chakra-ui/react';
 
 interface Props {
   playerId: string;
@@ -25,8 +28,7 @@ export const HistoricPointsLineChart = ({
   }
 
   if (isError) {
-    // TODO: Improve error handling.
-    return 'Error!';
+    return <ErrorAlert />;
   }
 
   if (data.length === 0) {

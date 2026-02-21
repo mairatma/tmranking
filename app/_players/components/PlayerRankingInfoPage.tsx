@@ -13,6 +13,7 @@ import { CategoryChooserDrawer } from '@/app/_components/CategoryChooserDrawer';
 import { LoadingPage } from '@/app/_components/base/LoadingPage';
 import { PlayerInfo } from './PlayerInfo';
 import { HistoricPointsLineChart } from './HistoricPointsLineChart';
+import { getCurrentYear } from '@/app/_ranking/helpers/years';
 
 const NON_RATING_CATEGORIES = AVAILABLE_CATEGORIES.filter(
   ({ type }) => type !== CategoryType.Rating,
@@ -39,7 +40,7 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
   const searchParams = useSearchParams();
   const year = searchParams.get('year')
     ? Number(searchParams.get('year'))
-    : undefined;
+    : getCurrentYear();
 
   const { data, isLoading } = usePlayerRankingInfo(id, categoryId, year);
 

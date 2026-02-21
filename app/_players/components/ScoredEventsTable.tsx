@@ -39,9 +39,9 @@ export const ScoredEventsTable = ({
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {events.map((item) => {
+            {events.map((item, index) => {
               return (
-                <Table.Row key={item.rank}>
+                <Table.Row key={index}>
                   <Table.Cell>
                     <Text fontWeight="bold" color="brand.primary" minW="3rem">
                       {item.rank}

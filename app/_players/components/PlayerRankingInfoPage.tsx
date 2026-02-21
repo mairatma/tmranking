@@ -75,29 +75,27 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
         <PlayerInfo player={player} />
       </Flex>
 
-      <Flex
-        alignItems="center"
-        direction="row"
-        justifyContent={{ smDown: 'space-between' }}
-        gap="8"
-        mt="4"
-      >
-        <Stack>
-          <Heading size="xl" fontWeight="700" color="secondary.900">
-            {CATEGORY_ID_MAP[categoryId].label} - {year}
-          </Heading>
+      <Stack mt="4">
+        <Heading size="xl" fontWeight="700" color="secondary.900">
+          {CATEGORY_ID_MAP[categoryId].label} - {year}
+        </Heading>
+        <Flex
+          alignItems="center"
+          direction="row"
+          justifyContent="space-between"
+        >
           <Stat.Root>
             <Stat.ValueText alignItems="baseline">
               {totalScore} <Stat.ValueUnit>pontos</Stat.ValueUnit>
             </Stat.ValueText>
           </Stat.Root>
-        </Stack>
-        <CategoryChooserDrawer
-          categories={NON_RATING_CATEGORIES}
-          value={categoryId}
-          onSelect={handleCategoryChange}
-        />
-      </Flex>
+          <CategoryChooserDrawer
+            categories={NON_RATING_CATEGORIES}
+            value={categoryId}
+            onSelect={handleCategoryChange}
+          />
+        </Flex>
+      </Stack>
       <Separator size="sm" my="2" />
 
       <Tabs.Root

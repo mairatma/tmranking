@@ -25,7 +25,7 @@ export const ScoredEventsTable = ({
 }: Props) => {
   return (
     <Box {...boxProps}>
-      <Heading mb="2">{title}</Heading>
+      <Heading mb="3">{title}</Heading>
       {events.length > 0 ? (
         <Table.Root size="sm" interactive striped>
           <Table.Header>

@@ -1,6 +1,7 @@
 import { LoadingPage } from '@/app/_components/base/LoadingPage';
 import { useHistoricPointsData } from '../hooks/useHistoricPointsData';
 import { DateLineChart } from '@/app/_components/chart/DateLineChart';
+import { EmptyState, VStack } from '@chakra-ui/react';
 
 interface Props {
   playerId: string;
@@ -28,5 +29,20 @@ export const HistoricPointsLineChart = ({
     return 'Error!';
   }
 
-  return <DateLineChart data={data} />;
+  if (data.length === 0) {
+    return (
+      <EmptyState.Root size="sm" borderWidth="1px" p="4" rounded="md">
+        <EmptyState.Content>
+          <VStack textAlign="center">
+            <EmptyState.Title>Nenhum evento encontrado</EmptyState.Title>
+            <EmptyState.Description>
+              Não foram encontrados eventos para plotar o gráfico.
+            </EmptyState.Description>
+          </VStack>
+        </EmptyState.Content>
+      </EmptyState.Root>
+    );
+  }
+
+  return <DateLineChart data={data} mt="3" />;
 };

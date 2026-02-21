@@ -8,7 +8,7 @@ import {
 
 interface Props extends Omit<SelectRootProps, 'value' | 'onChange'> {
   label: string;
-  placeholder: string;
+  placeholder?: string;
   value?: string;
   onChange: (newValue: string | null) => void;
 }

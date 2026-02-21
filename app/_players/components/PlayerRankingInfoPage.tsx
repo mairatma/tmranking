@@ -11,21 +11,13 @@ import {
   Tabs,
   Text,
 } from '@chakra-ui/react';
-import {
-  AVAILABLE_CATEGORIES,
-  CATEGORY_ID_MAP,
-  CategoryType,
-} from '@/app/_ranking/categories';
+import { CATEGORY_ID_MAP } from '@/app/_ranking/categories';
 import { ScoredEventsTable } from './ScoredEventsTable';
-import { CategoryChooserDrawer } from '@/app/_components/CategoryChooserDrawer';
 import { LoadingPage } from '@/app/_components/base/LoadingPage';
 import { PlayerInfo } from './PlayerInfo';
 import { HistoricPointsLineChart } from './HistoricPointsLineChart';
 import { getCurrentYear } from '@/app/_ranking/helpers/years';
-
-const NON_RATING_CATEGORIES = AVAILABLE_CATEGORIES.filter(
-  ({ type }) => type !== CategoryType.Rating,
-);
+import { PlayerRankingFilters } from './PlayerRankingFilters';
 
 enum TabTypes {
   ScoredEvents = 'ScoredEvents',
@@ -35,6 +27,7 @@ enum TabTypes {
 
 enum PageSearchParams {
   Tab = 'tab',
+  Year = 'year',
 }
 
 interface Props {
@@ -46,8 +39,8 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const year = searchParams.get('year')
-    ? Number(searchParams.get('year'))
+  const year = searchParams.get(PageSearchParams.Year)
+    ? Number(searchParams.get(PageSearchParams.Year))
     : getCurrentYear();
 
   const { data, isLoading } = usePlayerRankingInfo(id, categoryId, year);
@@ -64,10 +57,6 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
     (acc, { score }) => acc + score,
     0,
   );
-
-  const handleCategoryChange = (newCategory: string) => {
-    router.push(`/players/${id}/category/${newCategory}`);
-  };
 
   const handleTabChange = (newTab: string) => {
     const newParams = new URLSearchParams(searchParams);
@@ -98,10 +87,15 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
               {totalScore} <Stat.ValueUnit>pontos</Stat.ValueUnit>
             </Stat.ValueText>
           </Stat.Root>
-          <CategoryChooserDrawer
-            categories={NON_RATING_CATEGORIES}
-            value={categoryId}
-            onSelect={handleCategoryChange}
+          <PlayerRankingFilters
+            value={{ category: categoryId, year }}
+            onChange={(newFilters) => {
+              const newParams = new URLSearchParams(searchParams);
+              newParams.set(PageSearchParams.Year, newFilters.year.toString());
+              router.push(
+                `/players/${id}/category/${newFilters.category}?${newParams.toString()}`,
+              );
+            }}
           />
         </Flex>
       </Stack>

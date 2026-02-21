@@ -1,18 +1,28 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { usePlayerRankingInfo } from '../hooks/usePlayerRankingInfo';
 import {
   Center,
   Flex,
   Grid,
   Heading,
+  Separator,
   Spinner,
   Stack,
   Stat,
 } from '@chakra-ui/react';
-import { CATEGORY_ID_MAP } from '@/app/_ranking/categories';
+import {
+  AVAILABLE_CATEGORIES,
+  CATEGORY_ID_MAP,
+  CategoryType,
+} from '@/app/_ranking/categories';
 import { ScoredEventsTable } from './ScoredEventsTable';
+import { CategoryChooserDrawer } from '@/app/_components/CategoryChooserDrawer';
+
+const NON_RATING_CATEGORIES = AVAILABLE_CATEGORIES.filter(
+  ({ type }) => type !== CategoryType.Rating,
+);
 
 interface Props {
   id: string;
@@ -20,6 +30,7 @@ interface Props {
 }
 
 export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const year = searchParams.get('year')
     ? Number(searchParams.get('year'))
@@ -41,6 +52,10 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
     0,
   );
 
+  const handleCategoryChange = (newCategory: string) => {
+    router.push(`/players/${id}/category/${newCategory}`);
+  };
+
   return (
     <Stack gap="2">
       <Flex flexDirection="column" gap="2">
@@ -48,16 +63,7 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
           {player.name}
         </Heading>
         <Grid templateColumns="repeat(auto-fit, minmax(200px, 1fr))" gap="2">
-          <Stat.Root borderWidth="1px" p="4" rounded="md">
-            <Stat.Label color="secondary.900" fontWeight="700">
-              {CATEGORY_ID_MAP[categoryId].label}
-            </Stat.Label>
-            <Stat.ValueText alignItems="baseline">
-              {totalScore} <Stat.ValueUnit>pontos</Stat.ValueUnit>
-            </Stat.ValueText>
-          </Stat.Root>
-
-          <Stat.Root borderWidth="1px" p="4" rounded="md">
+          <Stat.Root size="sm" borderWidth="1px" p="4" rounded="md">
             <Stat.Label color="secondary.900" fontWeight="700">
               Idade (até o fim do ano)
             </Stat.Label>
@@ -73,7 +79,7 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
             </Stat.ValueText>
           </Stat.Root>
 
-          <Stat.Root borderWidth="1px" p="4" rounded="md">
+          <Stat.Root size="sm" borderWidth="1px" p="4" rounded="md">
             <Stat.Label color="secondary.900" fontWeight="700">
               Clube
             </Stat.Label>
@@ -82,7 +88,7 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
             </Stat.ValueText>
           </Stat.Root>
 
-          <Stat.Root borderWidth="1px" p="4" rounded="md">
+          <Stat.Root size="sm" borderWidth="1px" p="4" rounded="md">
             <Stat.Label color="secondary.900" fontWeight="700">
               Estado
             </Stat.Label>
@@ -93,8 +99,32 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
         </Grid>
       </Flex>
 
-      <ScoredEventsTable
+      <Flex
+        alignItems="center"
+        direction="row"
+        justifyContent={{ smDown: 'space-between' }}
+        gap="8"
         mt="4"
+      >
+        <Stack>
+          <Heading size="xl" fontWeight="700" color="secondary.900">
+            {CATEGORY_ID_MAP[categoryId].label}
+          </Heading>
+          <Stat.Root>
+            <Stat.ValueText alignItems="baseline">
+              {totalScore} <Stat.ValueUnit>pontos</Stat.ValueUnit>
+            </Stat.ValueText>
+          </Stat.Root>
+        </Stack>
+        <CategoryChooserDrawer
+          categories={NON_RATING_CATEGORIES}
+          value={categoryId}
+          onSelect={handleCategoryChange}
+        />
+      </Flex>
+      <Separator size="sm" my="2" />
+
+      <ScoredEventsTable
         title="Eventos que pontuaram para o ranking"
         events={player.scoredEvents}
         emptyState={{

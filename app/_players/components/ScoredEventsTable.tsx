@@ -13,21 +13,24 @@ import { EventResult } from '../types';
 
 interface Props extends BoxProps {
   title: string;
+  subtitle: string;
   events: EventResult[];
   emptyState: { title: string; description: string };
 }
 
 export const ScoredEventsTable = ({
   title,
+  subtitle,
   events,
   emptyState,
   ...boxProps
 }: Props) => {
   return (
     <Box {...boxProps}>
-      <Heading size="md" mb="3">
-        {title}
-      </Heading>
+      <Heading size="md">{title}</Heading>
+      <Text textStyle="xs" color="fg.muted" mb="4">
+        {subtitle}
+      </Text>
       {events.length > 0 ? (
         <Table.Root size="sm" interactive striped>
           <Table.Header>

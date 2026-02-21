@@ -2,7 +2,15 @@
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { usePlayerRankingInfo } from '../hooks/usePlayerRankingInfo';
-import { Flex, Heading, Separator, Stack, Stat, Tabs } from '@chakra-ui/react';
+import {
+  Flex,
+  Heading,
+  Separator,
+  Stack,
+  Stat,
+  Tabs,
+  Text,
+} from '@chakra-ui/react';
 import {
   AVAILABLE_CATEGORIES,
   CATEGORY_ID_MAP,
@@ -117,6 +125,7 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
         <Tabs.Content value={TabTypes.ScoredEvents}>
           <ScoredEventsTable
             title="Eventos que pontuaram para o ranking"
+            subtitle="Apenas os 8 eventos com maior pontuação contam para o ranking."
             events={player.scoredEvents}
             emptyState={{
               title: 'Nenhum evento com pontuação',
@@ -126,9 +135,10 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
           />
         </Tabs.Content>
         <Tabs.Content value={TabTypes.Chart}>
-          <Heading size="md" mb="4">
-            Pontuação no tempo
-          </Heading>
+          <Heading size="md">Pontuação no tempo</Heading>
+          <Text textStyle="xs" color="fg.muted" mb="4">
+            {year === getCurrentYear() ? 'Últimos 12 meses' : `Ano de ${year}`}
+          </Text>
           {currentTab === TabTypes.Chart && (
             <HistoricPointsLineChart
               playerId={id}
@@ -140,6 +150,7 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
         <Tabs.Content value={TabTypes.UnscoredEvents}>
           <ScoredEventsTable
             title="Eventos que não pontuaram para o ranking"
+            subtitle="Apenas os 8 eventos com maior pontuação contam para o ranking."
             events={player.unscoredEvents}
             emptyState={{
               title: 'Nenhum evento sem pontuação',

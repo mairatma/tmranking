@@ -14,17 +14,13 @@ import {
 import { CategoryChooser } from '@/app/_components/CategoryChooser';
 import { Select } from '@/app/_components/Select';
 
-import { AVAILABLE_CATEGORIES, CategoryType } from '../categories';
+import { AVAILABLE_CATEGORIES } from '../categories';
 import { createYearsCollection, getCurrentYear } from '../helpers/years';
 import { AVAILABLE_REGIONS } from '../regions';
 import { RankingOptions } from '../types';
 
 const REGION_COLLECTION = createListCollection({ items: AVAILABLE_REGIONS });
 const YEARS_COLLECTION = createYearsCollection();
-
-const NON_RATING_CATEGORIES = AVAILABLE_CATEGORIES.filter(
-  ({ type }) => type !== CategoryType.Rating,
-);
 
 interface Props {
   value: RankingOptions;
@@ -68,7 +64,7 @@ export const RankingFilters = ({ value, onChange }: Props) => {
             </Drawer.Header>
             <Drawer.Body>
               <CategoryChooser
-                categories={NON_RATING_CATEGORIES}
+                categories={AVAILABLE_CATEGORIES}
                 value={filters.category}
                 onChange={(category) => {
                   setFilters({ ...filters, category });

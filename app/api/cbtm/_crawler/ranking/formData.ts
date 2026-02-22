@@ -4,25 +4,30 @@ import { RankingOptions } from './types';
 export const buildRankingFormData = (
   sessionData: CbtmSessionData,
   { category, year, region, athlete }: RankingOptions,
+  isRating: boolean,
 ) => {
   const params = new URLSearchParams();
 
+  const categoryFieldName = isRating ? 'cmbRating' : 'cmbRANKING';
+
   // Event target and ViewState
-  params.append('__EVENTTARGET', 'ctl00$mainContent$cmbRANKING');
+  params.append('__EVENTTARGET', `ctl00$mainContent$${categoryFieldName}`);
   params.append('__EVENTARGUMENT', '');
   params.append('__VIEWSTATE', sessionData.viewState);
   params.append('__VIEWSTATEGENERATOR', sessionData.viewStateGenerator);
   params.append('__VIEWSTATEENCRYPTED', '');
   params.append('__EVENTVALIDATION', sessionData.eventValidation);
 
+  const categoryFieldValue = isRating ? category.substring(2) : category;
+  console.log('categoryFieldValue', categoryFieldValue);
   // Ranking dropdown
   params.append(
-    'ctl00$mainContent$cmbRANKING$State',
-    `{ "rawValue": "${category}" }`,
+    `ctl00$mainContent$${categoryFieldName}$State`,
+    `{ "rawValue": "${categoryFieldValue}" }`,
   );
-  params.append('ctl00$mainContent$cmbRANKING', category);
-  params.append('ctl00$mainContent$cmbRANKING$L', category);
-  params.append('mainContent_cmbRANKING_VI', category);
+  params.append(`ctl00$mainContent$${categoryFieldName}`, categoryFieldValue);
+  params.append(`ctl00$mainContent$${categoryFieldName}$L`, categoryFieldValue);
+  params.append(`mainContent_${categoryFieldName}_VI`, categoryFieldValue);
 
   // Year dropdown
   params.append('ctl00$mainContent$cmbAno$State', `{ "rawValue": "${year}" }`);

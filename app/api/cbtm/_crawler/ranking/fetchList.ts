@@ -1,17 +1,29 @@
 import { extractHtmlFromCallbackResponse } from '../helpers';
 import { extractSessionData, parseRankingTable } from './parser';
-import { CbtmSessionData, RANKING_INITIAL_SESSION_DATA } from '../session';
+import {
+  CbtmSessionData,
+  RANKING_INITIAL_SESSION_DATA,
+  RATING_INITIAL_SESSION_DATA,
+} from '../session';
 import { buildRankingFormData } from './formData';
 import { RankingOptions } from './types';
 import { buildCrawlerResponse } from '../response';
+import { CATEGORY_ID_MAP, CategoryType } from '@/app/_ranking/categories';
 
-const BASE_URL = 'https://app.cbtm.org.br/iUI/Site/RankingResultado';
+const BASE_URL_RANKING = 'https://app.cbtm.org.br/iUI/Site/RankingResultado';
+const BASE_URL_RATING = 'https://app.cbtm.org.br/iUI/Site/RatingResultado';
+
+const isRatingCategory = (categoryId: string) => {
+  return CATEGORY_ID_MAP[categoryId]?.type === CategoryType.Rating;
+};
 
 const fetchRankingPage = async (
   sessionData: CbtmSessionData,
   formData: URLSearchParams,
+  isRating: boolean,
 ) => {
-  const response = await fetch(`${BASE_URL}?Tipo=O`, {
+  const baseUrl = isRating ? BASE_URL_RATING : BASE_URL_RANKING;
+  const response = await fetch(`${baseUrl}?Tipo=O`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -28,13 +40,18 @@ const fetchRankingPage = async (
 };
 
 const fetchRankingFirstPageHtml = async (options: RankingOptions) => {
-  const formData = buildRankingFormData(RANKING_INITIAL_SESSION_DATA, options);
+  const isRating = isRatingCategory(options.category);
+  const initialSessionData = isRating
+    ? RATING_INITIAL_SESSION_DATA
+    : RANKING_INITIAL_SESSION_DATA;
 
-  const html = await fetchRankingPage(RANKING_INITIAL_SESSION_DATA, formData);
+  const formData = buildRankingFormData(initialSessionData, options, isRating);
+
+  const html = await fetchRankingPage(initialSessionData, formData, isRating);
 
   // Update ViewState for potential next request
   const newSessionData = {
-    ...RANKING_INITIAL_SESSION_DATA,
+    ...initialSessionData,
     ...extractSessionData(html),
   };
 
@@ -44,7 +61,8 @@ const fetchRankingFirstPageHtml = async (options: RankingOptions) => {
 const fetchRankingPageHtml = async (options: RankingOptions, page: number) => {
   const { newSessionData } = await fetchRankingFirstPageHtml(options);
 
-  const formData = buildRankingFormData(newSessionData, options);
+  const isRating = isRatingCategory(options.category);
+  const formData = buildRankingFormData(newSessionData, options, isRating);
   formData.set('__EVENTTARGET', '');
   formData.append('__CALLBACKID', 'ctl00$mainContent$grid');
   formData.append(
@@ -52,7 +70,11 @@ const fetchRankingPageHtml = async (options: RankingOptions, page: number) => {
     `c0:KV|2;[];GB|20;12|PAGERONCLICK3|PN${page - 1};`,
   );
 
-  const callbackData = await fetchRankingPage(newSessionData, formData);
+  const callbackData = await fetchRankingPage(
+    newSessionData,
+    formData,
+    isRating,
+  );
   return extractHtmlFromCallbackResponse(callbackData);
 };
 

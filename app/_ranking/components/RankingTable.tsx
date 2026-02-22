@@ -5,6 +5,7 @@ import { Box, EmptyState, Flex, Table, Text, VStack } from '@chakra-ui/react';
 import { Link } from '@/app/_components/base/Link';
 
 import { RankingEntry } from '../types';
+import { CATEGORY_ID_MAP, CategoryType } from '../categories';
 
 interface Props {
   category: string;
@@ -28,6 +29,9 @@ export const RankingTable = ({ category, rankings, year }: Props) => {
     );
   }
 
+  const isPlayerPageSupported =
+    CATEGORY_ID_MAP[category].type !== CategoryType.Rating;
+
   return (
     <Table.Root size="sm" interactive striped>
       <Table.Header>
@@ -39,12 +43,16 @@ export const RankingTable = ({ category, rankings, year }: Props) => {
       <Table.Body>
         {rankings.map((item) => {
           const description = `${item.club}${item.club && item.state ? ' - ' : ''}${item.state}`;
+
+          const playerLink = isPlayerPageSupported
+            ? `/players/${item.id}/category/${category}?year=${year}`
+            : `https://app.cbtm.org.br/iUI/Site/RatingResultadoDetalhe?Rating=${category}&Associado=${item.id}&Colocacao=${item.rank}&Pontos=${item.points}`;
+          const linkTarget = isPlayerPageSupported ? undefined : '_blank';
+
           return (
             <Table.Row key={item.rank}>
               <Table.Cell p="0">
-                <Link
-                  href={`/players/${item.id}/category/${category}?year=${year}`}
-                >
+                <Link href={playerLink} target={linkTarget}>
                   <Flex gap="2" p="3" alignItems="flex-start">
                     <Text fontWeight="bold" color="brand.primary" minW="3rem">
                       #{item.rank}
@@ -61,9 +69,7 @@ export const RankingTable = ({ category, rankings, year }: Props) => {
                 </Link>
               </Table.Cell>
               <Table.Cell textAlign="end" p="0">
-                <Link
-                  href={`/players/${item.id}/category/${category}?year=${year}`}
-                >
+                <Link href={playerLink} target={linkTarget}>
                   <Box p="3" fontWeight="600" color="text.primary">
                     {item.points}
                   </Box>

@@ -24,7 +24,7 @@ export const MainLayout = ({ children }: Props) => {
         gap="4"
         boxShadow="0 2px 8px rgba(0, 0, 0, 0.1)"
       >
-        <Image src="/images/cbtm.png" alt="CBTM" height={32} width={32} />
+        <Image src="/images/cbtm.png" alt="CBTM" height={34} width={32} />
         <Flex gap="6" ml="2">
           <NavLink href="/" isActive={!pathname.includes('/tournaments')}>
             Ranking

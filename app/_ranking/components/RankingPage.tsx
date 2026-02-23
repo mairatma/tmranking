@@ -32,8 +32,12 @@ export const RankingPage = () => {
   const searchParams = useSearchParams();
   const category = searchParams.get('category') ?? DEFAULT_CATEGORY_VALUE;
   const region = searchParams.get('region') ?? DEFAULT_REGION_VALUE;
-  const year = Number(searchParams.get('year')) || DEFAULT_YEAR_VALUE;
-  const page = Number(searchParams.get('page')) ?? INITIAL_PAGE;
+  const year = searchParams.get('year')
+    ? Number(searchParams.get('year'))
+    : DEFAULT_YEAR_VALUE;
+  const page = searchParams.get('page')
+    ? Number(searchParams.get('page'))
+    : INITIAL_PAGE;
 
   const { data, isLoading } = useRanking({
     category,

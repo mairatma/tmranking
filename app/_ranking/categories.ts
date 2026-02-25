@@ -456,3 +456,7 @@ export const CATEGORY_ID_MAP = AVAILABLE_CATEGORIES.reduce<
 >((acc, category) => {
   return { ...acc, [category.value]: category };
 }, {});
+
+export const isRatingCategory = (categoryId: string) => {
+  return CATEGORY_ID_MAP[categoryId]?.type === CategoryType.Rating;
+};

@@ -1,3 +1,5 @@
+import { isRatingCategory } from '@/app/_ranking/categories';
+
 import { extractHtmlFromCallbackResponse } from '../helpers';
 import { extractSessionData, parseRankingTable } from './parser';
 import {
@@ -8,14 +10,9 @@ import {
 import { buildRankingFormData } from './formData';
 import { RankingOptions } from './types';
 import { buildCrawlerResponse } from '../response';
-import { CATEGORY_ID_MAP, CategoryType } from '@/app/_ranking/categories';
 
 const BASE_URL_RANKING = 'https://app.cbtm.org.br/iUI/Site/RankingResultado';
 const BASE_URL_RATING = 'https://app.cbtm.org.br/iUI/Site/RatingResultado';
-
-const isRatingCategory = (categoryId: string) => {
-  return CATEGORY_ID_MAP[categoryId]?.type === CategoryType.Rating;
-};
 
 const fetchRankingPage = async (
   sessionData: CbtmSessionData,

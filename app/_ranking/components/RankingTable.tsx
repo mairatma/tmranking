@@ -50,7 +50,7 @@ export const RankingTable = ({ category, rankings, year }: Props) => {
           const linkTarget = isPlayerPageSupported ? undefined : '_blank';
 
           return (
-            <Table.Row key={item.rank}>
+            <Table.Row key={item.id}>
               <Table.Cell p="0">
                 <Link href={playerLink} target={linkTarget}>
                   <Flex gap="2" p="3" alignItems="flex-start">

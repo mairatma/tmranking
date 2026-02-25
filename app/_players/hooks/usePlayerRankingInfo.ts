@@ -16,7 +16,7 @@ const fetchPlayerRankingInfo = async (
   year?: number,
 ) => {
   const response = await fetch(
-    `/api/cbtm/players/${playerId}/categories/${categoryId}?year=${year ?? DEFAULT_YEAR_VALUE}`,
+    `/api/cbtm/players/${playerId}/ranking/${categoryId}?year=${year ?? DEFAULT_YEAR_VALUE}`,
   );
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);

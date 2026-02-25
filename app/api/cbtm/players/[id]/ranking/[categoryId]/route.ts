@@ -5,7 +5,7 @@ import { fetchPlayerById } from '../../../../_crawler/players/fetchById';
 
 export async function GET(
   req: NextRequest,
-  ctx: RouteContext<'/api/cbtm/players/[id]/categories/[categoryId]'>,
+  ctx: RouteContext<'/api/cbtm/players/[id]/ranking/[categoryId]'>,
 ) {
   if (req.method === 'OPTIONS') {
     return new Response('', { status: 200 });

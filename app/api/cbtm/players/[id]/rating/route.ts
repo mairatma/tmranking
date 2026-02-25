@@ -1,11 +1,11 @@
 import { NextRequest } from 'next/server';
 
-import { buildEtag, buildResponseHeaders } from '../../../../_helpers/response';
-import { fetchPlayerRankingById } from '../../../../_crawler/players/ranking/fetchPlayerRankingById';
+import { buildEtag, buildResponseHeaders } from '../../../_helpers/response';
+import { fetchPlayerRatingById } from '../../../_crawler/players/rating/fetchPlayerRatingById';
 
 export async function GET(
   req: NextRequest,
-  ctx: RouteContext<'/api/cbtm/players/[id]/ranking/[categoryId]'>,
+  ctx: RouteContext<'/api/cbtm/players/[id]/rating'>,
 ) {
   if (req.method === 'OPTIONS') {
     return new Response('', { status: 200 });
@@ -16,7 +16,7 @@ export async function GET(
   }
 
   try {
-    const { id, categoryId } = await ctx.params;
+    const { id } = await ctx.params;
 
     // Check If-None-Match header
     const clientETag = req.headers.get('if-none-match');
@@ -24,9 +24,7 @@ export async function GET(
       return new Response(undefined, { status: 304 });
     }
 
-    const year = req.nextUrl.searchParams.get('year');
-
-    const result = await fetchPlayerRankingById(id, categoryId, { year });
+    const result = await fetchPlayerRatingById(id);
     return new Response(JSON.stringify(result), {
       status: 200,
       headers: buildResponseHeaders(),

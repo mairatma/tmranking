@@ -1,6 +1,6 @@
 import { parsePlayerInfo } from './parser';
-import { getCookiesFromResponse } from '../../_helpers/cookies';
-import { buildCrawlerResponse } from '../response';
+import { getCookiesFromResponse } from '../../../_helpers/cookies';
+import { buildCrawlerResponse } from '../../response';
 
 const BASE_URL = 'https://app.cbtm.org.br/iUI/Site/RankingResultadoDetalhe';
 
@@ -36,7 +36,7 @@ export const fetchPlayerPageById = async (
   return { responseText, cookies };
 };
 
-export const fetchPlayerById = async (
+export const fetchPlayerRankingById = async (
   id: string,
   categoryId: string,
   params?: PlayerParams,

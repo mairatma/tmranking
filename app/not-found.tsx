@@ -6,12 +6,9 @@ import Link from 'next/link';
 export default function NotFound() {
   return (
     <Container maxW="md" py={{ base: 20, md: 40 }}>
-      <Stack gap={8} textAlign="center">
+      <Stack gap={2} textAlign="center">
         <Box>
-          <Heading size="4xl" mb={2}>
-            404
-          </Heading>
-          <Heading size="lg" fontWeight="semibold" mb={4}>
+          <Heading size="3xl" mb={4}>
             Página não encontrada
           </Heading>
           <Text fontSize="lg" color="fg.muted" mb={6}>

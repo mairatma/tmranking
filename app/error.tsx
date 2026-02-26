@@ -11,9 +11,9 @@ interface ErrorProps {
 export default function Error({ reset }: ErrorProps) {
   return (
     <Container maxW="md" py={{ base: 20, md: 40 }}>
-      <Stack gap={4} textAlign="center">
+      <Stack gap={2} textAlign="center">
         <Box>
-          <Heading size="3xl" mb={2}>
+          <Heading size="3xl" mb={4}>
             Algo deu errado
           </Heading>
           <Text fontSize="lg" color="fg.muted" mb={6}>

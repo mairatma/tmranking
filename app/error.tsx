@@ -13,10 +13,7 @@ export default function Error({ reset }: ErrorProps) {
     <Container maxW="md" py={{ base: 20, md: 40 }}>
       <Stack gap={4} textAlign="center">
         <Box>
-          <Heading size="4xl" mb={2}>
-            500
-          </Heading>
-          <Heading size="lg" fontWeight="semibold" mb={4}>
+          <Heading size="3xl" mb={2}>
             Algo deu errado
           </Heading>
           <Text fontSize="lg" color="fg.muted" mb={6}>

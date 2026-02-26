@@ -51,7 +51,7 @@ export const buildBracketRounds = (data: TournamentBrackets) => {
       rounds.push({
         title: ROUND_NAMES[roundIndex],
         seeds: bracket.map((game, gameIndex) => {
-          const [player1, player2] = data.teams[gameIndex];
+          const [player1, player2] = data.teams[gameIndex] ?? [];
           const [score1, score2, gameInfo] = game;
 
           return {

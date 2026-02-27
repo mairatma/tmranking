@@ -21,9 +21,9 @@ import { PlayerRankingFilters } from './PlayerRankingFilters';
 import { ErrorAlert } from '@/app/_components/base/ErrorAlert';
 
 enum TabTypes {
-  ScoredEvents = 'ScoredEvents',
-  Chart = 'Chart',
-  UnscoredEvents = 'UnscoredEvents',
+  ScoredEvents = 'scored',
+  Chart = 'chart',
+  UnscoredEvents = 'unscored',
 }
 
 enum PageSearchParams {

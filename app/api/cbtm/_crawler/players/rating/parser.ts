@@ -70,8 +70,8 @@ export const parsePlayerRatingInfo = (html: string) => {
         points: Number(cellElements[3]?.text.match(POINTS_REGEX)?.[1]) ?? 0,
         scoreAfter:
           Number(cellElements[4]?.text.match(AFTER_SCORE_REGEX)?.[1]) ?? 0,
-        setScores: cellElements[5]?.text.trim() ?? UNKNOWN,
-        oponentName: cellElements[6]?.text.trim() ?? UNKNOWN,
+        scores: cellElements[5]?.text.trim() ?? UNKNOWN,
+        opponentName: cellElements[6]?.text.trim() ?? UNKNOWN,
       };
     })
     .filter((event) => Boolean(event));

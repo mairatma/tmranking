@@ -1,9 +1,9 @@
 import { DataList, Grid, Stat } from '@chakra-ui/react';
 
-import { PlayerRankingInfo } from '../types';
+import { Player } from '../types';
 
 interface Props {
-  player: PlayerRankingInfo;
+  player: Player;
 }
 
 export const PlayerInfo = ({ player }: Props) => {

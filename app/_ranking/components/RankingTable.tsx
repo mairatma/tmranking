@@ -29,7 +29,7 @@ export const RankingTable = ({ category, rankings, year }: Props) => {
     );
   }
 
-  const isPlayerPageSupported =
+  const isRatingCategory =
     CATEGORY_ID_MAP[category].type !== CategoryType.Rating;
 
   return (
@@ -44,15 +44,14 @@ export const RankingTable = ({ category, rankings, year }: Props) => {
         {rankings.map((item) => {
           const description = `${item.club}${item.club && item.state ? ' - ' : ''}${item.state}`;
 
-          const playerLink = isPlayerPageSupported
+          const playerLink = isRatingCategory
             ? `/players/${item.id}/category/${category}?year=${year}`
-            : `https://app.cbtm.org.br/iUI/Site/RatingResultadoDetalhe?Rating=${category}&Associado=${item.id}&Colocacao=${item.rank}&Pontos=${item.points}`;
-          const linkTarget = isPlayerPageSupported ? undefined : '_blank';
+            : `/players/${item.id}/rating`;
 
           return (
             <Table.Row key={item.id}>
               <Table.Cell p="0">
-                <Link href={playerLink} target={linkTarget}>
+                <Link href={playerLink}>
                   <Flex gap="2" p="3" alignItems="flex-start">
                     <Text fontWeight="bold" color="brand.primary" minW="3rem">
                       #{item.rank}
@@ -69,7 +68,7 @@ export const RankingTable = ({ category, rankings, year }: Props) => {
                 </Link>
               </Table.Cell>
               <Table.Cell textAlign="end" p="0">
-                <Link href={playerLink} target={linkTarget}>
+                <Link href={playerLink}>
                   <Box p="3" fontWeight="600" color="text.primary">
                     {item.points}
                   </Box>

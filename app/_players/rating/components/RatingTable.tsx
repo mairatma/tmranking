@@ -1,7 +1,8 @@
-import { Box, EmptyState, Table, VStack } from '@chakra-ui/react';
+import { Box, EmptyState, Flex, Table, Text, VStack } from '@chakra-ui/react';
 import { format, parse } from 'date-fns';
 
 import { GameScore, RatingScore } from '../types';
+import { LuArrowDown, LuArrowUp } from 'react-icons/lu';
 
 interface Props {
   scores: RatingScore[];
@@ -38,8 +39,7 @@ export const RatingTable = ({ scores }: Props) => {
           {hasOpponentName(scores[0]) && (
             <Table.ColumnHeader>Oponente</Table.ColumnHeader>
           )}
-          <Table.ColumnHeader textAlign="end">Pontos</Table.ColumnHeader>
-          <Table.ColumnHeader textAlign="end">Rating depois</Table.ColumnHeader>
+          <Table.ColumnHeader textAlign="end">Rating</Table.ColumnHeader>
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -74,15 +74,27 @@ export const RatingTable = ({ scores }: Props) => {
                 </Table.Cell>
               )}
               <Table.Cell textAlign="end">
-                <Box fontWeight="600" color={scoreColor}>
-                  {item.points > 0 ? '+' : ''}
-                  {item.points}
-                </Box>
-              </Table.Cell>
-              <Table.Cell textAlign="end">
-                <Box fontWeight="600" color="text.primary">
+                <Flex
+                  fontWeight="600"
+                  color="text.primary"
+                  gap="2"
+                  justifyContent="end"
+                >
+                  <Text fontSize="xs" fontWeight="600" color={scoreColor}>
+                    <Flex alignItems="center">
+                      {item.points > 0 ? '+' : ''}
+                      {item.points}
+                      {item.points > 0 ? (
+                        <LuArrowUp />
+                      ) : item.points < 0 ? (
+                        <LuArrowDown />
+                      ) : (
+                        ''
+                      )}
+                    </Flex>
+                  </Text>
                   {item.scoreAfter}
-                </Box>
+                </Flex>
               </Table.Cell>
             </Table.Row>
           );

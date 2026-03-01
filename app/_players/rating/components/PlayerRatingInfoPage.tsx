@@ -7,6 +7,7 @@ import { ErrorAlert } from '@/app/_components/base/ErrorAlert';
 import { usePlayerRatingInfo } from '../hooks/usePlayerRatingInfo';
 import { PlayerInfo } from '../../components/PlayerInfo';
 import { RatingTable } from './RatingTable';
+import { getRatingName } from '../categories';
 
 enum TabTypes {
   TournamentScores = 'tournaments',
@@ -58,7 +59,9 @@ export const PlayerRatingInfoPage = ({ id }: Props) => {
       </Flex>
 
       <Stack mt="4">
-        <Heading size="xl">Rating</Heading>
+        <Heading size="xl">
+          Rating - {getRatingName(totalRating, player.gender)}
+        </Heading>
         <Stat.Root>
           <Stat.ValueText alignItems="baseline">
             {totalRating} <Stat.ValueUnit>pontos</Stat.ValueUnit>

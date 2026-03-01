@@ -1,8 +1,11 @@
+import { Gender } from '../_ranking/categories';
+
 export interface Player {
   name: string;
   age: string;
   state: string;
   team: string;
+  gender: Gender;
 }
 
 export interface EventResult {

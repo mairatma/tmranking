@@ -11,7 +11,10 @@ import {
   Tabs,
   Text,
 } from '@chakra-ui/react';
-import { CATEGORY_ID_MAP } from '@/app/_ranking/categories';
+import {
+  CATEGORY_ID_MAP,
+  getPlayerRankingCategories,
+} from '@/app/_ranking/categories';
 import { ScoredEventsTable } from './ScoredEventsTable';
 import { LoadingPage } from '@/app/_components/base/LoadingPage';
 import { PlayerInfo } from './PlayerInfo';
@@ -59,6 +62,11 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
   const totalScore = player.scoredEvents.reduce(
     (acc, { score }) => acc + score,
     0,
+  );
+
+  console.log(
+    'categories',
+    getPlayerRankingCategories(player.gender, player.age),
   );
 
   const handleTabChange = (newTab: string) => {

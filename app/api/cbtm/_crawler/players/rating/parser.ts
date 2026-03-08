@@ -29,8 +29,8 @@ export const parsePlayerRatingInfo = (html: string) => {
   const gender = root.querySelector('#mainContent_divhomem')
     ? 'Male'
     : 'Female';
-  const age =
-    root.querySelector('#mainContent_lblIdade')?.text.trim() ?? UNKNOWN;
+  const rawAge = root.querySelector('#mainContent_lblIdade')?.text.trim();
+  const age = rawAge ? Number(rawAge) : null;
 
   const tournamentScoresTable = root.querySelectorAll(
     '#mainContent_grideventos_DXMainTable tr',

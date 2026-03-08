@@ -2,7 +2,7 @@ import { Gender } from '../_ranking/categories';
 
 export interface Player {
   name: string;
-  age: string;
+  age: number | null;
   state: string;
   team: string;
   gender: Gender;

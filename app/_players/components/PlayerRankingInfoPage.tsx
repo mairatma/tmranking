@@ -21,9 +21,8 @@ import { PlayerRankingFilters } from './PlayerRankingFilters';
 import { ErrorAlert } from '@/app/_components/base/ErrorAlert';
 
 enum TabTypes {
-  ScoredEvents = 'scored',
+  Events = 'events',
   Chart = 'chart',
-  UnscoredEvents = 'unscored',
 }
 
 enum PageSearchParams {
@@ -54,8 +53,7 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
     return <ErrorAlert />;
   }
 
-  const currentTab =
-    searchParams.get(PageSearchParams.Tab) ?? TabTypes.ScoredEvents;
+  const currentTab = searchParams.get(PageSearchParams.Tab) ?? TabTypes.Events;
 
   const { player } = data;
   const totalScore = player.scoredEvents.reduce(
@@ -113,15 +111,10 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
         onValueChange={(e) => handleTabChange(e.value)}
       >
         <Tabs.List borderColor="border.light">
-          <Tabs.Trigger value={TabTypes.ScoredEvents}>
-            Eventos pontuados
-          </Tabs.Trigger>
+          <Tabs.Trigger value={TabTypes.Events}>Eventos</Tabs.Trigger>
           <Tabs.Trigger value={TabTypes.Chart}>Gráfico</Tabs.Trigger>
-          <Tabs.Trigger value={TabTypes.UnscoredEvents}>
-            Eventos não pontuados
-          </Tabs.Trigger>
         </Tabs.List>
-        <Tabs.Content value={TabTypes.ScoredEvents}>
+        <Tabs.Content value={TabTypes.Events}>
           <ScoredEventsTable
             title="Eventos que pontuaram para o ranking"
             subtitle="Apenas os 8 eventos com maior pontuação contam para o ranking."
@@ -130,6 +123,16 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
               title: 'Nenhum evento com pontuação',
               description:
                 'O jogador não participou de eventos que pontuaram para o ranking',
+            }}
+          />
+
+          <ScoredEventsTable
+            mt="4"
+            title="Eventos que não pontuaram para o ranking"
+            events={player.unscoredEvents}
+            emptyState={{
+              title: 'Nenhum evento sem pontuação',
+              description: 'Todos os eventos pontuaram para o ranking.',
             }}
           />
         </Tabs.Content>
@@ -145,17 +148,6 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
               year={year}
             />
           )}
-        </Tabs.Content>
-        <Tabs.Content value={TabTypes.UnscoredEvents}>
-          <ScoredEventsTable
-            title="Eventos que não pontuaram para o ranking"
-            subtitle="Apenas os 8 eventos com maior pontuação contam para o ranking."
-            events={player.unscoredEvents}
-            emptyState={{
-              title: 'Nenhum evento sem pontuação',
-              description: 'Todos os eventos pontuaram para o ranking.',
-            }}
-          />
         </Tabs.Content>
       </Tabs.Root>
     </Stack>

@@ -1,4 +1,4 @@
-import { getRatingAbsoluteType } from '@/app/_players/rating/categories';
+import { getRating } from '@/app/_players/rating/categories';
 
 import { AVAILABLE_CATEGORIES, CategoryType, Gender } from '.';
 
@@ -30,33 +30,45 @@ export const getPlayerRankingAgedCategories = (
   return categories;
 };
 
-const getPlayerAbsoluteRankingCategory = (
+const getPlayerRatingBasedCategories = (
   gender: Gender,
   ratingScore: number,
 ) => {
-  const absoluteType = getRatingAbsoluteType(ratingScore, gender);
+  const rating = getRating(ratingScore, gender);
 
-  const category = AVAILABLE_CATEGORIES.find((category) => {
+  const absoluteCategory = AVAILABLE_CATEGORIES.find((category) => {
     return (
       category.gender === gender &&
-      category.label.startsWith(`ABSOLUTO ${absoluteType}`)
+      category.label.startsWith(`ABSOLUTO ${rating.absoluteType}`)
     );
   });
-  return category ?? null;
+
+  const ratingCategory = AVAILABLE_CATEGORIES.find((category) => {
+    return (
+      category.gender === gender &&
+      category.label.startsWith(`Rating ${rating.name}`)
+    );
+  });
+
+  return { absoluteCategory, ratingCategory };
 };
 
-export const getPlayerRankingCategories = (
+export const getPlayerCategories = (
   gender: Gender,
   age: number | null,
   ratingScore: number,
 ) => {
   const agedCategories = getPlayerRankingAgedCategories(gender, age);
-  const absoluteCategory = getPlayerAbsoluteRankingCategory(
+  const { absoluteCategory, ratingCategory } = getPlayerRatingBasedCategories(
     gender,
     ratingScore,
   );
 
-  return absoluteCategory
-    ? [...agedCategories, absoluteCategory]
+  const categoriesWithAbsolute = absoluteCategory
+    ? [absoluteCategory, ...agedCategories]
     : agedCategories;
+
+  return ratingCategory
+    ? [...categoriesWithAbsolute, ratingCategory]
+    : categoriesWithAbsolute;
 };

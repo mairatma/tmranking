@@ -8,7 +8,7 @@ import { usePlayerRatingInfo } from '../hooks/usePlayerRatingInfo';
 import { PlayerInfo } from '../../components/PlayerInfo';
 import { RatingTable } from './RatingTable';
 import { getRatingName } from '../categories';
-import { getPlayerRankingCategories } from '@/app/_ranking/categories/helpers';
+import { getPlayerCategories } from '@/app/_ranking/categories/helpers';
 
 enum TabTypes {
   TournamentScores = 'tournaments',
@@ -46,7 +46,7 @@ export const PlayerRatingInfoPage = ({ id }: Props) => {
 
   console.log(
     'categories',
-    getPlayerRankingCategories(player.gender, player.age, totalRating),
+    getPlayerCategories(player.gender, player.age, totalRating),
   );
 
   const handleTabChange = (newTab: string) => {

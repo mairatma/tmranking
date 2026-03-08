@@ -511,31 +511,3 @@ export const CATEGORY_ID_MAP = AVAILABLE_CATEGORIES.reduce<
 export const isRatingCategory = (categoryId: string) => {
   return CATEGORY_ID_MAP[categoryId]?.type === CategoryType.Rating;
 };
-
-export const getPlayerRankingCategories = (
-  gender: Gender,
-  age: number | null,
-) => {
-  if (!age) return [];
-
-  const mainRankingCategoryIndex = AVAILABLE_CATEGORIES.findIndex(
-    (category) => {
-      if (
-        category.gender !== gender ||
-        category.type !== CategoryType.Ranking ||
-        !category.maxAge
-      )
-        return false;
-
-      return category.maxAge >= age;
-    },
-  );
-
-  const mainRankingCategory = AVAILABLE_CATEGORIES[mainRankingCategoryIndex];
-  const categories = [mainRankingCategory];
-  if (mainRankingCategory.label.startsWith('SUB')) {
-    categories.push(AVAILABLE_CATEGORIES[mainRankingCategoryIndex + 1]);
-  }
-
-  return categories;
-};

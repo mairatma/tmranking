@@ -2,11 +2,13 @@ import {
   Badge,
   Box,
   Card,
+  EmptyState,
   Flex,
   Grid,
   Spinner,
   Table,
   Text,
+  VStack,
 } from '@chakra-ui/react';
 
 import { useTournamentGroups } from '../hooks/useTournamentGroups';
@@ -21,6 +23,22 @@ export const Groups = ({ id, categoryId }: Props) => {
 
   if (!data) {
     return <Spinner />;
+  }
+
+  if (data.groups.length === 0) {
+    return (
+      <EmptyState.Root size="sm" borderWidth="1px" p="4" rounded="md">
+        <EmptyState.Content>
+          <VStack textAlign="center">
+            <EmptyState.Title>Nenhum grupos encontrado</EmptyState.Title>
+            <EmptyState.Description>
+              Não foram encontrados grupos. O torneio ainda está sendo
+              preparado.
+            </EmptyState.Description>
+          </VStack>
+        </EmptyState.Content>
+      </EmptyState.Root>
+    );
   }
 
   return (

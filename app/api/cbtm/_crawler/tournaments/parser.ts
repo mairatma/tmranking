@@ -83,6 +83,10 @@ export const parseTournamentGroups = (html: string) => {
     const dataElements = element.querySelectorAll(
       '.dxflNestedControlCell_MaterialCompact',
     );
+
+    const hasElements = dataElements?.length > 0;
+    if (!hasElements) return null;
+
     const name = dataElements[0].textContent.trim() ?? '';
 
     const participants = [];
@@ -109,7 +113,7 @@ export const parseTournamentGroups = (html: string) => {
     return { name, participants };
   });
 
-  return groups;
+  return groups.filter((group) => Boolean(group));
 };
 
 const parseSetScores = (

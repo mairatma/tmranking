@@ -145,6 +145,10 @@ export const parseTournamentResults = (html: string) => {
     const dataElements = element.querySelectorAll(
       '.dxflNestedControlCell_MaterialCompact',
     );
+
+    const hasElements = dataElements?.length > 0;
+    if (!hasElements) return null;
+
     const splitName = dataElements[0].textContent.split('-');
     const name = splitName[splitName.length - 1].trim();
 
@@ -185,5 +189,5 @@ export const parseTournamentResults = (html: string) => {
     };
   });
 
-  return games;
+  return games.filter((game) => Boolean(game));
 };

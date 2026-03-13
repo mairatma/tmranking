@@ -4,11 +4,13 @@ import {
   Badge,
   Box,
   Card,
+  EmptyState,
   Flex,
   Grid,
   Spinner,
   Table,
   Text,
+  VStack,
 } from '@chakra-ui/react';
 
 import { useTournamentResults } from '../hooks/useTournamentResults';
@@ -30,6 +32,21 @@ export const Results = ({ id, categoryId }: Props) => {
 
   if (!data) {
     return <Spinner />;
+  }
+
+  if (data.results.length === 0) {
+    return (
+      <EmptyState.Root size="sm" borderWidth="1px" p="4" rounded="md">
+        <EmptyState.Content>
+          <VStack textAlign="center">
+            <EmptyState.Title>Nenhum jogo encontrado</EmptyState.Title>
+            <EmptyState.Description>
+              Não foram encontrados jogos. O torneio ainda está sendo preparado.
+            </EmptyState.Description>
+          </VStack>
+        </EmptyState.Content>
+      </EmptyState.Root>
+    );
   }
 
   const atheleteOptions = getAllAtheletesFromResults(data.results).map(

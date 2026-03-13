@@ -87,20 +87,21 @@ export const parseTournamentGroups = (html: string) => {
 
     const participants = [];
     let startIndex = 6;
-    while (
-      dataElements.length > startIndex &&
-      dataElements[startIndex + 1].textContent.trim() !== ''
-    ) {
-      participants.push({
-        name: dataElements[startIndex + 1].textContent.trim(),
-        rankingPoints:
-          dataElements[startIndex + 2].textContent.match(INTEGER_REGEX)?.[1] ??
-          0,
-        ratingPoints:
-          dataElements[startIndex + 3].textContent.match(INTEGER_REGEX)?.[1] ??
-          0,
-        qualified: dataElements[startIndex + 4].textContent.trim() !== '',
-      });
+    while (startIndex < dataElements.length) {
+      if (dataElements[startIndex + 1].textContent.trim() !== '') {
+        participants.push({
+          name: dataElements[startIndex + 1].textContent.trim(),
+          rankingPoints:
+            dataElements[startIndex + 2].textContent.match(
+              INTEGER_REGEX,
+            )?.[1] ?? 0,
+          ratingPoints:
+            dataElements[startIndex + 3].textContent.match(
+              INTEGER_REGEX,
+            )?.[1] ?? 0,
+          qualified: dataElements[startIndex + 4].textContent.trim() !== '',
+        });
+      }
 
       startIndex += 5;
     }

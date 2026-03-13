@@ -54,6 +54,12 @@ export const AVAILABLE_CATEGORIES: Category[] = [
     type: CategoryType.Absolute,
   },
   {
+    value: '310',
+    label: 'ABSOLUTO G (MAS)',
+    gender: Gender.Male,
+    type: CategoryType.Absolute,
+  },
+  {
     value: '266',
     label: 'SUB-07 MAS',
     gender: Gender.Male,
@@ -188,6 +194,12 @@ export const AVAILABLE_CATEGORIES: Category[] = [
   {
     value: '112',
     label: 'ABSOLUTO D (FEM)',
+    gender: Gender.Female,
+    type: CategoryType.Absolute,
+  },
+  {
+    value: '309',
+    label: 'ABSOLUTO E (FEM)',
     gender: Gender.Female,
     type: CategoryType.Absolute,
   },

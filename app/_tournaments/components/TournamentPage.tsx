@@ -6,7 +6,7 @@ import { LuBrackets, LuGrid2X2, LuSquareCheck, LuUser } from 'react-icons/lu';
 import { useTournament } from '@/app/_tournaments/hooks/useTournament';
 import { Registrations } from './Registrations';
 import { CategoryChooserDrawer } from '@/app/_components/CategoryChooserDrawer';
-import { CATEGORY_ID_MAP } from '@/app/_ranking/categories';
+import { CATEGORY_ID_MAP, Gender } from '@/app/_ranking/categories';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Brackets } from './Brackets';
 import { Groups } from './Groups';
@@ -29,6 +29,11 @@ enum TournamentSearchParams {
 interface Props {
   id: string;
 }
+
+const GENDER_TO_SORT_VALUE: Record<Gender, number> = {
+  [Gender.Male]: 0,
+  [Gender.Female]: 1,
+};
 
 export const TournamentPage = ({ id }: Props) => {
   const router = useRouter();
@@ -53,7 +58,12 @@ export const TournamentPage = ({ id }: Props) => {
 
   const availableCategories = data.categories
     .map((item) => CATEGORY_ID_MAP[item.value])
-    .filter((item) => item);
+    .filter((item) => item)
+    .sort(
+      (category1, category2) =>
+        GENDER_TO_SORT_VALUE[category1.gender] -
+        GENDER_TO_SORT_VALUE[category2.gender],
+    );
 
   const category =
     searchParams.get(TournamentSearchParams.Category) ??

@@ -15,3 +15,13 @@ export interface TournamentResults {
     sets: string[];
   }[];
 }
+
+export interface TournamentGroup {
+  name: string;
+  participants: {
+    name: string;
+    rankingPoints: number;
+    ratingPoints: number;
+    qualified: boolean;
+  }[];
+}

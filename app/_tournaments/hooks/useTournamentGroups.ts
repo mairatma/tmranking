@@ -1,14 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-interface TournamentGroup {
-  name: string;
-  participants: {
-    name: string;
-    rankingPoints: number;
-    ratingPoints: number;
-    qualified: boolean;
-  }[];
-}
+import { TournamentGroup } from '../types';
 
 interface GetTournamentGroupsResponse {
   groups: TournamentGroup[];

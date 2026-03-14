@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Box, Spinner, Switch } from '@chakra-ui/react';
+import { Box, Flex, Spinner, Switch, Text } from '@chakra-ui/react';
 
 import { useTournamentRegistrations } from '@/app/_tournaments/hooks/useTournamentRegistrations';
 
@@ -22,14 +22,23 @@ export const Registrations = ({ id, categoryId }: Props) => {
 
   return (
     <Box>
-      <Switch.Root
-        checked={shouldGroupByClubs}
-        onCheckedChange={(e) => setShouldGroupByClubs(e.checked)}
-      >
-        <Switch.HiddenInput />
-        <Switch.Label>Agrupar por clubes</Switch.Label>
-        <Switch.Control />
-      </Switch.Root>
+      <Flex gap="3" justifyContent={{ smDown: 'space-between' }}>
+        <Text display="flex" gap="2" fontSize="sm" color="fg.muted">
+          <Text fontWeight="bold">Total de inscritos:</Text>
+          <Text>{data.registrations.length}</Text>
+        </Text>
+
+        <Switch.Root
+          checked={shouldGroupByClubs}
+          onCheckedChange={(e) => setShouldGroupByClubs(e.checked)}
+        >
+          <Switch.HiddenInput />
+          <Switch.Label fontSize="sm" color="fg.muted" fontWeight="bold">
+            Agrupar por clubes:
+          </Switch.Label>
+          <Switch.Control />
+        </Switch.Root>
+      </Flex>
 
       <Box mt="4">
         {shouldGroupByClubs ? (

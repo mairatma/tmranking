@@ -14,9 +14,11 @@ import { TournamentResults } from '../types';
 const WINNER_STYLES = {
   color: 'var(--chakra-colors-primary-900)',
   fontWeight: 'bold',
+  textAlign: 'left',
 };
 const LOSER_STYLES = {
   color: 'var(--chakra-colors-primary-700)',
+  textAlign: 'left',
 };
 
 interface Props extends IRenderSeedProps {

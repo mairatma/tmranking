@@ -68,7 +68,7 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
 
   return (
     <>
-      <Stack mt="4">
+      <Stack mt="2">
         <Heading size="xl" fontWeight="700" color="secondary.900">
           {CATEGORY_ID_MAP[categoryId].label} - {year}
         </Heading>

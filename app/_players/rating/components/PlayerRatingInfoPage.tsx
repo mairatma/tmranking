@@ -7,7 +7,6 @@ import { ErrorAlert } from '@/app/_components/base/ErrorAlert';
 import { usePlayerRatingInfo } from '../hooks/usePlayerRatingInfo';
 import { RatingTable } from './RatingTable';
 import { getRatingName } from '../categories';
-import { getPlayerCategories } from '@/app/_ranking/categories/helpers';
 
 enum TabTypes {
   TournamentScores = 'tournaments',
@@ -43,11 +42,6 @@ export const PlayerRatingInfoPage = ({ id }: Props) => {
   const { player } = data;
   const totalRating = player.scoresPerTournament[0]?.scoreAfter ?? 0;
 
-  console.log(
-    'categories',
-    getPlayerCategories(player.gender, player.age, totalRating),
-  );
-
   const handleTabChange = (newTab: string) => {
     const newParams = new URLSearchParams(searchParams);
     newParams.set(PageSearchParams.Tab, newTab);
@@ -56,7 +50,7 @@ export const PlayerRatingInfoPage = ({ id }: Props) => {
 
   return (
     <>
-      <Stack mt="4">
+      <Stack mt="2">
         <Heading size="xl">
           Rating - {getRatingName(totalRating, player.gender)}
         </Heading>

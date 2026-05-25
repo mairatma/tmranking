@@ -1,11 +1,10 @@
 'use client';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Flex, Heading, Separator, Stack, Stat, Tabs } from '@chakra-ui/react';
+import { Heading, Separator, Stack, Stat, Tabs } from '@chakra-ui/react';
 import { LoadingPage } from '@/app/_components/base/LoadingPage';
 import { ErrorAlert } from '@/app/_components/base/ErrorAlert';
 import { usePlayerRatingInfo } from '../hooks/usePlayerRatingInfo';
-import { PlayerInfo } from '../../components/PlayerInfo';
 import { RatingTable } from './RatingTable';
 import { getRatingName } from '../categories';
 import { getPlayerCategories } from '@/app/_ranking/categories/helpers';
@@ -56,14 +55,7 @@ export const PlayerRatingInfoPage = ({ id }: Props) => {
   };
 
   return (
-    <Stack gap="2">
-      <Flex flexDirection="column" gap="2">
-        <Heading size="xl" color="text.primary">
-          {player.name}
-        </Heading>
-        <PlayerInfo player={player} />
-      </Flex>
-
+    <>
       <Stack mt="4">
         <Heading size="xl">
           Rating - {getRatingName(totalRating, player.gender)}
@@ -95,6 +87,6 @@ export const PlayerRatingInfoPage = ({ id }: Props) => {
           <RatingTable scores={player.scoresPerGame} />
         </Tabs.Content>
       </Tabs.Root>
-    </Stack>
+    </>
   );
 };

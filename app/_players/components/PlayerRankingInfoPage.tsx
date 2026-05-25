@@ -14,7 +14,6 @@ import {
 import { CATEGORY_ID_MAP } from '@/app/_ranking/categories';
 import { ScoredEventsTable } from './ScoredEventsTable';
 import { LoadingPage } from '@/app/_components/base/LoadingPage';
-import { PlayerInfo } from './PlayerInfo';
 import { HistoricPointsLineChart } from './HistoricPointsLineChart';
 import { getCurrentYear } from '@/app/_ranking/helpers/years';
 import { PlayerRankingFilters } from './PlayerRankingFilters';
@@ -68,14 +67,7 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
   };
 
   return (
-    <Stack gap="2">
-      <Flex flexDirection="column" gap="2">
-        <Heading size="xl" color="text.primary">
-          {player.name}
-        </Heading>
-        <PlayerInfo player={player} />
-      </Flex>
-
+    <>
       <Stack mt="4">
         <Heading size="xl" fontWeight="700" color="secondary.900">
           {CATEGORY_ID_MAP[categoryId].label} - {year}
@@ -150,6 +142,6 @@ export const PlayerRankingInfoPage = ({ id, categoryId }: Props) => {
           )}
         </Tabs.Content>
       </Tabs.Root>
-    </Stack>
+    </>
   );
 };

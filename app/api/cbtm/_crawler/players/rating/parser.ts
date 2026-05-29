@@ -7,6 +7,36 @@ const INITIAL_SCORE_REGEX = /inicial: (\d+)/;
 const POINTS_REGEX = /Pts:: (.+)/;
 const AFTER_SCORE_REGEX = /final: (.+)/;
 
+function parseScoreString(input: string) {
+  const leftMatch = input.match(/^\(([^)]+)\)/);
+  const rightMatch = input.match(/(\d*)\(([^)]+)\)$/);
+  const middleMatch = input.match(/\)\s+(.+?)\s+\d*\(/);
+
+  const parseArray = (str: string) => str.split(',').map(Number);
+
+  const middleRaw = middleMatch ? middleMatch[1].trim() : '';
+  const rightPrefix = rightMatch?.[1] ? [Number(rightMatch[1])] : [];
+
+  const middleIntegers = [
+    ...middleRaw.split(/\s+/).map(Number),
+    ...rightPrefix,
+  ].filter((n) => !isNaN(n));
+
+  const setsCount = middleIntegers[0] + middleIntegers[1];
+
+  return {
+    playerSets: leftMatch ? parseArray(leftMatch[1]).slice(0, setsCount) : [],
+    totalScores: middleIntegers,
+    opponentSets: rightMatch
+      ? parseArray(rightMatch[2]).slice(0, setsCount)
+      : [],
+  };
+}
+
+// Example
+const input = '(11,3,12,0,0,0,0) 0 X 3(13,11,14,0,0,0,0)';
+console.log(parseScoreString(input));
+
 export const parsePlayerRatingInfo = (html: string) => {
   const root = parse(html);
 
@@ -62,6 +92,8 @@ export const parsePlayerRatingInfo = (html: string) => {
       const date = cellElements[0]?.text.trim() ?? UNKNOWN;
       if (date === UNKNOWN) return null;
 
+      const scoresAsString = cellElements[5]?.text.trim();
+
       return {
         date: cellElements[0]?.text.trim() ?? UNKNOWN,
         eventName: cellElements[1]?.text.trim() ?? UNKNOWN,
@@ -70,7 +102,7 @@ export const parsePlayerRatingInfo = (html: string) => {
         points: Number(cellElements[3]?.text.match(POINTS_REGEX)?.[1]) ?? 0,
         scoreAfter:
           Number(cellElements[4]?.text.match(AFTER_SCORE_REGEX)?.[1]) ?? 0,
-        scores: cellElements[5]?.text.trim() ?? UNKNOWN,
+        scores: scoresAsString ? parseScoreString(scoresAsString) : UNKNOWN,
         opponentName: cellElements[6]?.text.trim() ?? UNKNOWN,
       };
     })

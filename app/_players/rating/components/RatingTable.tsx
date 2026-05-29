@@ -3,16 +3,19 @@ import { format, parse } from 'date-fns';
 
 import { GameScore, RatingScore } from '../types';
 import { LuArrowDown, LuArrowUp } from 'react-icons/lu';
+import { ScorePopover } from '@/app/_components/ScorePopover';
+import { ScoreResults } from '@/app/_tournaments/types';
 
 interface Props {
   scores: RatingScore[];
+  playerName: string;
 }
 
 const hasOpponentName = (score: RatingScore): score is GameScore => {
   return 'opponentName' in score;
 };
 
-export const RatingTable = ({ scores }: Props) => {
+export const RatingTable = ({ scores, playerName }: Props) => {
   if (scores.length === 0) {
     return (
       <EmptyState.Root size="sm" borderWidth="1px" p="4" rounded="md">
@@ -54,6 +57,21 @@ export const RatingTable = ({ scores }: Props) => {
           const splitDate = item.date.split(' ')[0];
           const parsedDate = parse(splitDate, 'dd/MM/yyyy', new Date());
 
+          const results: ScoreResults | null = hasOpponentName(item)
+            ? [
+                {
+                  playerName,
+                  totalScore: item.scores.totalScores[0],
+                  sets: item.scores.playerSets,
+                },
+                {
+                  playerName: item.opponentName,
+                  totalScore: item.scores.totalScores[1],
+                  sets: item.scores.opponentSets,
+                },
+              ]
+            : null;
+
           return (
             <Table.Row key={index}>
               <Table.Cell>
@@ -74,27 +92,29 @@ export const RatingTable = ({ scores }: Props) => {
                 </Table.Cell>
               )}
               <Table.Cell textAlign="end">
-                <Flex
-                  fontWeight="600"
-                  color="text.primary"
-                  gap="2"
-                  justifyContent="end"
-                >
-                  <Text fontSize="xs" fontWeight="600" color={scoreColor}>
-                    <Flex alignItems="center">
-                      {item.points > 0 ? '+' : ''}
-                      {item.points}
-                      {item.points > 0 ? (
-                        <LuArrowUp />
-                      ) : item.points < 0 ? (
-                        <LuArrowDown />
-                      ) : (
-                        ''
-                      )}
-                    </Flex>
-                  </Text>
-                  {item.scoreAfter}
-                </Flex>
+                <ScorePopover results={results}>
+                  <Flex
+                    fontWeight="600"
+                    color="text.primary"
+                    gap="2"
+                    justifyContent="end"
+                  >
+                    <Text fontSize="xs" fontWeight="600" color={scoreColor}>
+                      <Flex alignItems="center">
+                        {item.points > 0 ? '+' : ''}
+                        {item.points}
+                        {item.points > 0 ? (
+                          <LuArrowUp />
+                        ) : item.points < 0 ? (
+                          <LuArrowDown />
+                        ) : (
+                          ''
+                        )}
+                      </Flex>
+                    </Text>
+                    {item.scoreAfter}
+                  </Flex>
+                </ScorePopover>
               </Table.Cell>
             </Table.Row>
           );

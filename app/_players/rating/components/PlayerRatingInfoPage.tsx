@@ -75,10 +75,13 @@ export const PlayerRatingInfoPage = ({ id }: Props) => {
           <Tabs.Trigger value={TabTypes.GameScores}>Partidas</Tabs.Trigger>
         </Tabs.List>
         <Tabs.Content value={TabTypes.TournamentScores}>
-          <RatingTable scores={player.scoresPerTournament} />
+          <RatingTable
+            scores={player.scoresPerTournament}
+            playerName={player.name}
+          />
         </Tabs.Content>
         <Tabs.Content value={TabTypes.GameScores}>
-          <RatingTable scores={player.scoresPerGame} />
+          <RatingTable scores={player.scoresPerGame} playerName={player.name} />
         </Tabs.Content>
       </Tabs.Root>
     </>

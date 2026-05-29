@@ -9,7 +9,11 @@ export interface RatingScore {
 }
 
 export interface GameScore extends RatingScore {
-  scores: string;
+  scores: {
+    playerSets: string[];
+    totalScores: [number, number];
+    opponentSets: string[];
+  };
   opponentName: string;
 }
 

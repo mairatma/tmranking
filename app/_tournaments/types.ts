@@ -25,3 +25,11 @@ export interface TournamentGroup {
     qualified: boolean;
   }[];
 }
+
+interface Result {
+  playerName: string;
+  totalScore: number;
+  sets: string[];
+}
+
+export type ScoreResults = [Result, Result];

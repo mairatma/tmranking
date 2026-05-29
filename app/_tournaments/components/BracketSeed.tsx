@@ -9,7 +9,8 @@ import {
 } from '@chakra-ui/react';
 import { IRenderSeedProps, Seed, SeedItem, SeedTeam } from 'react-brackets';
 import { TBD_WINNER } from '../helpers/brackets';
-import { TournamentResults } from '../types';
+import { ScoreResults, TournamentResults } from '../types';
+import { ScorePopover } from '@/app/_components/ScorePopover';
 
 const WINNER_STYLES = {
   color: 'var(--chakra-colors-primary-900)',
@@ -48,39 +49,55 @@ export const BracketSeed = ({
   const isSecondTeamTheWinner =
     winner === teams[1].name && winner !== TBD_WINNER;
 
+  const popOverResults: ScoreResults | null = gameResults
+    ? [
+        {
+          playerName: gameResults.scores[0].name,
+          totalScore: gameResults.finalScore[0],
+          sets: gameResults.scores[0].sets,
+        },
+        {
+          playerName: gameResults.scores[1].name,
+          totalScore: gameResults.finalScore[1],
+          sets: gameResults.scores[1].sets,
+        },
+      ]
+    : null;
+
   return (
     <Seed mobileBreakpoint={breakpoint} style={{ fontSize: 12 }}>
+      <ScorePopover isLoading={!results} results={popOverResults}>
+        <Box cursor="pointer" _hover={{ opacity: 0.8 }} width="100%">
+          <SeedItem
+            style={{ backgroundColor: 'var(--chakra-colors-primary-100)' }}
+          >
+            <div>
+              <SeedTeam
+                style={isFirstTeamTheWinner ? WINNER_STYLES : LOSER_STYLES}
+              >
+                {teams[0]?.name || 'BYE'}
+                <div>{score[0]}</div>
+              </SeedTeam>
+              <SeedTeam
+                style={isSecondTeamTheWinner ? WINNER_STYLES : LOSER_STYLES}
+              >
+                {teams[1]?.name || 'BYE'}
+                <div>{score[1]}</div>
+              </SeedTeam>
+            </div>
+          </SeedItem>
+          <Box color="gray.500" mt={1}>
+            {date}
+          </Box>
+        </Box>
+      </ScorePopover>
       <Popover.Root
         positioning={{
           offset: { crossAxis: 0, mainAxis: -20 },
           placement: 'bottom-start',
         }}
       >
-        <Popover.Trigger asChild>
-          <Box cursor="pointer" _hover={{ opacity: 0.8 }} width="100%">
-            <SeedItem
-              style={{ backgroundColor: 'var(--chakra-colors-primary-100)' }}
-            >
-              <div>
-                <SeedTeam
-                  style={isFirstTeamTheWinner ? WINNER_STYLES : LOSER_STYLES}
-                >
-                  {teams[0]?.name || 'BYE'}
-                  <div>{score[0]}</div>
-                </SeedTeam>
-                <SeedTeam
-                  style={isSecondTeamTheWinner ? WINNER_STYLES : LOSER_STYLES}
-                >
-                  {teams[1]?.name || 'BYE'}
-                  <div>{score[1]}</div>
-                </SeedTeam>
-              </div>
-            </SeedItem>
-            <Box color="gray.500" mt={1}>
-              {date}
-            </Box>
-          </Box>
-        </Popover.Trigger>
+        <Popover.Trigger asChild></Popover.Trigger>
         <Portal>
           <Popover.Positioner>
             <Popover.Content width={gameResults ? 'auto' : undefined}>

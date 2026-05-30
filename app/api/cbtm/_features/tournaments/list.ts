@@ -12,7 +12,11 @@ interface Options {
 
 export const fetchTournamentList = ({ offset, limit }: Options = {}) => {
   return db
-    .select({ cbtmId: tournaments.cbtmId, name: tournaments.name })
+    .select({
+      id: tournaments.id,
+      cbtmId: tournaments.cbtmId,
+      name: tournaments.name,
+    })
     .from(tournaments)
     .offset(offset ?? DEFAULT_OFFSET)
     .limit(limit ?? DEFAULT_LIMIT)

@@ -1,3 +1,9 @@
+export interface Tournament {
+  id: string;
+  cbtmId: string;
+  name: string;
+}
+
 export interface TournamentBrackets {
   teams: string[][];
   results: [number, number, string][][];

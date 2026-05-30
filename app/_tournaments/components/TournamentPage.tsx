@@ -11,8 +11,6 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Brackets } from './Brackets';
 import { Groups } from './Groups';
 import { Results } from './Results';
-import { useSaveTournament } from '../hooks/useSaveTournament';
-import { useEffect } from 'react';
 
 enum TabTypes {
   Registrations = 'registrations',
@@ -41,16 +39,6 @@ export const TournamentPage = ({ id }: Props) => {
   const searchParams = useSearchParams();
 
   const { data, isLoading } = useTournament(id);
-  const { saveTournament } = useSaveTournament();
-
-  useEffect(() => {
-    if (data) {
-      saveTournament(id, data.title);
-    }
-
-    // We should not save just because saveTournament has changed.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, data]);
 
   if (isLoading || !data) {
     return <Spinner />;

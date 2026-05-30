@@ -15,11 +15,12 @@ import { useRouter } from 'next/navigation';
 import { FormEventHandler, useState } from 'react';
 import { useTournaments } from '../hooks/useTournaments';
 import Link from 'next/link';
+import { LoadingPage } from '@/app/_components/base/LoadingPage';
 
 export const TournamentsPage = () => {
   const router = useRouter();
 
-  const { tournaments } = useTournaments();
+  const { data: tournaments, isLoading } = useTournaments();
 
   const [tournamentId, setTournamentId] = useState<string | null>(null);
   const handleSearch: FormEventHandler = (e) => {
@@ -55,24 +56,26 @@ export const TournamentsPage = () => {
         </form>
       </div>
 
-      {tournaments.length > 0 ? (
+      {isLoading && <LoadingPage />}
+
+      {tournaments && tournaments.length > 0 && (
         <Table.Root size="md" interactive>
           <Table.Header>
             <Table.Row>
               <Table.ColumnHeader color="white" fontWeight="600">
-                Acessados recentemente
+                Torneios salvos
               </Table.ColumnHeader>
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {tournaments.map(({ id, name }, index) => (
+            {tournaments?.map(({ cbtmId, name }, index) => (
               <Table.Row
-                key={id}
+                key={cbtmId}
                 bg={index % 2 === 0 ? 'bg.secondary' : 'bg.primary'}
                 _hover={{ bg: 'primary.50' }}
               >
                 <Table.Cell p="0">
-                  <Link href={`/tournaments/${id}`}>
+                  <Link href={`/tournaments/${cbtmId}`}>
                     <Box p="3" fontWeight="500">
                       {name}
                     </Box>
@@ -82,7 +85,8 @@ export const TournamentsPage = () => {
             ))}
           </Table.Body>
         </Table.Root>
-      ) : (
+      )}
+      {!isLoading && tournaments?.length === 0 && (
         <EmptyState.Root>
           <EmptyState.Content>
             <VStack textAlign="center">

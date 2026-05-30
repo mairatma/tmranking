@@ -66,6 +66,7 @@ export const Groups = ({ id, categoryId }: Props) => {
         label="Filtrar por atleta"
         options={atheleteOptions}
         value={selectedAthelete}
+        emptyText="Atleta não encontrado"
         onChange={setSelectedAthlete}
         mb="4"
       />

@@ -14,9 +14,10 @@ interface Props extends Omit<
   ComboboxRootProps,
   'collection' | 'onInputValueChange' | 'value' | 'onValueChange' | 'onChange'
 > {
-  label: ReactNode;
+  label?: ReactNode;
   options: { label: string; value: string }[];
   value: string;
+  emptyText?: string;
   onChange: (newValue: string) => void;
 }
 
@@ -24,6 +25,7 @@ export const SearchSelect = ({
   label,
   options,
   value,
+  emptyText,
   onChange,
   ...otherProps
 }: Props) => {
@@ -42,7 +44,7 @@ export const SearchSelect = ({
       onValueChange={(e) => onChange(e.value[0])}
       {...otherProps}
     >
-      <Combobox.Label>{label}</Combobox.Label>
+      {label && <Combobox.Label>{label}</Combobox.Label>}
       <Combobox.Control>
         <Combobox.Input placeholder="Digite para buscar" />
         <Combobox.IndicatorGroup>
@@ -53,7 +55,9 @@ export const SearchSelect = ({
       <Portal>
         <Combobox.Positioner>
           <Combobox.Content>
-            <Combobox.Empty>Nenhum jogador encontrado</Combobox.Empty>
+            <Combobox.Empty>
+              {emptyText ?? 'Item não encontrado'}
+            </Combobox.Empty>
             {collection.items.map((item) => (
               <Combobox.Item item={item} key={item.value}>
                 {item.label}

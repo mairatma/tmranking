@@ -13,9 +13,25 @@ const parseAllRatingPlayerNames = (html: string) => {
   }
 
   try {
-    console.log('itemsInfo', match[1]);
-    const itemsInfo = JSON.parse(match[1].replace(/'/g, '"'));
-    return itemsInfo as { value: string; text: string };
+    const itemsInfoRaw = JSON.parse(match[1].replace(/'/g, '"')) as {
+      value: string;
+      text: string;
+    }[];
+
+    const idToItemMap = itemsInfoRaw.reduce<Record<string, string>>(
+      (acc, item) => {
+        return {
+          ...acc,
+          [item.value]: item.text,
+        };
+      },
+      {},
+    );
+
+    return Object.keys(idToItemMap).map((id) => ({
+      id,
+      name: idToItemMap[id],
+    }));
   } catch (e) {
     console.error('Failed to parse itemsInfo:', e);
     return [];

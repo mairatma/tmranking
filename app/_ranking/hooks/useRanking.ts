@@ -8,6 +8,7 @@ const DEFAULT_PAGE = 1;
 interface GetRankingResponse {
   rankings: [RankingEntry];
   totalItems: number;
+  allPlayerNames: { id: string; name: string }[];
   crawledAt: string;
 }
 

@@ -14,11 +14,12 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 import { useRanking } from '../hooks/useRanking';
 import { RankingTable } from './RankingTable';
-import { AVAILABLE_CATEGORIES } from '../categories';
+import { AVAILABLE_CATEGORIES, isRatingCategory } from '../categories';
 import { AVAILABLE_REGIONS } from '../regions';
 import { RankingFilters } from './RankingFilters';
 import { RankingOptions } from '../types';
 import { getCurrentYear } from '../helpers/years';
+import { SearchSelect } from '@/app/_components/SearchSelect';
 
 const DEFAULT_CATEGORY_VALUE = AVAILABLE_CATEGORIES[0].value;
 const DEFAULT_REGION_VALUE = AVAILABLE_REGIONS[0].value;
@@ -59,9 +60,13 @@ export const RankingPage = () => {
     router.push(`${pathname}?${newParams.toString()}`);
   };
 
-  const categoryName = AVAILABLE_CATEGORIES.find(
+  const categoryInfo = AVAILABLE_CATEGORIES.find(
     (item) => item.value === category,
-  )?.label;
+  );
+
+  const athleteOptions = data
+    ? data.allPlayerNames.map(({ id, name }) => ({ value: id, label: name }))
+    : [];
 
   return (
     <Stack gap="6">
@@ -75,7 +80,7 @@ export const RankingPage = () => {
       >
         <div>
           <Heading size="lg" color="text.primary" mb="1">
-            {categoryName}
+            {categoryInfo?.label}
           </Heading>
           <Flex>
             <Heading size="sm" color="text.secondary" fontWeight="400">
@@ -100,6 +105,14 @@ export const RankingPage = () => {
 
       {!isLoading && data && (
         <>
+          {isRatingCategory(category) && (
+            <SearchSelect
+              options={athleteOptions}
+              value=""
+              emptyText="Atleta não encontrado"
+              onChange={(atleta) => console.log('Atleta selecionado', atleta)}
+            />
+          )}
           <RankingTable
             rankings={data.rankings}
             category={category}

@@ -1,6 +1,27 @@
 import { parse } from 'node-html-parser';
 import { extractGridCallbackState, extractInputValue } from '../helpers';
 
+const ALL_PLAYER_NAMES_REGEX =
+  /createControl\(dx\.BootstrapClientListBox,\s*'mainContent_cmbAtleta_L'[\s\S]*?'itemsInfo':\s*(\[[\s\S]*?\])\s*,\s*'cssClasses'/;
+
+const parseAllRatingPlayerNames = (html: string) => {
+  const match = html.match(ALL_PLAYER_NAMES_REGEX);
+
+  if (!match) {
+    console.error('itemsInfo not found');
+    return html;
+  }
+
+  try {
+    console.log('itemsInfo', match[1]);
+    const itemsInfo = JSON.parse(match[1].replace(/'/g, '"'));
+    return itemsInfo as { value: string; text: string };
+  } catch (e) {
+    console.error('Failed to parse itemsInfo:', e);
+    return [];
+  }
+};
+
 /**
  * Parse ranking table from HTML
  * The table structure uses Bootstrap grid layout within table cells
@@ -75,7 +96,9 @@ export const parseRankingTable = (html: string) => {
   const totalItems =
     /(?:'|\\')itemCount(?:'|\\'):\s*(\d+)/.exec(html)?.[1] ?? '0';
 
-  return { rankings, totalItems };
+  const allPlayerNames = parseAllRatingPlayerNames(html);
+
+  return { rankings, totalItems, allPlayerNames };
 };
 
 export const extractSessionData = (html: string) => {

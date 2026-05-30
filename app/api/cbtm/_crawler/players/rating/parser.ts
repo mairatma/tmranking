@@ -33,10 +33,6 @@ function parseScoreString(input: string) {
   };
 }
 
-// Example
-const input = '(11,3,12,0,0,0,0) 0 X 3(13,11,14,0,0,0,0)';
-console.log(parseScoreString(input));
-
 export const parsePlayerRatingInfo = (html: string) => {
   const root = parse(html);
 
@@ -108,5 +104,13 @@ export const parsePlayerRatingInfo = (html: string) => {
     })
     .filter((event) => Boolean(event));
 
-  return { name, state, team, gender, age, scoresPerTournament, scoresPerGame };
+  return {
+    name,
+    state,
+    team,
+    gender,
+    age,
+    scoresPerTournament,
+    scoresPerGame,
+  };
 };

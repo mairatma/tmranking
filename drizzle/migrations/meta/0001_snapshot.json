@@ -1,0 +1,59 @@
+{
+  "id": "a71b5d48-3905-407d-8ce9-e77b58cefc83",
+  "prevId": "c62df105-a9e0-45d3-9ebc-a512163461f6",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.tournaments": {
+      "name": "tournaments",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "cbtm_id": {
+          "name": "cbtm_id",
+          "type": "varchar(9)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "tournaments_cbtm_id_unique": {
+          "name": "tournaments_cbtm_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "cbtm_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

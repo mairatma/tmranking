@@ -1,3 +1,4 @@
+import { addTournament } from '../../_features/tournaments/add';
 import { getCookiesFromResponse } from '../../_helpers/cookies';
 import { buildCrawlerResponse } from '../response';
 import { parseTournamentNameAndCategories } from './parser';
@@ -19,5 +20,12 @@ export const fetchTournamentPageById = async (id: string) => {
 export const fetchTournamentById = async (id: string) => {
   const { responseText } = await fetchTournamentPageById(id);
 
-  return buildCrawlerResponse(parseTournamentNameAndCategories(responseText));
+  const tournament = buildCrawlerResponse(
+    parseTournamentNameAndCategories(responseText),
+  );
+
+  // Store the tournament in the backround so we start storing references organically.
+  addTournament(id, tournament.title);
+
+  return tournament;
 };

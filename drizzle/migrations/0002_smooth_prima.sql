@@ -1,0 +1,1 @@
+ALTER TABLE "tournaments" ALTER COLUMN "cbtm_id" SET DATA TYPE integer USING cbtm_id::integer;

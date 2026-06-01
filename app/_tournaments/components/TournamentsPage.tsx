@@ -16,11 +16,12 @@ import { FormEventHandler, useState } from 'react';
 import { useTournaments } from '../hooks/useTournaments';
 import Link from 'next/link';
 import { LoadingPage } from '@/app/_components/base/LoadingPage';
+import { ErrorAlert } from '@/app/_components/base/ErrorAlert';
 
 export const TournamentsPage = () => {
   const router = useRouter();
 
-  const { data: tournaments, isLoading } = useTournaments();
+  const { data: tournaments, isLoading, isError } = useTournaments();
 
   const [tournamentId, setTournamentId] = useState<string | null>(null);
   const handleSearch: FormEventHandler = (e) => {
@@ -34,6 +35,10 @@ export const TournamentsPage = () => {
   const goToTournament = (tournamentId: string) => {
     router.push(`/tournaments/${tournamentId}`);
   };
+
+  if (isError) {
+    return <ErrorAlert />;
+  }
 
   return (
     <Stack gap="6">

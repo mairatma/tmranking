@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 
 import {
   Combobox,
@@ -31,10 +31,16 @@ export const SearchSelect = ({
 }: Props) => {
   const { contains } = useFilter({ sensitivity: 'base' });
 
-  const { collection, filter } = useListCollection({
+  const { collection, filter, set } = useListCollection({
     initialItems: options,
     filter: contains,
   });
+
+  useEffect(() => {
+    set(options);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [options]);
 
   return (
     <Combobox.Root

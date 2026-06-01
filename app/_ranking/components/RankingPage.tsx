@@ -20,6 +20,7 @@ import { RankingFilters } from './RankingFilters';
 import { RankingOptions } from '../types';
 import { getCurrentYear } from '../helpers/years';
 import { SearchSelect } from '@/app/_components/SearchSelect';
+import { useMemo } from 'react';
 
 const DEFAULT_CATEGORY_VALUE = AVAILABLE_CATEGORIES[0].value;
 const DEFAULT_REGION_VALUE = AVAILABLE_REGIONS[0].value;
@@ -64,9 +65,16 @@ export const RankingPage = () => {
     (item) => item.value === category,
   );
 
-  const athleteOptions = data
-    ? data.allPlayerNames.map(({ id, name }) => ({ value: id, label: name }))
-    : [];
+  const athleteOptions = useMemo(
+    () =>
+      data
+        ? data.allPlayerNames.map(({ id, name }) => ({
+            value: id,
+            label: name,
+          }))
+        : [],
+    [data],
+  );
 
   return (
     <Stack gap="6">

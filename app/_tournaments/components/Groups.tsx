@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import {
   Badge,
@@ -31,6 +31,15 @@ export const Groups = ({ id, categoryId }: Props) => {
 
   const [selectedAthelete, setSelectedAthlete] = useState('');
 
+  const atheleteOptions = useMemo(
+    () =>
+      getAllAtheletesFromGroups(data?.groups ?? []).map((name) => ({
+        label: name,
+        value: name,
+      })),
+    [data?.groups],
+  );
+
   if (!data) {
     return <Spinner />;
   }
@@ -53,9 +62,6 @@ export const Groups = ({ id, categoryId }: Props) => {
 
   const groupsWithNumber = enhanceGroupsWithNumber(data.groups);
 
-  const atheleteOptions = getAllAtheletesFromGroups(data.groups).map(
-    (name) => ({ label: name, value: name }),
-  );
   const groupsToDisplay = selectedAthelete
     ? filterGroupsByAthelete(groupsWithNumber, selectedAthelete)
     : groupsWithNumber;

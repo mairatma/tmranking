@@ -7,8 +7,7 @@ export const getHighestId = async () => {
     .select({
       cbtmId: max(tournaments.cbtmId),
     })
-    .from(tournaments)
-    .limit(1);
+    .from(tournaments);
 
-  return response[0].cbtmId;
+  return response[0].cbtmId as number;
 };

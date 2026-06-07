@@ -25,7 +25,7 @@ export const fetchTournamentById = async (id: string) => {
   );
 
   // Store the tournament in the backround so we start storing references organically.
-  addTournament(id, tournament.title);
+  addTournament(Number(id), tournament.title);
 
   return tournament;
 };

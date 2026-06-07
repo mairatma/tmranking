@@ -1,7 +1,13 @@
 'use client';
 
-import { Flex, Heading, Spinner, Stack, Tabs } from '@chakra-ui/react';
-import { LuBrackets, LuGrid2X2, LuSquareCheck, LuUser } from 'react-icons/lu';
+import { Flex, Heading, Icon, Spinner, Stack, Tabs } from '@chakra-ui/react';
+import {
+  LuBookmark,
+  LuBrackets,
+  LuGrid2X2,
+  LuSquareCheck,
+  LuUser,
+} from 'react-icons/lu';
 
 import { useTournament } from '@/app/_tournaments/hooks/useTournament';
 import { Registrations } from './Registrations';
@@ -11,6 +17,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Brackets } from './Brackets';
 import { Groups } from './Groups';
 import { Results } from './Results';
+import { useAddFavoriteTournament } from '../hooks/useAddFavoriteTournament';
 
 enum TabTypes {
   Registrations = 'registrations',
@@ -39,6 +46,7 @@ export const TournamentPage = ({ id }: Props) => {
   const searchParams = useSearchParams();
 
   const { data, isLoading } = useTournament(id);
+  const { addFavoriteTournament } = useAddFavoriteTournament();
 
   if (isLoading || !data) {
     return <Spinner />;
@@ -75,9 +83,19 @@ export const TournamentPage = ({ id }: Props) => {
   return (
     <Stack gap="2">
       <div>
-        <Heading size="lg" color="text.primary" mb="4">
-          {data?.title}
-        </Heading>
+        <Flex alignItems="center" justifyContent="space-between">
+          <Heading size="lg" color="text.primary" mb="4">
+            {data?.title}
+          </Heading>
+          <Icon
+            size="lg"
+            color="primary.900"
+            cursor="pointer"
+            onClick={() => addFavoriteTournament(id, data.title)}
+          >
+            <LuBookmark />
+          </Icon>
+        </Flex>
         <Flex
           alignItems="center"
           direction="row"

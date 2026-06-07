@@ -17,7 +17,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Brackets } from './Brackets';
 import { Groups } from './Groups';
 import { Results } from './Results';
-import { useAddFavoriteTournament } from '../hooks/useAddFavoriteTournament';
+import { useFavoriteTournament } from '../hooks/useFavoriteTournament';
 
 enum TabTypes {
   Registrations = 'registrations',
@@ -46,7 +46,7 @@ export const TournamentPage = ({ id }: Props) => {
   const searchParams = useSearchParams();
 
   const { data, isLoading } = useTournament(id);
-  const { addFavoriteTournament } = useAddFavoriteTournament();
+  const { isFavorite, toggleFavorite } = useFavoriteTournament(id);
 
   if (isLoading || !data) {
     return <Spinner />;
@@ -91,7 +91,8 @@ export const TournamentPage = ({ id }: Props) => {
             size="lg"
             color="primary.900"
             cursor="pointer"
-            onClick={() => addFavoriteTournament(id, data.title)}
+            onClick={() => toggleFavorite(data.title)}
+            style={{ fill: isFavorite ? 'currentColor' : 'none' }}
           >
             <LuBookmark />
           </Icon>

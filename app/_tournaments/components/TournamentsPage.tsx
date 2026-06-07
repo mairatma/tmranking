@@ -14,6 +14,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { FormEventHandler, useState } from 'react';
 import { useTournaments } from '../hooks/useTournaments';
+import { useFavoriteTournaments } from '../hooks/useFavoriteTournaments';
 import Link from 'next/link';
 import { LoadingPage } from '@/app/_components/base/LoadingPage';
 import { ErrorAlert } from '@/app/_components/base/ErrorAlert';
@@ -22,6 +23,7 @@ export const TournamentsPage = () => {
   const router = useRouter();
 
   const { data: tournaments, isLoading, isError } = useTournaments();
+  const favoriteTournaments = useFavoriteTournaments();
 
   const [tournamentId, setTournamentId] = useState<string | null>(null);
   const handleSearch: FormEventHandler = (e) => {
@@ -61,6 +63,35 @@ export const TournamentsPage = () => {
         </form>
       </div>
 
+      {favoriteTournaments.length > 0 && (
+        <Table.Root size="md" interactive>
+          <Table.Header>
+            <Table.Row>
+              <Table.ColumnHeader color="white" fontWeight="600">
+                Favoritos
+              </Table.ColumnHeader>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {favoriteTournaments.map(({ id, name }, index) => (
+              <Table.Row
+                key={id}
+                bg={index % 2 === 0 ? 'bg.secondary' : 'bg.primary'}
+                _hover={{ bg: 'primary.50' }}
+              >
+                <Table.Cell p="0">
+                  <Link href={`/tournaments/${id}`}>
+                    <Box p="3" fontWeight="500">
+                      {name}
+                    </Box>
+                  </Link>
+                </Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table.Root>
+      )}
+
       {isLoading && <LoadingPage />}
 
       {tournaments && tournaments.length > 0 && (
@@ -68,7 +99,7 @@ export const TournamentsPage = () => {
           <Table.Header>
             <Table.Row>
               <Table.ColumnHeader color="white" fontWeight="600">
-                Torneios salvos
+                Torneios
               </Table.ColumnHeader>
             </Table.Row>
           </Table.Header>

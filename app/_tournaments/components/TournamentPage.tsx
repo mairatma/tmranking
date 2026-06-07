@@ -83,7 +83,7 @@ export const TournamentPage = ({ id }: Props) => {
   return (
     <Stack gap="2">
       <div>
-        <Flex alignItems="center" justifyContent="space-between">
+        <Flex alignItems="center" justifyContent="space-between" gap="2">
           <Heading size="lg" color="text.primary" mb="4">
             {data?.title}
           </Heading>

@@ -38,10 +38,12 @@ export const TournamentsPage = () => {
   }, [nameSearch]);
 
   const {
-    data: tournaments,
+    data: tournamentList,
     isLoading,
     isError,
   } = useTournaments(debouncedNameSearch || undefined);
+
+  const tournaments = tournamentList?.data;
   const favoriteTournaments = useFavoriteTournaments();
 
   const [tournamentId, setTournamentId] = useState<string | null>(null);

@@ -2,7 +2,12 @@ import { useQuery } from '@tanstack/react-query';
 
 import { Tournament } from '../types';
 
-const fetchTournaments = async (search?: string) => {
+interface TournamentList {
+  data: Tournament[];
+  total: number;
+}
+
+const fetchTournaments = async (search?: string): Promise<TournamentList> => {
   const url = new URL('/api/cbtm/tournaments', window.location.origin);
   if (search) url.searchParams.set('search', search);
 
@@ -11,12 +16,14 @@ const fetchTournaments = async (search?: string) => {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
 
-  return (await response.json()) as Tournament[];
+  return response.json();
 };
 
 export const useTournaments = (search?: string) => {
   return useQuery({
     queryKey: ['tournament', 'list', search ?? ''],
     queryFn: () => fetchTournaments(search),
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 };

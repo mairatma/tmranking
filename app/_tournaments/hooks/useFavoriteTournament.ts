@@ -4,7 +4,7 @@ import {
   LOCAL_STORAGE_TOURNAMENTS_KEY,
 } from '../localStorage';
 
-const MAX_TOURNAMENTS = 50;
+const MAX_TOURNAMENTS = 10;
 
 export const useFavoriteTournament = (id: string) => {
   const [isFavorite, setIsFavorite] = useState(false);

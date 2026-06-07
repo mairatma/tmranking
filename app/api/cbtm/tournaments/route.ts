@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 
 import { buildEtag, buildResponseHeaders } from '../_helpers/response';
-import { fetchTournamentList } from '../_features/tournaments/list';
+import { fetchTournamentList, PAGE_SIZE } from '../_features/tournaments/list';
 
 /**
  * Main API handler
@@ -23,7 +23,9 @@ export async function GET(req: NextRequest) {
     }
 
     const search = req.nextUrl.searchParams.get('search') ?? undefined;
-    const result = await fetchTournamentList({ search });
+    const page = parseInt(req.nextUrl.searchParams.get('page') ?? '1', 10);
+    const offset = (page - 1) * PAGE_SIZE;
+    const result = await fetchTournamentList({ search, offset });
     return new Response(JSON.stringify(result), {
       status: 200,
       headers: buildResponseHeaders(),

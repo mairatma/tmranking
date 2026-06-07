@@ -3,7 +3,7 @@ import { tournaments } from '@/app/api/_lib/db/schema';
 import { asc, count, ilike } from 'drizzle-orm';
 
 const DEFAULT_OFFSET = 0;
-const DEFAULT_LIMIT = 20;
+export const PAGE_SIZE = 20;
 
 interface Options {
   offset?: number;
@@ -28,7 +28,7 @@ export const fetchTournamentList = async ({
       .from(tournaments)
       .where(where)
       .offset(offset ?? DEFAULT_OFFSET)
-      .limit(limit ?? DEFAULT_LIMIT)
+      .limit(limit ?? PAGE_SIZE)
       .orderBy(asc(tournaments.name)),
     db.select({ total: count() }).from(tournaments).where(where),
   ]);

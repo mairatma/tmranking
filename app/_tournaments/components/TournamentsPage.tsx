@@ -10,17 +10,20 @@ import {
   GridItem,
   Group,
   Heading,
+  HStack,
+  IconButton,
   Input,
   InputGroup,
+  Pagination,
   Popover,
   Stack,
   Table,
   VStack,
 } from '@chakra-ui/react';
-import { LuSearch } from 'react-icons/lu';
+import { LuChevronLeft, LuChevronRight, LuSearch } from 'react-icons/lu';
 import { useRouter } from 'next/navigation';
 import { FormEventHandler, useState, useEffect } from 'react';
-import { useTournaments } from '../hooks/useTournaments';
+import { useTournaments, PAGE_SIZE } from '../hooks/useTournaments';
 import { useFavoriteTournaments } from '../hooks/useFavoriteTournaments';
 import Link from 'next/link';
 import { LoadingPage } from '@/app/_components/base/LoadingPage';
@@ -31,19 +34,25 @@ export const TournamentsPage = () => {
 
   const [nameSearch, setNameSearch] = useState('');
   const [debouncedNameSearch, setDebouncedNameSearch] = useState('');
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     const timeout = setTimeout(() => setDebouncedNameSearch(nameSearch), 300);
     return () => clearTimeout(timeout);
   }, [nameSearch]);
 
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedNameSearch]);
+
   const {
     data: tournamentList,
     isLoading,
     isError,
-  } = useTournaments(debouncedNameSearch || undefined);
+  } = useTournaments(debouncedNameSearch || undefined, page);
 
   const tournaments = tournamentList?.data;
+  const tournamentsTotal = tournamentList?.total ?? 0;
   const favoriteTournaments = useFavoriteTournaments();
 
   const [tournamentId, setTournamentId] = useState<string | null>(null);
@@ -177,6 +186,29 @@ export const TournamentsPage = () => {
                   ))}
                 </Table.Body>
               </Table.Root>
+            )}
+
+            {!isLoading && tournamentsTotal > PAGE_SIZE && (
+              <Pagination.Root
+                count={tournamentsTotal}
+                pageSize={PAGE_SIZE}
+                page={page}
+                onPageChange={(e) => setPage(e.page)}
+              >
+                <HStack justifyContent="flex-end">
+                  <Pagination.PrevTrigger asChild>
+                    <IconButton size="sm" variant="outline">
+                      <LuChevronLeft />
+                    </IconButton>
+                  </Pagination.PrevTrigger>
+                  <Pagination.PageText />
+                  <Pagination.NextTrigger asChild>
+                    <IconButton size="sm" variant="outline">
+                      <LuChevronRight />
+                    </IconButton>
+                  </Pagination.NextTrigger>
+                </HStack>
+              </Pagination.Root>
             )}
 
             {!isLoading && tournaments?.length === 0 && (

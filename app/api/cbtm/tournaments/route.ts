@@ -22,7 +22,8 @@ export async function GET(req: NextRequest) {
       return new Response(undefined, { status: 304 });
     }
 
-    const result = await fetchTournamentList();
+    const search = req.nextUrl.searchParams.get('search') ?? undefined;
+    const result = await fetchTournamentList({ search });
     return new Response(JSON.stringify(result), {
       status: 200,
       headers: buildResponseHeaders(),

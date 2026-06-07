@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   EmptyState,
+  Flex,
   Group,
   Heading,
   Input,
@@ -12,7 +13,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
-import { FormEventHandler, useState } from 'react';
+import { FormEventHandler, useState, useEffect } from 'react';
 import { useTournaments } from '../hooks/useTournaments';
 import { useFavoriteTournaments } from '../hooks/useFavoriteTournaments';
 import Link from 'next/link';
@@ -22,7 +23,19 @@ import { ErrorAlert } from '@/app/_components/base/ErrorAlert';
 export const TournamentsPage = () => {
   const router = useRouter();
 
-  const { data: tournaments, isLoading, isError } = useTournaments();
+  const [nameSearch, setNameSearch] = useState('');
+  const [debouncedNameSearch, setDebouncedNameSearch] = useState('');
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setDebouncedNameSearch(nameSearch), 300);
+    return () => clearTimeout(timeout);
+  }, [nameSearch]);
+
+  const {
+    data: tournaments,
+    isLoading,
+    isError,
+  } = useTournaments(debouncedNameSearch || undefined);
   const favoriteTournaments = useFavoriteTournaments();
 
   const [tournamentId, setTournamentId] = useState<string | null>(null);
@@ -48,19 +61,27 @@ export const TournamentsPage = () => {
         <Heading size="lg" color="text.primary" mb="4">
           Torneios
         </Heading>
-        <form onSubmit={handleSearch}>
-          <Group attached w="full" maxW="sm">
-            <Input
-              placeholder="ID do torneio"
-              name="tournamentId"
-              value={tournamentId || ''}
-              onChange={(e) => setTournamentId(e.target.value)}
-            />
-            <Button type="submit" colorScheme="primary">
-              Procurar
-            </Button>
-          </Group>
-        </form>
+        <Flex gap="3" wrap="wrap">
+          <Input
+            placeholder="Buscar por nome"
+            value={nameSearch}
+            onChange={(e) => setNameSearch(e.target.value)}
+            maxW="sm"
+          />
+          <form onSubmit={handleSearch}>
+            <Group attached>
+              <Input
+                placeholder="ID do torneio"
+                name="tournamentId"
+                value={tournamentId || ''}
+                onChange={(e) => setTournamentId(e.target.value)}
+              />
+              <Button type="submit" colorScheme="primary">
+                Procurar
+              </Button>
+            </Group>
+          </form>
+        </Flex>
       </div>
 
       {favoriteTournaments.length > 0 && (
@@ -96,13 +117,6 @@ export const TournamentsPage = () => {
 
       {tournaments && tournaments.length > 0 && (
         <Table.Root size="md" interactive>
-          <Table.Header>
-            <Table.Row>
-              <Table.ColumnHeader color="white" fontWeight="600">
-                Torneios
-              </Table.ColumnHeader>
-            </Table.Row>
-          </Table.Header>
           <Table.Body>
             {tournaments?.map(({ cbtmId, name }, index) => (
               <Table.Row

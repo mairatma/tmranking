@@ -19,7 +19,6 @@ export const buildRankingFormData = (
   params.append('__EVENTVALIDATION', sessionData.eventValidation);
 
   const categoryFieldValue = isRating ? category.substring(2) : category;
-  console.log('categoryFieldValue', categoryFieldValue);
   // Ranking dropdown
   params.append(
     `ctl00$mainContent$${categoryFieldName}$State`,

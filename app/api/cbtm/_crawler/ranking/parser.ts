@@ -9,7 +9,7 @@ const parseAllRatingPlayerNames = (html: string) => {
 
   if (!match) {
     console.error('itemsInfo not found');
-    return html;
+    return [];
   }
 
   try {

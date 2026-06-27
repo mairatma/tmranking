@@ -133,7 +133,7 @@ export const CategoryChooser = ({ categories, value, onChange }: Props) => {
         </Select.Control>
         <Portal>
           <Select.Positioner>
-            <Select.Content>
+            <Select.Content zIndex="max">
               {categoryCollection.items.map((item) => (
                 <Select.Item item={item} key={item.value}>
                   {item.label}

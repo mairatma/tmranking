@@ -40,7 +40,7 @@ export const Select = ({
       </ChakraSelect.Control>
       <Portal>
         <ChakraSelect.Positioner>
-          <ChakraSelect.Content>
+          <ChakraSelect.Content zIndex="max">
             {collection.items.map((item) => (
               <ChakraSelect.Item item={item} key={item.value}>
                 {item.label}

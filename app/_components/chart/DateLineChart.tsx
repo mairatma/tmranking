@@ -33,12 +33,14 @@ export const DateLineChart = ({ data, ...otherProps }: Props) => {
 
   return (
     <Chart.Root maxH="sm" chart={chart} {...otherProps}>
-      <LineChart data={chart.data}>
+      <LineChart data={chart.data} width="100%" height="100%">
         <CartesianGrid stroke={chart.color('border')} vertical={false} />
         <XAxis
           axisLine={false}
           dataKey={chart.key('date')}
-          tickFormatter={(date: Date) => format(date, 'MMM yyyy')}
+          tickFormatter={(value: string | Date) =>
+            format(new Date(value), 'MMM yyyy')
+          }
           stroke={chart.color('border')}
         />
         <YAxis

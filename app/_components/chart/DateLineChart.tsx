@@ -6,6 +6,7 @@ import {
   CartesianGrid,
   Line,
   LineChart,
+  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
@@ -33,38 +34,40 @@ export const DateLineChart = ({ data, ...otherProps }: Props) => {
 
   return (
     <Chart.Root maxH="sm" chart={chart} {...otherProps}>
-      <LineChart data={chart.data} width="100%" height="100%">
-        <CartesianGrid stroke={chart.color('border')} vertical={false} />
-        <XAxis
-          axisLine={false}
-          dataKey={chart.key('date')}
-          tickFormatter={(value: string | Date) =>
-            format(new Date(value), 'MMM yyyy')
-          }
-          stroke={chart.color('border')}
-        />
-        <YAxis
-          axisLine={false}
-          tickLine={false}
-          tickMargin={10}
-          stroke={chart.color('border')}
-        />
-        <Tooltip
-          animationDuration={100}
-          cursor={false}
-          content={<ChartTooltip />}
-        />
-        {chart.series.map((item) => (
-          <Line
-            key={item.name}
-            isAnimationActive={false}
-            dataKey={chart.key(item.name)}
-            stroke={chart.color(item.color)}
-            strokeWidth={2}
-            dot={false}
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart data={chart.data}>
+          <CartesianGrid stroke={chart.color('border')} vertical={false} />
+          <XAxis
+            axisLine={false}
+            dataKey={chart.key('date')}
+            tickFormatter={(value: string | Date) =>
+              format(new Date(value), 'MMM yyyy')
+            }
+            stroke={chart.color('border')}
           />
-        ))}
-      </LineChart>
+          <YAxis
+            axisLine={false}
+            tickLine={false}
+            tickMargin={10}
+            stroke={chart.color('border')}
+          />
+          <Tooltip
+            animationDuration={100}
+            cursor={false}
+            content={<ChartTooltip />}
+          />
+          {chart.series.map((item) => (
+            <Line
+              key={item.name}
+              isAnimationActive={false}
+              dataKey={chart.key(item.name)}
+              stroke={chart.color(item.color)}
+              strokeWidth={2}
+              dot={false}
+            />
+          ))}
+        </LineChart>
+      </ResponsiveContainer>
     </Chart.Root>
   );
 };

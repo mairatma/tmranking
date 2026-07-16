@@ -53,7 +53,7 @@ export const TournamentPage = ({ id }: Props) => {
   }
 
   const availableCategories = data.categories
-    .map((item) => getCategoryById(item.value, true))
+    .map((item) => getCategoryById(item.value))
     .filter((item) => item)
     .sort(
       (category1, category2) =>
@@ -70,7 +70,7 @@ export const TournamentPage = ({ id }: Props) => {
     router.push(`${pathname}?${newParams.toString()}`);
   };
 
-  const categoryName = getCategoryById(category, true).label;
+  const categoryName = getCategoryById(category).label;
 
   const currentTab =
     searchParams.get(TournamentSearchParams.Tab) ?? TabTypes.Registrations;

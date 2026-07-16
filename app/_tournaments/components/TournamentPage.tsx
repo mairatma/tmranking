@@ -12,7 +12,7 @@ import {
 import { useTournament } from '@/app/_tournaments/hooks/useTournament';
 import { Registrations } from './Registrations';
 import { CategoryChooserDrawer } from '@/app/_components/CategoryChooserDrawer';
-import { CATEGORY_ID_MAP, Gender } from '@/app/_ranking/categories';
+import { Gender, getCategoryById } from '@/app/_ranking/categories';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Brackets } from './Brackets';
 import { Groups } from './Groups';
@@ -53,7 +53,7 @@ export const TournamentPage = ({ id }: Props) => {
   }
 
   const availableCategories = data.categories
-    .map((item) => CATEGORY_ID_MAP[item.value])
+    .map((item) => getCategoryById(item.value, true))
     .filter((item) => item)
     .sort(
       (category1, category2) =>
@@ -70,7 +70,7 @@ export const TournamentPage = ({ id }: Props) => {
     router.push(`${pathname}?${newParams.toString()}`);
   };
 
-  const categoryName = CATEGORY_ID_MAP[category].label;
+  const categoryName = getCategoryById(category, true).label;
 
   const currentTab =
     searchParams.get(TournamentSearchParams.Tab) ?? TabTypes.Registrations;

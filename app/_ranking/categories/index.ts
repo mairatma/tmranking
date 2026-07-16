@@ -1,21 +1,8 @@
-export enum Gender {
-  Female = 'Female',
-  Male = 'Male',
-}
+import { REGIONAL_CATEGORIES } from './regional';
+import { Category, CategoryType, Gender } from './types';
 
-export enum CategoryType {
-  Absolute = 'Absolute',
-  Ranking = 'Ranking',
-  Rating = 'Rating',
-}
-
-export interface Category {
-  value: string;
-  label: string;
-  gender: Gender;
-  maxAge?: number;
-  type: CategoryType;
-}
+export { CategoryType, Gender };
+export type { Category };
 
 export const AVAILABLE_CATEGORIES: Category[] = [
   {
@@ -502,7 +489,12 @@ export const AVAILABLE_CATEGORIES: Category[] = [
   },
 ];
 
-export const CATEGORY_ID_MAP = AVAILABLE_CATEGORIES.reduce<
+const AVAILABLE_CATEGORIES_WITH_REGIONAL = [
+  ...AVAILABLE_CATEGORIES,
+  ...REGIONAL_CATEGORIES,
+];
+
+export const CATEGORY_ID_MAP = AVAILABLE_CATEGORIES_WITH_REGIONAL.reduce<
   Record<string, Category>
 >((acc, category) => {
   return { ...acc, [category.value]: category };
@@ -511,3 +503,11 @@ export const CATEGORY_ID_MAP = AVAILABLE_CATEGORIES.reduce<
 export const isRatingCategory = (categoryId: string) => {
   return CATEGORY_ID_MAP[categoryId]?.type === CategoryType.Rating;
 };
+
+export const getAvailableCategories = (includeRegional = false) => {
+  if (!includeRegional) return AVAILABLE_CATEGORIES;
+
+  return [...AVAILABLE_CATEGORIES, ...REGIONAL_CATEGORIES];
+};
+
+export const getCategoryById = (id: string) => CATEGORY_ID_MAP[id];

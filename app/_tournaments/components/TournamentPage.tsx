@@ -38,6 +38,7 @@ interface Props {
 const GENDER_TO_SORT_VALUE: Record<Gender, number> = {
   [Gender.Male]: 0,
   [Gender.Female]: 1,
+  [Gender.Mixed]: 2,
 };
 
 export const TournamentPage = ({ id }: Props) => {

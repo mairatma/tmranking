@@ -1,6 +1,7 @@
 export enum Gender {
   Female = 'Female',
   Male = 'Male',
+  Mixed = 'Mixed',
 }
 
 export enum CategoryType {

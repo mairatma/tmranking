@@ -63,14 +63,15 @@ export const TournamentPage = ({ id }: Props) => {
 
   const category =
     searchParams.get(TournamentSearchParams.Category) ??
-    availableCategories[0].value;
+    availableCategories[0]?.value;
+
   const handleCategoryChange = (newCategory: string) => {
     const newParams = new URLSearchParams(searchParams);
     newParams.set(TournamentSearchParams.Category, newCategory);
     router.push(`${pathname}?${newParams.toString()}`);
   };
 
-  const categoryName = getCategoryById(category).label;
+  const categoryName = getCategoryById(category)?.label;
 
   const currentTab =
     searchParams.get(TournamentSearchParams.Tab) ?? TabTypes.Registrations;

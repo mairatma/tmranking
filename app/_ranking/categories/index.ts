@@ -1,3 +1,4 @@
+import { MIXED_DOUBLES_CATEGORIES } from './mixedDoubles';
 import { REGIONAL_CATEGORIES } from './regional';
 import { Category, CategoryType, Gender } from './types';
 
@@ -492,6 +493,7 @@ export const AVAILABLE_CATEGORIES: Category[] = [
 const AVAILABLE_CATEGORIES_WITH_REGIONAL = [
   ...AVAILABLE_CATEGORIES,
   ...REGIONAL_CATEGORIES,
+  ...MIXED_DOUBLES_CATEGORIES,
 ];
 
 export const CATEGORY_ID_MAP = AVAILABLE_CATEGORIES_WITH_REGIONAL.reduce<

@@ -3,19 +3,19 @@ import { CategoryType, Gender } from './types';
 
 export const REGIONAL_CATEGORIES: Category[] = [
   {
-    value: '394',
+    value: '397',
     label: 'Rating A FEM',
     gender: Gender.Female,
     type: CategoryType.Rating,
   },
   {
-    value: '295',
+    value: '395',
     label: 'Rating B FEM',
     gender: Gender.Female,
     type: CategoryType.Rating,
   },
   {
-    value: '394',
+    value: '384',
     label: 'Rating A MAS',
     gender: Gender.Male,
     type: CategoryType.Rating,
@@ -57,7 +57,7 @@ export const REGIONAL_CATEGORIES: Category[] = [
     type: CategoryType.Rating,
   },
   {
-    value: '388',
+    value: '387',
     label: 'Rating H MAS',
     gender: Gender.Male,
     type: CategoryType.Rating,
